@@ -23,43 +23,46 @@ public class NNAdaptorTest {
      */
     public static void main(String[] args) {
         
+        NNAdaptorTest(true);        
+    }
+    
+    public static boolean NNAdaptorTest(boolean v) {
+        
         boolean reqPass = GRepTest.GRepTest(false);
         
-        if (!reqPass)
+        if (!reqPass) {
             System.out.println("Genetic Representation test failed.  Aborting.");
+            return false;
+        }
         
-        System.out.println("Prerequisite class tests passed.");
-
-
-                
+        if (v)
+            System.out.println("Prerequisite class tests passed.");    
         
+        int totalFails = 0;
         SimControl control = new SimControl();
         NNAdaptor nn = new NNAdaptor();
         GRep r = new GRep();
-        r.randomise();
-        //r.maximal();
-        System.out.println("String LE: " + r.toBinaryString(false));
-        
+        //r.randomise();
+        r.maximal();
         nn.createFromGRep(r);
         
-        System.out.println(nn.getLayerCount());
-        System.out.println(nn.getInputCount());
-        System.out.println(nn.getOutputCount());
+        int fails = basicStrucTest(nn, v);
+        totalFails += fails;
+        if (v)
+            System.out.println("Basic structure test failures: " + fails);       
+
+        fails = connectionsTest(nn, r, v);
+        totalFails += fails;
+        if (v)
+            System.out.println("Connection test failures: " + fails);   
         
-        System.out.println(nn.getNodesInLayer(0));
-        System.out.println(nn.getNodesInLayer(1));
-        System.out.println(nn.getNodesInLayer(2));
-        System.out.println(nn.getNodesInLayer(3));
+        fails = connectionsTest(nn, r, v);
+        totalFails += fails;
+        if (v)
+            System.out.println("Connection test failures: " + fails);        
         
-        System.out.println(nn.getTotalNodeCount());
-  
-        double[] in = new double[SimConsts.getNumInputs()];
-        System.out.println(Arrays.toString(nn.output(in)));
-        System.out.println("Basic structure test: Total failures: " + basicStrucTest(nn));
         
-        connectionsTest(nn, r);
-        
-        int fails = 0;
+        fails = 0;
         Random random = new Random();
         for (int x = 0; x < 1000; x++) {
             control.setMAX_LAYERS(random.nextInt(100)+1);
@@ -68,44 +71,68 @@ public class NNAdaptorTest {
             control.setNumInputs(random.nextInt(100)+1);
             r.randomise();
             nn.createFromGRep(r);
-            fails += basicStrucTest(nn); 
-            fails += connectionsTest(nn, r);
+            fails += basicStrucTest(nn, v); 
+            fails += connectionsTest(nn, r, v);
+            fails += outputTest(nn, v);
         }
-        System.out.println("Failures in 1000 randomised tests: " + fails);
-
+        if (v)
+            System.out.println("Failures in 1000 randomised tests: " + fails);
+        
+        totalFails += fails;
+        
+        if (totalFails == 0)
+            return true;
+        
+        return false;
     }
     
-    public static int basicStrucTest(NNAdaptor nn) {
+    public static int basicStrucTest(NNAdaptor nn, boolean v) {
         int fails = 0;
         if (nn.getLayerCount() > SimConsts.getMAX_LAYERS() + 2) {
-            System.out.println("Layer count mismatch: max " + (SimConsts.getMAX_LAYERS()+2) + " expected, " + nn.getLayerCount() + " found.");
             fails++;
+            if (v)
+                System.out.println("Layer count mismatch: max " + (SimConsts.getMAX_LAYERS()+2) + " expected, " + nn.getLayerCount() + " found.");      
         }
         if (!(nn.getInputCount() == SimConsts.getNumInputs())) {
-            System.out.println("Inputs mismatch: " + SimConsts.getNumInputs() + " expected, " + nn.getInputCount() + " found.");
             fails++;
+            if (v)
+                System.out.println("Inputs mismatch: " + SimConsts.getNumInputs() + " expected, " + nn.getInputCount() + " found.");
         }   
         if (!(nn.getOutputCount() == SimConsts.getNumOutputs())) {
-            System.out.println("Outputs mismatch: " + SimConsts.getNumOutputs() + " expected, " + nn.getOutputCount() + " found.");
             fails++;
+            if (v)
+                System.out.println("Outputs mismatch: " + SimConsts.getNumOutputs() + " expected, " + nn.getOutputCount() + " found.");
         }          
         for (int i = 1; i < nn.getLayerCount(); i++) {
             if (nn.getNodesInLayer(i) > SimConsts.getMAX_NODES_PER_LAYER()) {
-                System.out.println("Number of nodes mismatch in layer " + i + ": " + SimConsts.getMAX_NODES_PER_LAYER() + " expected, " + nn.getNodesInLayer(i) + " found.");
-                fails++;                
+                fails++;
+                if (v)
+                    System.out.println("Number of nodes mismatch in layer " + i + ": " + SimConsts.getMAX_NODES_PER_LAYER() + " expected, " + nn.getNodesInLayer(i) + " found.");               
             }     
         }
         return fails;
     }
     
     
-    public static int connectionsTest(NNAdaptor nn, GRep r) {
+    public static int connectionsTest(NNAdaptor nn, GRep r, boolean v) {
         int fails = 0;
         if (!NNAdaptor.testWeightsList(r).containsAll(nn.weights())) {
             fails++;
-            System.out.println("Connections test failed: neural network connection list is not contained in genetic representation full active weight list.");        
+            if (v)
+                System.out.println("Connections test failed: neural network connection list is not contained in genetic representation full active weight list.");        
         }        
         return fails;
     }    
     
+    public static int outputTest(NNAdaptor nn, boolean v) {
+        int fails = 0;
+        double[] in = new double[SimConsts.getNumInputs()];
+        double[] out = nn.output(in);
+        if (out.length != SimConsts.getNumOutputs()) {
+            fails++;
+            if (v)
+                System.out.println("Number of outputs mismatch: " + SimConsts.getNumOutputs() + " expected, " + out.length + " found.");             
+        }
+        return fails;
+    }
 }
