@@ -17,7 +17,6 @@ import controls.SimControl;
  */
 public class GRepTest {
 
-    //CHANGE!!!!!
     /**
      * @param args the command line arguments
      */
