@@ -194,6 +194,11 @@ public class NNAdaptor {
         return total;
     }
     
+    /**
+     * Produces a list of weights for active connections.  
+     * This differs from encog's .getWeights(), which will return 0.0 weight for inactive connections.
+     * @return list of weights as doubles
+     */
     public List<Double> weights() {
         List<Double> out = new ArrayList<>();
         for (int I = 0; I < getInputCount(); I++) {
