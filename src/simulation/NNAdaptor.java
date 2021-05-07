@@ -168,6 +168,11 @@ public class NNAdaptor {
         return total;
     }
 
+    /**
+     * Returns an array (double[SimConsts.numOutputs]) of outputs from the given array of inputs.
+     * @param input double[] of length SimConsts.numInputs
+     * @return double[] of length SimConsts.numOutputs
+     */
     public double[] output(double[] input) {
         double[] output = new double[SimConsts.getNumOutputs()]; 
         nn.compute(input, output);
@@ -196,7 +201,8 @@ public class NNAdaptor {
     
     /**
      * Produces a list of weights for active connections.  
-     * This differs from encog's .getWeights(), which will return 0.0 weight for inactive connections.
+     * This differs from encog's .dumpWeights(), which will return 0.0 weight for inactive connections.  
+     * For class testing.
      * @return list of weights as doubles
      */
     public List<Double> weights() {
@@ -221,7 +227,11 @@ public class NNAdaptor {
     }  
     
     /**
-     * 
+     * Produces a "test weight list" from a genetic representation. This list will contain
+     * all possible active (index bit 1) weight values from the genetic representation.
+     *  For class testing.
+     * @param r Genetic Representation
+     * @return List<Double> of all active weights from the GRep 
      */
     public static List<Double> testWeightsList(GRep r) {
         List<Double> out = new ArrayList<>();
