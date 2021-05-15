@@ -46,7 +46,6 @@ public class GRep {
      * Makes all bits 1 to the required length
      */
     public void maximal() {       
-        //convert list to bitset, via List<Long> to long[] mapping, trim, and assign
         genome = new BitSet(requiredLength());
         genome.flip(0, requiredLength());
     }    

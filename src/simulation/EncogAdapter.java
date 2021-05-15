@@ -19,7 +19,7 @@ import org.encog.neural.networks.layers.BasicLayer;
  *
  * @author Kathryn Andrew
  */
-public class NNAdaptor {
+public class EncogAdapter implements NNAdapter {
     
     private final BasicNetwork nn = new BasicNetwork();
     
@@ -169,7 +169,7 @@ public class NNAdaptor {
     }
 
     /**
-     * Returns an array (double[SimConsts.numOutputs]) of outputs from the given array of inputs.
+     * Returns an array (double[SimConsts.numOutputs]) of outputs calculated from the given array of inputs.
      * @param input double[] of length SimConsts.numInputs
      * @return double[] of length SimConsts.numOutputs
      */

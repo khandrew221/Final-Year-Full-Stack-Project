@@ -7,7 +7,7 @@ package controls;
 
 /**
  *
- * @author Anguipes
+ * @author Kathryn Andrew
  */
 public class SimControl {
     

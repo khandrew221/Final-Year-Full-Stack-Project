@@ -16,7 +16,7 @@ import java.util.Random;
  *
  * @author Anguipes
  */
-public class NNAdaptorTest {
+public class EncogAdapterTest {
 
     /**
      * @param args the command line arguments
@@ -40,7 +40,7 @@ public class NNAdaptorTest {
         
         int totalFails = 0;
         SimControl control = new SimControl();
-        NNAdaptor nn = new NNAdaptor();
+        EncogAdapter nn = new EncogAdapter();
         GRep r = new GRep();
         //r.randomise();
         r.maximal();
@@ -86,7 +86,7 @@ public class NNAdaptorTest {
         return false;
     }
     
-    public static int basicStrucTest(NNAdaptor nn, boolean v) {
+    public static int basicStrucTest(EncogAdapter nn, boolean v) {
         int fails = 0;
         if (nn.getLayerCount() > SimConsts.getMAX_LAYERS() + 2) {
             fails++;
@@ -114,9 +114,9 @@ public class NNAdaptorTest {
     }
     
     
-    public static int connectionsTest(NNAdaptor nn, GRep r, boolean v) {
+    public static int connectionsTest(EncogAdapter nn, GRep r, boolean v) {
         int fails = 0;
-        if (!NNAdaptor.testWeightsList(r).containsAll(nn.weights())) {
+        if (!EncogAdapter.testWeightsList(r).containsAll(nn.weights())) {
             fails++;
             if (v)
                 System.out.println("Connections test failed: neural network connection list is not contained in genetic representation full active weight list.");        
@@ -124,7 +124,7 @@ public class NNAdaptorTest {
         return fails;
     }    
     
-    public static int outputTest(NNAdaptor nn, boolean v) {
+    public static int outputTest(EncogAdapter nn, boolean v) {
         int fails = 0;
         double[] in = new double[SimConsts.getNumInputs()];
         double[] out = nn.output(in);

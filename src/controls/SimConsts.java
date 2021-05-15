@@ -7,7 +7,7 @@ package controls;
 
 /**
  *
- * @author Anguipes
+ * @author Kathryn Andrew
  */
 public class SimConsts {
     
@@ -15,6 +15,11 @@ public class SimConsts {
     private static int MAX_NODES_PER_LAYER = 3;
     private static int numInputs = 1;
     private static int numOutputs = 1;
+    
+    private static int ENV_MIN_SIZE = 100;
+    private static int ENV_MAX_SIZE = 3000;
+    private static int ENV_MIN_DENSITY = 2;
+    private static int ENV_MAX_DENSITY = 10;
 
     public static int getMAX_LAYERS() {
         return MAX_LAYERS;
@@ -47,5 +52,39 @@ public class SimConsts {
     static void setNumOutputs(int numOutputs) {
         SimConsts.numOutputs = numOutputs;
     }
+
+    public static int getENV_MIN_SIZE() {
+        return ENV_MIN_SIZE;
+    }
+
+    static void setENV_MIN_SIZE(int ENV_MIN_SIZE) {
+        SimConsts.ENV_MIN_SIZE = ENV_MIN_SIZE;
+    }
+
+    public static int getENV_MAX_SIZE() {
+        return ENV_MAX_SIZE;
+    }
+
+    static void setENV_MAX_SIZE(int ENV_MAX_SIZE) {
+        SimConsts.ENV_MAX_SIZE = ENV_MAX_SIZE;
+    }
+
+    public static int getENV_MIN_DENSITY() {
+        return ENV_MIN_DENSITY;
+    }
+
+    static void setENV_MIN_DENSITY(int ENV_MIN_DENSITY) {
+        SimConsts.ENV_MIN_DENSITY = ENV_MIN_DENSITY;
+    }
+
+    public static int getENV_MAX_DENSITY() {
+        return ENV_MAX_DENSITY;
+    }
+
+    static void setENV_MAX_DENSITY(int ENV_MAX_DENSITY) {
+        SimConsts.ENV_MAX_DENSITY = ENV_MAX_DENSITY;
+    }
+    
+    
     
 }
