@@ -29,17 +29,11 @@ public class GRep {
      * Randomises the entire genome, with a 50/50 probability of 0 or 1 for each bit.
      */
     public void randomise() {       
-        //variable setup
-        Random random = new Random();
-        List<Long> longs = new ArrayList<>();        
+        Random random = new Random();        
         //number of longs required for the required genome length
-        int itr = (int) Math.ceil(requiredLength()/64.0);        
-        //generate a list of longs
-        for (int i = 0; i < itr; i++) {
-            longs.add(random.nextLong());
-        }
-        //convert list to bitset, via List<Long> to long[] mapping, trim, and assign
-        genome = BitSet.valueOf(longs.stream().mapToLong(l -> l).toArray()).get(0, requiredLength());        
+        int length = (int) Math.ceil(requiredLength()/64.0);        
+        //convert stream of random longs to bitset via .toArray() to long[], trim, and assign  
+        genome = BitSet.valueOf(random.longs(length).toArray()).get(0, requiredLength());  
     }
     
     /**
