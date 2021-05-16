@@ -39,7 +39,7 @@ public class EncogAdapter implements NNAdapter {
         //loop maximal layers
         for (int L = 1; L <= SimConsts.getMAX_LAYERS(); L++) {
             int trueN = 0;
-            //loop nodes
+            //loop nodes in layer
             for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
                 if (g.nodeAt(L, n)) {
                     //map node's actual to code position
