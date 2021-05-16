@@ -25,6 +25,7 @@ public class EvironmentTest {
         System.out.println("Running prerequisite class tests..."); 
         if (ScalarFieldTest(false)) {
             System.out.println("Prerequisite class tests passed.");
+            testAddField(true);
             testAddDeleteField(true);
             testGetSetFieldValues(true);
             testResize(true);
@@ -33,12 +34,42 @@ public class EvironmentTest {
         }
     }
       
+
+    public static int testAddField(boolean v) {
+        
+        int fails = 0;
+        
+        Environment e = new Environment(100,100);
+        Random random = new Random();
+
+        int min = -1000 + random.nextInt(2000);
+        int max = -1000 + random.nextInt(2000);
+        int d = random.nextInt(SimConsts.getENV_MAX_DENSITY()-SimConsts.getENV_MIN_DENSITY())+SimConsts.getENV_MIN_DENSITY();
+        if (min > max) {
+                int hold = min;
+                min = max;
+                max = hold;
+        }
+        e.addField("Test1", d, min, max);
+        
+        if (!e.listFields().contains("Test1")) {
+                fails++;
+                if (v)
+                    System.out.println("Failure on adding field Test1: Field with name \"Test1\" not found."); 
+        }
+
+        if (v)
+            System.out.println("Failures on adding field: " + fails);        
+        
+        return fails;
+    }      
+    
     
     public static int testAddDeleteField(boolean v) {
         
         int fails = 0;
         
-        Environment e = new Environment(100,100,11);
+        Environment e = new Environment(100,100);
         
         if (!e.listFields().isEmpty()) {
             fails++;
@@ -48,7 +79,7 @@ public class EvironmentTest {
             
             Set<String> testSet = new HashSet<>();
             testSet.add("Test1");
-            e.addField("Test1", 0, 100);
+            e.addField("Test1", 11, 0, 100);
             
             if (!e.listFields().equals(testSet)) {
                 fails++;
@@ -68,9 +99,9 @@ public class EvironmentTest {
             testSet.add("Test2");
             testSet.add("Test3");
             testSet.add("Test4");
-            e.addField("Test2", 0, 100);
-            e.addField("Test3", 0, 100);
-            e.addField("Test4", 0, 100);
+            e.addField("Test2", 11, 0, 100);
+            e.addField("Test3", 11, 0, 100);
+            e.addField("Test4", 11, 0, 100);
             
             if (!e.listFields().equals(testSet)) {
                 fails++;
@@ -102,6 +133,8 @@ public class EvironmentTest {
         return fails;
     } 
     
+ 
+    
     public static int testGetSetFieldValues(boolean v) {
         int fails = 0;
         Random random = new Random();
@@ -111,8 +144,8 @@ public class EvironmentTest {
             int x = SimConsts.getENV_MIN_SIZE() + random.nextInt(SimConsts.getENV_MAX_SIZE()-SimConsts.getENV_MIN_SIZE());
             int y = SimConsts.getENV_MIN_SIZE() + random.nextInt(SimConsts.getENV_MAX_SIZE()-SimConsts.getENV_MIN_SIZE());
             int d = random.nextInt(SimConsts.getENV_MAX_DENSITY()-SimConsts.getENV_MIN_DENSITY())+SimConsts.getENV_MIN_DENSITY();
-            e = new Environment(x,y,d);
-            e.addField("Test1", 0, 100);
+            e = new Environment(x,y);
+            e.addField("Test1", d, 0, 100);
             //System.out.println(x + ", " + y + ", " + d);
             fails += testGetFixedValues(e, "Test1", 0, false);
             int val = -1000 + random.nextInt(2000);
@@ -141,8 +174,8 @@ public class EvironmentTest {
         Environment e;
         
         for (int i = 0; i < 1000; i++) {
-            e = new Environment(100,100,11);
-            e.addField("Test1", 0, 100);
+            e = new Environment(100,100);
+            e.addField("Test1", 11, 0, 100);
             int min = -1000 + random.nextInt(2000);
             int max = -1000 + random.nextInt(2000);
             if (min > max) {
@@ -153,13 +186,14 @@ public class EvironmentTest {
             e.randomiseField("Test1", min, max);
             int x = SimConsts.getENV_MIN_SIZE() + random.nextInt(SimConsts.getENV_MAX_SIZE()-SimConsts.getENV_MIN_SIZE());
             int y = SimConsts.getENV_MIN_SIZE() + random.nextInt(SimConsts.getENV_MAX_SIZE()-SimConsts.getENV_MIN_SIZE());
-            int d = random.nextInt(SimConsts.getENV_MAX_DENSITY()-SimConsts.getENV_MIN_DENSITY())+SimConsts.getENV_MIN_DENSITY();
-            e.resize(x, y, d);
-            if (e.getDensity() != d) {
+            //int d = random.nextInt(SimConsts.getENV_MAX_DENSITY()-SimConsts.getENV_MIN_DENSITY())+SimConsts.getENV_MIN_DENSITY();
+            e.resize(x, y);
+            //density currently not changed by resize
+            /*if (e.getDensity("Test1") != d) {
                 fails++;
                 if (v)
-                    System.out.println("Wrong evironment density: " + d + " expected, actual result " + e.getDensity());              
-            }
+                    System.out.println("Wrong evironment density: " + d + " expected, actual result " + e.getDensity("Test1"));              
+            }*/
             if (e.getXSize() != x) {
                 fails++;
                 if (v)

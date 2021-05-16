@@ -133,6 +133,14 @@ public class EncogAdapterTest {
             if (v)
                 System.out.println("Number of outputs mismatch: " + SimConsts.getNumOutputs() + " expected, " + out.length + " found.");             
         }
+        for (double x : out) {
+            if (x > 1 || x < 0) {
+                fails++;
+                if (v)
+                    System.out.println("Outputs range mismatch: value between 0 and 1 expected, " + x + " found.");             
+            }
+        }
+        
         return fails;
     }
 }

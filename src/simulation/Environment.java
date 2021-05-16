@@ -19,7 +19,6 @@ public class Environment {
     private final Map<String, ScalarField> fields = new HashMap<>();;
     private int xSize;
     private int ySize;
-    private int density;
     
     
     /**
@@ -27,9 +26,8 @@ public class Environment {
      * too low.  !!!NO BAD DESIGN BY CONTRACT
      * @param x
      * @param y
-     * @param d 
      */
-    public Environment(int x, int y, int d) {
+    public Environment(int x, int y) {
         if (x >= SimConsts.getENV_MIN_SIZE())
             xSize = x;
         else 
@@ -38,10 +36,6 @@ public class Environment {
             ySize = y;
         else 
             ySize = SimConsts.getENV_MIN_SIZE();        
-        if (d < SimConsts.getENV_MIN_DENSITY())
-            density = SimConsts.getENV_MIN_DENSITY();
-        else 
-            density = d;
     }
 
     /**
@@ -50,7 +44,7 @@ public class Environment {
      * @param y
      * @param d 
      */
-    void resize(int x, int y, int d) {
+    void resize(int x, int y) {
         if (x >= SimConsts.getENV_MIN_SIZE())
             xSize = x;
         else 
@@ -59,12 +53,8 @@ public class Environment {
             ySize = y;
         else 
             ySize = SimConsts.getENV_MIN_SIZE();        
-        if (d < SimConsts.getENV_MIN_DENSITY())
-            density = SimConsts.getENV_MIN_DENSITY();
-        else 
-            density = d;  
         for (ScalarField s : fields.values()) {
-            s.resample(x, y, d);
+            s.resample(x, y, s.getDensity());
         }
     }
     
@@ -74,9 +64,9 @@ public class Environment {
      * If the name is already present as a map key, nothing is added.
      * @param name name of the new field
      */
-    void addField(String name, double min, double max) {
+    void addField(String name, int d, double min, double max) {
         if (!fields.containsKey(name))
-            fields.put(name, new ScalarField(xSize, ySize, density, min, max));
+            fields.put(name, new ScalarField(xSize, ySize, d, min, max));
     }    
     
     /**
@@ -175,8 +165,11 @@ public class Environment {
         return ySize;
     }
 
-    public int getDensity() {
-        return density;
+    public int getDensity(String n) {
+        if (fields.containsKey(n)) {
+            return fields.get(n).getDensity();
+        }        
+        return 0;
     }
     
 }

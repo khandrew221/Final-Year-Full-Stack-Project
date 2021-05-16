@@ -6,9 +6,7 @@
 package simulation;
 
 import controls.SimConsts;
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -36,15 +34,6 @@ public class GRep {
         genome = BitSet.valueOf(random.longs(length).toArray()).get(0, requiredLength());  
     }
     
-    /**
-     * Makes all bits 1 to the required length
-     */
-    public void maximal() {       
-        genome = new BitSet(requiredLength());
-        genome.flip(0, requiredLength());
-    }    
-    
-
     /**
      * Returns whether the genome codes for a node present at the given position on the inner node grid.
      * @param layer an int between 1 and MAX_LAYERS (inclusive)
@@ -101,21 +90,7 @@ public class GRep {
         }
     }  
     
-    /**
-     * FOR TESTING
-     * @return the bit at the given index as a boolean value
-     */
-    public boolean bitAt(int i) {        
-        return genome.get(i);
-    }   
     
-    /**
-     * FOR TESTING
-     * @return the sub bitset from the given index i (inclusive) to the given index i2 (exclusive) 
-     */
-    public BitSet bitSetAt(int i, int i2) {        
-        return genome.get(i, i2);
-    }     
     
     /**
      * @return the required genome length based on simulation factors
@@ -144,6 +119,32 @@ public class GRep {
     public static int inputConnectionsLength() {        
         return  9*SimConsts.getNumInputs()*SimConsts.getMAX_NODES_PER_LAYER();
     }     
+
+
+
+    /**
+     * FOR TESTING
+     * @return the bit at the given index as a boolean value
+     */
+    public boolean bitAt(int i) {        
+        return genome.get(i);
+    }   
+    
+    /**
+     * FOR TESTING
+     * @return the sub bitset from the given index i (inclusive) to the given index i2 (exclusive) 
+     */
+    public BitSet bitSetAt(int i, int i2) {        
+        return genome.get(i, i2);
+    }     
+    
+    /**
+     * Makes all bits 1 to the required length
+     */
+    public void maximal() {       
+        genome = new BitSet(requiredLength());
+        genome.flip(0, requiredLength());
+    }      
     
     /**
      * Converts the genome BitSet to a binary string, with leading zeros.
