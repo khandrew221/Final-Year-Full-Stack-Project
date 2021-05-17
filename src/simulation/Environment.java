@@ -22,52 +22,54 @@ public class Environment {
     
     
     /**
-     * checks for minimum input value ranges, as these are the ones that cause fatal errors if 
-     * too low.  !!!NO BAD DESIGN BY CONTRACT
+     * 
      * @param x
      * @param y
      */
     public Environment(int x, int y) {
-        if (x >= SimConsts.getENV_MIN_SIZE())
-            xSize = x;
-        else 
-            xSize = SimConsts.getENV_MIN_SIZE();
-        if (y >= SimConsts.getENV_MIN_SIZE())
-            ySize = y;
-        else 
-            ySize = SimConsts.getENV_MIN_SIZE();        
+        xSize = x;
+        ySize = y;    
     }
 
     /**
-     * Resizes the environment and all scalar fields  !!!NO BAD DESIGN BY CONTRACT
+     * Removes all fields
+     * 
+     * UC002
+     */
+    public void clearAllFields() {
+        fields.clear();
+    }
+    
+    /**
+     * adds an empty (all 0 value) field with the given String as name/key to the field map.
+     * If the name is already present as a map key, nothing is added.
+     * 
+     * UC002
+     * 
+     * @param name name of the new field
+     */
+    void addField(String name, int d, double min, double max) {
+        if (!fields.containsKey(name))
+            fields.put(name, new ScalarField(xSize, ySize, d, min, max));
+    }     
+    
+    
+    /**
+     * Resizes the environment and all scalar fields.
      * @param x
      * @param y
      * @param d 
      */
     void resize(int x, int y) {
-        if (x >= SimConsts.getENV_MIN_SIZE())
-            xSize = x;
-        else 
-            xSize = SimConsts.getENV_MIN_SIZE();
-        if (y >= SimConsts.getENV_MIN_SIZE())
-            ySize = y;
-        else 
-            ySize = SimConsts.getENV_MIN_SIZE();        
+        xSize = x;
+        ySize = y;       
         for (ScalarField s : fields.values()) {
             s.resample(x, y, s.getDensity());
         }
     }
     
     
-    /**
-     * adds an empty (all 0 value) field with the given String as name/key to the field map.
-     * If the name is already present as a map key, nothing is added.
-     * @param name name of the new field
-     */
-    void addField(String name, int d, double min, double max) {
-        if (!fields.containsKey(name))
-            fields.put(name, new ScalarField(xSize, ySize, d, min, max));
-    }    
+   
     
     /**
      * removes field with the given String as name/key from the field map if it exists

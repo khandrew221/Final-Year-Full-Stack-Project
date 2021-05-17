@@ -7,7 +7,7 @@ package simulation;
 
 /**
  * A simple pair class to hold layer + node index coordinates, for mapping to each other as
- * implemented position to genetically coded position.
+ * implemented position to genetically coded position.  Required for EncogAdapter.
  * @author Kathryn Andrew
  */
 public class LNPair {

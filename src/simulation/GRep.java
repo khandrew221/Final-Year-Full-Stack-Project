@@ -30,6 +30,9 @@ public class GRep {
     
     /**
      * Randomises the entire genome, with a 50/50 probability of 0 or 1 for each bit.
+     * 
+     * Req for: UC002
+     * 
      */
     public void randomise() {       
         Random random = new Random();        
@@ -37,19 +40,14 @@ public class GRep {
         int length = (int) Math.ceil(requiredLength()/64.0);        
         //convert stream of random longs to bitset via .toArray() to long[], trim, and assign  
         genome = BitSet.valueOf(random.longs(length).toArray()).get(0, requiredLength());  
-    }
-    
-    /**
-     * Makes all bits 1 to the required length
-     */
-    public void maximal() {       
-        genome = new BitSet(requiredLength());
-        genome.flip(0, requiredLength());
-    }    
+    }   
     
 
     /**
      * Returns whether the genome codes for a node present at the given position on the inner node grid.
+     * 
+     * Req for: UC009
+     * 
      * @param layer an int between 1 and MAX_LAYERS (inclusive)
      * @param node an int between 0 and MAX_NODES_PER_LAYER-1 (inclusive)
      * @return true if there should be a node at the given x,y coordinate.
@@ -64,6 +62,9 @@ public class GRep {
      * Note that this does NOT test whether the connection is between nodes that exist given the node grid, or any other condition
      * that causes the connection to be invalidated: it only checks the index bit of the connection gene.
      * Layer 0 represents the input layer. Layer MAX_LAYERS+1 represents the output layer.
+     * 
+     * Req for: UC009
+     * 
      * @param layer an int between 0 and MAX_LAYERS (inclusive)
      * @param node an int between 0 and MAX_NODES_PER_LAYER-1 (inclusive)
      * @param node2 an int between 0 and MAX_NODES_PER_LAYER-1 (inclusive)
@@ -87,6 +88,9 @@ public class GRep {
      * IF valid.
      * A BitSet is returned so that interpretation into a value can be coded elsewhere.
      * Layer 0 represents the input layer. Layer MAX_LAYERS+1 represents the output layer.
+     * 
+     * Req for: UC009
+     * 
      * @param layer an int between 1 and MAX_LAYERS+1 (inclusive)
      * @param node an int between 0 and MAX_NODES_PER_LAYER-1 (inclusive)
      * @param node2 an int between 0 and MAX_NODES_PER_LAYER-1 (inclusive)
@@ -103,24 +107,9 @@ public class GRep {
             return genome.get(ind, ind+8);
         }
     }  
-    
-    /**
-     * FOR TESTING
-     * @return the bit at the given index as a boolean value
-     */
-    public boolean bitAt(int i) {        
-        return genome.get(i);
-    }   
-    
-    /**
-     * FOR TESTING
-     * @return the sub bitset from the given index i (inclusive) to the given index i2 (exclusive) 
-     */
-    public BitSet bitSetAt(int i, int i2) {        
-        return genome.get(i, i2);
-    }     
-    
-    /**
+
+   /**
+     * Req for: constructor, multiple methods, testing 
      * @return the required genome length based on simulation factors
      */
     public int requiredLength() {        
@@ -128,6 +117,7 @@ public class GRep {
     }
     
     /**
+     *  Req for: constructor, multiple methods, testing 
      * @return the number of bits dedicated to defining the node grid
      */
     public int gridLength() {        
@@ -135,6 +125,7 @@ public class GRep {
     } 
     
     /**
+     *  Req for: constructor, multiple methods, testing 
      * @return the number of bits dedicated to defining the main and output connections
      */
     public int mainConnectionsLength() {        
@@ -142,14 +133,48 @@ public class GRep {
     }   
     
     /**
+     *  Req for: constructor, multiple methods, testing 
      * @return the number of bits dedicated to defining the input connections
      */
     public int inputConnectionsLength() {        
         return  9*NUM_INPUTS*MAX_NODES_PER_LAYER;
+    }         
+    
+    /**
+     * Makes all bits 1 to the required length
+     * 
+     * Req for: TESTING
+     * 
+     */
+    public void maximal() {       
+        genome = new BitSet(requiredLength());
+        genome.flip(0, requiredLength());
+    } 
+    
+    
+    /**
+     * Req for: TESTING
+     * @return the bit at the given index as a boolean value
+     */
+    public boolean bitAt(int i) {        
+        return genome.get(i);
+    }   
+    
+    /**
+     * Req for: TESTING
+     * @return the sub bitset from the given index i (inclusive) to the given index i2 (exclusive) 
+     */
+    public BitSet bitSetAt(int i, int i2) {        
+        return genome.get(i, i2);
     }     
+    
+ 
     
     /**
      * Converts the genome BitSet to a binary string, with leading zeros.
+     * 
+     * Req for: TESTING
+     * 
      * @param BE if true, gives a big-endian output.  Otherwise little-endian.
      * @return a binary string representing the genome BitSet
      */

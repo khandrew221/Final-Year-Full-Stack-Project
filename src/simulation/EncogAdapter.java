@@ -24,6 +24,9 @@ public class EncogAdapter implements NNAdapter {
     
     /**
      * builds the neural network from a genetic representation held in a GRep object.
+     * 
+     * Req for: UC009
+     * 
      * @param g genetic representation
      * @param MAX_LAYERS
      * @param MAX_NODES_PER_LAYER
@@ -118,24 +121,14 @@ public class EncogAdapter implements NNAdapter {
                 }
             } 
         }
-    }
-    
-    
-    /**
-     * Returns an array (double[SimConsts.numOutputs]) of outputs calculated from the given array of inputs.
-     * @param input double[] of length SimConsts.numInputs
-     * @return double[] of length SimConsts.numOutputs
-     */
-    @Override
-    public double[] output(double[] input) {
-        double[] output = new double[nn.getOutputCount()]; 
-        nn.compute(input, output);
-        return output;
-    }    
+    }   
     
     /**
      * Produces a weight value between -1 and 1 from the first 8 bits of the given bitset. 
      * 0 weight is encoded twice, once at 00000000 and once at 10000000
+     * 
+     * Req for: UC009, this.createFromGRep()
+     * 
      * @param w
      * @return a double between -1 and 1 inclusive
      */
@@ -150,66 +143,32 @@ public class EncogAdapter implements NNAdapter {
         //normalise 1-255 range to +/- 1
         total = (total-1)/127 - 1;
         return total;
-    }    
-    
-
-    
-    /**
-     * 
-     * @return number of layers as an int
-     */    
-    public int getLayerCount() {
-        return nn.getLayerCount();
-    }
-    
-    /**
-     * 
-     * @return number of inputs as an int
-     */
-    public int getInputCount() {
-        return nn.getInputCount();
     }  
     
-    /**
-     * 
-     * @return number of outputs as an int
-     */
-    public int getOutputCount() {
-        return nn.getOutputCount();
-    }  
     
     /**
-     * Returns the number of nodes in the layer represented by the given index.
-     * If the index is invalid, returns 0.
-     * @param i layer index
-     * @return 
+     * Returns an array (double[SimConsts.numOutputs]) of outputs calculated from the given array of inputs.
+     * 
+     * Req for: TESTING
+     * 
+     * @param input double[] of length SimConsts.numInputs
+     * @return double[] of length SimConsts.numOutputs
      */
-    public int getNodesInLayer(int i){
-        if (i >= 0 && i < nn.getLayerCount()) {
-            return nn.getLayerNeuronCount(i);
-        }
-        else {
-            return 0;
-        }
-    }
-     
-    /**
-     * Returns the number of nodes in the layer represented by the given index.
-     * If the index is invalid, returns 0.
-     * @return number of nodes in the neural network
-     */
-    public int getTotalNodeCount(){
-        int total = 0;
-        for (int i = 0; i < nn.getLayerCount(); i++) {
-            total += nn.getLayerNeuronCount(i);
-        }        
-        return total;
-    }
-
+    @Override
+    public double[] output(double[] input) {
+        double[] output = new double[nn.getOutputCount()]; 
+        nn.compute(input, output);
+        return output;
+    }     
+    
+    
+    
     /**
      * Produces a list of weights for active connections.  
      * This differs from encog's .dumpWeights(), which will return 0.0 weight for inactive connections.  
-     * For class testing.
+     * 
+     * Req for: TESTING
+     * 
      * @return list of weights as doubles
      */
     public List<Double> weights() {
@@ -234,11 +193,17 @@ public class EncogAdapter implements NNAdapter {
     }  
     
     /**
-     * Produces a "test weight list" from a genetic representation. This list will contain
+     * Produces a "test weight list" from a genetic representation.This list will contain 
      * all possible active (index bit 1) weight values from the genetic representation.
-     *  For class testing.
+     * 
+     * Req for: TESTING
+     * 
      * @param r Genetic Representation
-     * @return List<Double> of all active weights from the GRep 
+     * @param MAX_LAYERS
+     * @param MAX_NODES_PER_LAYER
+     * @param NUM_INPUTS
+     * @param NUM_OUTPUTS
+     * @return List\<Double\> of all active weights from the GRep 
      */
     public static List<Double> testWeightsList(GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
         List<Double> out = new ArrayList<>();
@@ -269,6 +234,64 @@ public class EncogAdapter implements NNAdapter {
             }
         }        
         return out;
+    }      
+    
+    
+    /**
+     * Req for: TESTING
+     * @return number of layers as an int
+     */    
+    public int getLayerCount() {
+        return nn.getLayerCount();
+    }
+    
+    /**
+     * Req for: TESTING
+     * @return number of inputs as an int
+     */
+    public int getInputCount() {
+        return nn.getInputCount();
     }  
+    
+    /**
+     * Req for: TESTING
+     * @return number of outputs as an int
+     */
+    public int getOutputCount() {
+        return nn.getOutputCount();
+    }  
+    
+    /**
+     * Returns the number of nodes in the layer represented by the given index.
+     * If the index is invalid, returns 0.
+     * 
+     * Req for: TESTING
+     * 
+     * @param i layer index
+     * @return 
+     */
+    public int getNodesInLayer(int i){
+        if (i >= 0 && i < nn.getLayerCount()) {
+            return nn.getLayerNeuronCount(i);
+        }
+        else {
+            return 0;
+        }
+    }
+     
+    /**
+     * Returns the total number of nodes in the network.
+     * If the index is invalid, returns 0.
+     * @return number of nodes in the neural network
+     */
+    public int getTotalNodeCount(){
+        int total = 0;
+        for (int i = 0; i < nn.getLayerCount(); i++) {
+            total += nn.getLayerNeuronCount(i);
+        }        
+        return total;
+    }
+
+
    
 }
