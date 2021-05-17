@@ -2,8 +2,6 @@ package simulation;
 
 
 import java.util.Random;
-import controls.SimConsts;
-import controls.SimControl;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,32 +25,35 @@ public class GRepTest {
     
     public static boolean GRepTest(boolean v) {
         int totalFails = 0;
-        SimControl control = new SimControl();
-        GRep r = new GRep();
+
+        int MAX_LAYERS = 2;
+        int MAX_NODES_PER_LAYER = 3;
+        int NUM_INPUTS = 1;
+        GRep r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS);
         r.randomise();
         
         if (v) {
-            System.out.println("Required length: " + GRep.requiredLength());
+            System.out.println("Required length: " + r.requiredLength());
             //System.out.println("String BE: " + r.toBinaryString(true));
             System.out.println("String LE: " + r.toBinaryString(false));
         }
         
         
         int itr = 0;
-        int fails = gridTest(r, itr);
+        int fails = gridTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr);
         totalFails += fails;
         if (v)
             System.out.println("Grid test: " + fails + " failures.");        
-        itr = GRep.gridLength();
+        itr = r.gridLength();
         
-        fails = mainConnectionsTest(r, itr, v);
+        fails = mainConnectionsTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr, v);
         totalFails += fails;
         if (v)
             System.out.println("Main connections test: " + fails + " failures."); 
         
-        itr += GRep.mainConnectionsLength();
+        itr += r.mainConnectionsLength();
         
-        fails = inputConnectionsTest(r, itr, v);
+        fails = inputConnectionsTest(r, MAX_NODES_PER_LAYER, NUM_INPUTS, itr, v);
         totalFails += fails;
         if (v)
             System.out.println("Input connections test: " + fails + " failures."); 
@@ -60,41 +61,41 @@ public class GRepTest {
         
         r.maximal();
         itr = 0;       
-        fails = gridTest(r, itr);
+        fails = gridTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr);
         totalFails += fails;
         if (v)
             System.out.println("Maximal grid test: " + fails + " failures.");        
-        itr = GRep.gridLength();
+        itr = r.gridLength();
         
-        fails = mainConnectionsTest(r, itr, v);
+        fails = mainConnectionsTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr, v);
         totalFails += fails;
         if (v)
             System.out.println("Maximal Main connections test: " + fails + " failures."); 
         
-        itr += GRep.mainConnectionsLength();
+        itr += r.mainConnectionsLength();
         
-        fails = inputConnectionsTest(r, itr, v);
+        fails = inputConnectionsTest(r, MAX_NODES_PER_LAYER, NUM_INPUTS, itr, v);
         totalFails += fails;
         if (v)
             System.out.println("Maximal Input connections test: " + fails + " failures."); 
         
         
-        r = new GRep();
+        r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS);
         itr = 0;       
-        fails = gridTest(r, itr);
+        fails = gridTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr);
         totalFails += fails;
         if (v)
             System.out.println("0 Grid test: " + fails + " failures.");        
-        itr = GRep.gridLength();
+        itr = r.gridLength();
         
-        fails = mainConnectionsTest(r, itr, v);
+        fails = mainConnectionsTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr, v);
         totalFails += fails;
         if (v)
             System.out.println("0 Main connections test: " + fails + " failures."); 
         
-        itr += GRep.mainConnectionsLength();
+        itr += r.mainConnectionsLength();
         
-        fails = inputConnectionsTest(r, itr, v);
+        fails = inputConnectionsTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr, v);
         totalFails += fails;
         if (v)
             System.out.println("0 Input connections test: " + fails + " failures."); 
@@ -103,17 +104,17 @@ public class GRepTest {
         fails = 0;
         Random random = new Random();
         for (int x = 0; x < 1000; x++) {
-            control.setMAX_LAYERS(random.nextInt(100));
-            control.setMAX_NODES_PER_LAYER(random.nextInt(30));
-            control.setNumOutputs(random.nextInt(SimConsts.getMAX_NODES_PER_LAYER()+1));
-            control.setNumInputs(random.nextInt(100));
+            MAX_LAYERS = random.nextInt(100)+1;
+            MAX_NODES_PER_LAYER = random.nextInt(30)+1;
+            NUM_INPUTS = random.nextInt(100)+1;
+            r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS);
             r.randomise();
             itr = 0;
-            fails += gridTest(r, itr); 
-            itr = GRep.gridLength();
-            fails += mainConnectionsTest(r, itr, v); 
-            itr += GRep.mainConnectionsLength();
-            fails += inputConnectionsTest(r, itr, v);          
+            fails += gridTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr); 
+            itr = r.gridLength();
+            fails += mainConnectionsTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr, v); 
+            itr += r.mainConnectionsLength();
+            fails += inputConnectionsTest(r, MAX_NODES_PER_LAYER, NUM_INPUTS, itr, v);          
         }
         
         if (v)
@@ -127,11 +128,11 @@ public class GRepTest {
     }
     
     
-    public static int mainConnectionsTest(GRep r, int itr, boolean v) {
+    public static int mainConnectionsTest(GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int itr, boolean v) {
         int fails = 0;
-        for (int L = 1; L <= SimConsts.getMAX_LAYERS(); L++) {
-            for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
-                for (int n2 = 0; n2 < SimConsts.getMAX_NODES_PER_LAYER(); n2++) {
+        for (int L = 1; L <= MAX_LAYERS; L++) {
+            for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
+                for (int n2 = 0; n2 < MAX_NODES_PER_LAYER; n2++) {
                     if (r.connectionAt(L, n, n2) != r.bitAt(itr)) {
                         fails++;
                         if (v)
@@ -150,10 +151,10 @@ public class GRepTest {
         return fails;
     }
     
-    public static int gridTest(GRep r, int itr) {
+    public static int gridTest(GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int itr) {
         int fails = 0;
-        for (int L = 1; L <= SimConsts.getMAX_LAYERS(); L++) {
-            for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
+        for (int L = 1; L <= MAX_LAYERS; L++) {
+            for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 if (r.nodeAt(L, n) != r.bitAt(itr)) fails++;
                 itr++;
             }
@@ -161,10 +162,10 @@ public class GRepTest {
         return fails;
     }    
     
-    public static int inputConnectionsTest(GRep r, int itr, boolean v) {
+    public static int inputConnectionsTest(GRep r, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int itr, boolean v) {
         int fails = 0;
-        for (int I = 0; I < SimConsts.getNumInputs(); I++) {
-            for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
+        for (int I = 0; I < NUM_INPUTS; I++) {
+            for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 if (r.connectionAt(0, I, n) != r.bitAt(itr)) {
                     fails++;
                     if (v) {

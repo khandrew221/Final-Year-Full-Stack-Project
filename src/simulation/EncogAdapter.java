@@ -25,7 +25,12 @@ public class EncogAdapter implements NNAdapter {
     /**
      * builds the neural network from a genetic representation held in a GRep object.
      * @param g genetic representation
+     * @param MAX_LAYERS
+     * @param MAX_NODES_PER_LAYER
+     * @param NUM_INPUTS
+     * @param NUM_OUTPUTS
      */    
+    @Override
     public void createFromGRep(GRep g, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {        
         //add input layer
         //no activation function (direct value pass), no bias node, SimConsts.getNumInputs nodes
@@ -115,6 +120,40 @@ public class EncogAdapter implements NNAdapter {
         }
     }
     
+    
+    /**
+     * Returns an array (double[SimConsts.numOutputs]) of outputs calculated from the given array of inputs.
+     * @param input double[] of length SimConsts.numInputs
+     * @return double[] of length SimConsts.numOutputs
+     */
+    @Override
+    public double[] output(double[] input) {
+        double[] output = new double[nn.getOutputCount()]; 
+        nn.compute(input, output);
+        return output;
+    }    
+    
+    /**
+     * Produces a weight value between -1 and 1 from the first 8 bits of the given bitset. 
+     * 0 weight is encoded twice, once at 00000000 and once at 10000000
+     * @param w
+     * @return a double between -1 and 1 inclusive
+     */
+    private static double parseWeight(BitSet w) {
+        //return zero for empty bitset
+        if (w.isEmpty()) return 0;            
+        //otherwise, parse bitset as value between 1 and 255;
+        double total = 0;
+        for (int i = 7; i >= 0; i--) {
+            if (w.get(i)) total += Math.pow(2, i);
+        }            
+        //normalise 1-255 range to +/- 1
+        total = (total-1)/127 - 1;
+        return total;
+    }    
+    
+
+    
     /**
      * 
      * @return number of layers as an int
@@ -168,37 +207,6 @@ public class EncogAdapter implements NNAdapter {
     }
 
     /**
-     * Returns an array (double[SimConsts.numOutputs]) of outputs calculated from the given array of inputs.
-     * @param input double[] of length SimConsts.numInputs
-     * @return double[] of length SimConsts.numOutputs
-     */
-    public double[] output(double[] input) {
-        double[] output = new double[nn.getOutputCount()]; 
-        nn.compute(input, output);
-        return output;
-    }
-       
-    
-    /**
-     * Produces a weight value between -1 and 1 from the first 8 bits of the given bitset. 
-     * 0 weight is encoded twice, once at 00000000 and once at 10000000
-     * @param w
-     * @return a double between -1 and 1 inclusive
-     */
-    private static double parseWeight(BitSet w) {
-        //return zero for empty bitset
-        if (w.isEmpty()) return 0;            
-        //otherwise, parse bitset as value between 1 and 255;
-        double total = 0;
-        for (int i = 7; i >= 0; i--) {
-            if (w.get(i)) total += Math.pow(2, i);
-        }            
-        //normalise 1-255 range to +/- 1
-        total = (total-1)/127 - 1;
-        return total;
-    }
-    
-    /**
      * Produces a list of weights for active connections.  
      * This differs from encog's .dumpWeights(), which will return 0.0 weight for inactive connections.  
      * For class testing.
@@ -234,7 +242,7 @@ public class EncogAdapter implements NNAdapter {
      */
     public static List<Double> testWeightsList(GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
         List<Double> out = new ArrayList<>();
-        int itr = GRep.gridLength() + GRep.mainConnectionsLength();
+        int itr = r.gridLength() + r.mainConnectionsLength();
         for (int I = 0; I < NUM_INPUTS; I++) {
             for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 if (r.connectionAt(0, I, n)) {
@@ -246,7 +254,7 @@ public class EncogAdapter implements NNAdapter {
                 }
             }
         }
-        itr = GRep.gridLength();
+        itr = r.gridLength();
         for (int L = 1; L <= MAX_LAYERS; L++) {
             for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 for (int n2 = 0; n2 < MAX_NODES_PER_LAYER; n2++) {
@@ -261,5 +269,6 @@ public class EncogAdapter implements NNAdapter {
             }
         }        
         return out;
-    }    
+    }  
+   
 }

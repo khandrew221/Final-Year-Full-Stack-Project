@@ -1,7 +1,6 @@
 package simulation;
 
 
-import java.util.Arrays;
 import java.util.Random;
 
 /*
@@ -43,7 +42,7 @@ public class EncogAdapterTest {
         
         int totalFails = 0;
         EncogAdapter nn = new EncogAdapter();
-        GRep r = new GRep();
+        GRep r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS);
         //r.randomise();
         r.maximal();
         nn.createFromGRep(r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);

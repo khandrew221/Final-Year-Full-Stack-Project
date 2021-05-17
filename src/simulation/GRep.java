@@ -5,7 +5,6 @@
  */
 package simulation;
 
-import controls.SimConsts;
 import java.util.BitSet;
 import java.util.Random;
 
@@ -17,9 +16,15 @@ import java.util.Random;
  */
 public class GRep {
     
+    private final int MAX_NODES_PER_LAYER;
+    private final int MAX_LAYERS;
+    private final int NUM_INPUTS;
     private BitSet genome;
     
-    public GRep() {
+    public GRep(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS) {
+        this.MAX_LAYERS = MAX_LAYERS;
+        this.MAX_NODES_PER_LAYER = MAX_NODES_PER_LAYER;
+        this.NUM_INPUTS = NUM_INPUTS;
         genome = new BitSet(requiredLength());
     }
     
@@ -35,13 +40,22 @@ public class GRep {
     }
     
     /**
+     * Makes all bits 1 to the required length
+     */
+    public void maximal() {       
+        genome = new BitSet(requiredLength());
+        genome.flip(0, requiredLength());
+    }    
+    
+
+    /**
      * Returns whether the genome codes for a node present at the given position on the inner node grid.
      * @param layer an int between 1 and MAX_LAYERS (inclusive)
      * @param node an int between 0 and MAX_NODES_PER_LAYER-1 (inclusive)
      * @return true if there should be a node at the given x,y coordinate.
      */
     public boolean nodeAt(int layer, int node) {
-        int ind = (layer-1)*SimConsts.getMAX_NODES_PER_LAYER() + node;
+        int ind = (layer-1)*MAX_NODES_PER_LAYER + node;
         return genome.get(ind);
     }
     
@@ -58,10 +72,10 @@ public class GRep {
     public boolean connectionAt(int layer, int node, int node2) {
         if (layer == 0) {
            //input connections
-           int ind = gridLength() + mainConnectionsLength() + 9*SimConsts.getMAX_NODES_PER_LAYER()*node + 9*node2;
+           int ind = gridLength() + mainConnectionsLength() + 9*MAX_NODES_PER_LAYER*node + 9*node2;
            return genome.get(ind);
         } else {
-            int ind = (layer-1)*9*SimConsts.getMAX_NODES_PER_LAYER()*SimConsts.getMAX_NODES_PER_LAYER() + 9*SimConsts.getMAX_NODES_PER_LAYER()*node + 9*node2 + gridLength();
+            int ind = (layer-1)*9*MAX_NODES_PER_LAYER*MAX_NODES_PER_LAYER + 9*MAX_NODES_PER_LAYER*node + 9*node2 + gridLength();
             return genome.get(ind);            
         }
     }    
@@ -81,47 +95,15 @@ public class GRep {
     public BitSet weightAt(int layer, int node, int node2) {
         if (layer == 0) {
             //input connections
-            int ind = gridLength() + mainConnectionsLength() + 9*SimConsts.getMAX_NODES_PER_LAYER()*node + 9*node2 + 1;
+            int ind = gridLength() + mainConnectionsLength() + 9*MAX_NODES_PER_LAYER*node + 9*node2 + 1;
             return genome.get(ind, ind+8);
         } else {
             //main connections
-            int ind = (layer-1)*9*SimConsts.getMAX_NODES_PER_LAYER()*SimConsts.getMAX_NODES_PER_LAYER() + 9*SimConsts.getMAX_NODES_PER_LAYER()*node + 9*node2 + gridLength() + 1;
+            int ind = (layer-1)*9*MAX_NODES_PER_LAYER*MAX_NODES_PER_LAYER + 9*MAX_NODES_PER_LAYER*node + 9*node2 + gridLength() + 1;
             return genome.get(ind, ind+8);
         }
     }  
     
-    
-    
-    /**
-     * @return the required genome length based on simulation factors
-     */
-    public static int requiredLength() {        
-        return gridLength() + mainConnectionsLength() + inputConnectionsLength();
-    }
-    
-    /**
-     * @return the number of bits dedicated to defining the node grid
-     */
-    public static int gridLength() {        
-        return  SimConsts.getMAX_NODES_PER_LAYER()*SimConsts.getMAX_LAYERS();
-    } 
-    
-    /**
-     * @return the number of bits dedicated to defining the main and output connections
-     */
-    public static int mainConnectionsLength() {        
-        return  9*SimConsts.getMAX_LAYERS()*SimConsts.getMAX_NODES_PER_LAYER()*SimConsts.getMAX_NODES_PER_LAYER();
-    }   
-    
-    /**
-     * @return the number of bits dedicated to defining the input connections
-     */
-    public static int inputConnectionsLength() {        
-        return  9*SimConsts.getNumInputs()*SimConsts.getMAX_NODES_PER_LAYER();
-    }     
-
-
-
     /**
      * FOR TESTING
      * @return the bit at the given index as a boolean value
@@ -139,12 +121,32 @@ public class GRep {
     }     
     
     /**
-     * Makes all bits 1 to the required length
+     * @return the required genome length based on simulation factors
      */
-    public void maximal() {       
-        genome = new BitSet(requiredLength());
-        genome.flip(0, requiredLength());
-    }      
+    public int requiredLength() {        
+        return gridLength() + mainConnectionsLength() + inputConnectionsLength();
+    }
+    
+    /**
+     * @return the number of bits dedicated to defining the node grid
+     */
+    public int gridLength() {        
+        return  MAX_NODES_PER_LAYER*MAX_LAYERS;
+    } 
+    
+    /**
+     * @return the number of bits dedicated to defining the main and output connections
+     */
+    public int mainConnectionsLength() {        
+        return  9*MAX_LAYERS*MAX_NODES_PER_LAYER*MAX_NODES_PER_LAYER;
+    }   
+    
+    /**
+     * @return the number of bits dedicated to defining the input connections
+     */
+    public int inputConnectionsLength() {        
+        return  9*NUM_INPUTS*MAX_NODES_PER_LAYER;
+    }     
     
     /**
      * Converts the genome BitSet to a binary string, with leading zeros.

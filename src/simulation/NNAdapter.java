@@ -14,11 +14,5 @@ public interface NNAdapter {
     public void createFromGRep(GRep g, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS);
     public double[] output(double[] input);
     
-    //necessary?
-    public int getLayerCount();
-    public int getInputCount();
-    public int getOutputCount();   
-    public int getNodesInLayer(int i);
-    public int getTotalNodeCount();
     
 }
