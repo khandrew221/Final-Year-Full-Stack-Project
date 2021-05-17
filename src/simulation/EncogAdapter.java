@@ -5,7 +5,6 @@
  */
 package simulation;
 
-import controls.SimConsts;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -27,20 +26,20 @@ public class EncogAdapter implements NNAdapter {
      * builds the neural network from a genetic representation held in a GRep object.
      * @param g genetic representation
      */    
-    public void createFromGRep(GRep g) {        
+    public void createFromGRep(GRep g, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {        
         //add input layer
         //no activation function (direct value pass), no bias node, SimConsts.getNumInputs nodes
-        nn.addLayer(new BasicLayer(null,false,SimConsts.getNumInputs()));
+        nn.addLayer(new BasicLayer(null,false,NUM_INPUTS));
                 
         //read the node grid part of the genome to add inner layers and build 
         //node coordinate map        
         Map<LNPair, LNPair> nodeMap = new HashMap<>();        
         int trueL = 1;  //internal layer numbering starts at 1 (0 is input)               
         //loop maximal layers
-        for (int L = 1; L <= SimConsts.getMAX_LAYERS(); L++) {
+        for (int L = 1; L <= MAX_LAYERS; L++) {
             int trueN = 0;
             //loop nodes in layer
-            for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
+            for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 if (g.nodeAt(L, n)) {
                     //map node's actual to code position
                     nodeMap.put(new LNPair(trueL, trueN), new LNPair(L, n));
@@ -60,7 +59,7 @@ public class EncogAdapter implements NNAdapter {
 
         //add output layer
         //sigmoid activation, no bias node, SimConsts.getNumOutputs() nodes
-        nn.addLayer(new BasicLayer(new ActivationSigmoid(),false,SimConsts.getNumOutputs()));        
+        nn.addLayer(new BasicLayer(new ActivationSigmoid(), false, NUM_OUTPUTS));        
         
         //required for further work on network
         nn.getStructure().finalizeStructure(); 
@@ -174,7 +173,7 @@ public class EncogAdapter implements NNAdapter {
      * @return double[] of length SimConsts.numOutputs
      */
     public double[] output(double[] input) {
-        double[] output = new double[SimConsts.getNumOutputs()]; 
+        double[] output = new double[nn.getOutputCount()]; 
         nn.compute(input, output);
         return output;
     }
@@ -233,11 +232,11 @@ public class EncogAdapter implements NNAdapter {
      * @param r Genetic Representation
      * @return List<Double> of all active weights from the GRep 
      */
-    public static List<Double> testWeightsList(GRep r) {
+    public static List<Double> testWeightsList(GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
         List<Double> out = new ArrayList<>();
         int itr = GRep.gridLength() + GRep.mainConnectionsLength();
-        for (int I = 0; I < SimConsts.getNumInputs(); I++) {
-            for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
+        for (int I = 0; I < NUM_INPUTS; I++) {
+            for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 if (r.connectionAt(0, I, n)) {
                     itr++;
                     out.add(parseWeight(r.weightAt(0, I, n)));
@@ -248,9 +247,9 @@ public class EncogAdapter implements NNAdapter {
             }
         }
         itr = GRep.gridLength();
-        for (int L = 1; L <= SimConsts.getMAX_LAYERS(); L++) {
-            for (int n = 0; n < SimConsts.getMAX_NODES_PER_LAYER(); n++) {
-                for (int n2 = 0; n2 < SimConsts.getMAX_NODES_PER_LAYER(); n2++) {
+        for (int L = 1; L <= MAX_LAYERS; L++) {
+            for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
+                for (int n2 = 0; n2 < MAX_NODES_PER_LAYER; n2++) {
                     if (r.connectionAt(L, n, n2)) {
                         itr++;
                         out.add(parseWeight(r.weightAt(L, n, n2)));

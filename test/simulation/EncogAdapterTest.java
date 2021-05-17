@@ -2,8 +2,6 @@ package simulation;
 
 
 import java.util.Arrays;
-import controls.SimConsts;
-import controls.SimControl;
 import java.util.Random;
 
 /*
@@ -38,25 +36,29 @@ public class EncogAdapterTest {
         if (v)
             System.out.println("Prerequisite class tests passed.");    
         
+        int MAX_LAYERS = 2;
+        int MAX_NODES_PER_LAYER = 3;
+        int NUM_INPUTS = 1;
+        int NUM_OUTPUTS = 1;
+        
         int totalFails = 0;
-        SimControl control = new SimControl();
         EncogAdapter nn = new EncogAdapter();
         GRep r = new GRep();
         //r.randomise();
         r.maximal();
-        nn.createFromGRep(r);
+        nn.createFromGRep(r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
         
-        int fails = basicStrucTest(nn, v);
+        int fails = basicStrucTest(nn, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS, v);
         totalFails += fails;
         if (v)
             System.out.println("Basic structure test failures: " + fails);       
 
-        fails = connectionsTest(nn, r, v);
+        fails = connectionsTest(nn, r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS, v);
         totalFails += fails;
         if (v)
             System.out.println("Connection test failures: " + fails);   
         
-        fails = connectionsTest(nn, r, v);
+        fails = connectionsTest(nn, r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS, v);
         totalFails += fails;
         if (v)
             System.out.println("Connection test failures: " + fails);        
@@ -65,15 +67,15 @@ public class EncogAdapterTest {
         fails = 0;
         Random random = new Random();
         for (int x = 0; x < 1000; x++) {
-            control.setMAX_LAYERS(random.nextInt(100)+1);
-            control.setMAX_NODES_PER_LAYER(random.nextInt(30)+1);
-            control.setNumOutputs(random.nextInt(SimConsts.getMAX_NODES_PER_LAYER()+1));
-            control.setNumInputs(random.nextInt(100)+1);
+            MAX_LAYERS = random.nextInt(100)+1;
+            MAX_NODES_PER_LAYER = random.nextInt(30)+1;
+            NUM_INPUTS = random.nextInt(100)+1;
+            NUM_OUTPUTS = random.nextInt(MAX_NODES_PER_LAYER+1);
             r.randomise();
-            nn.createFromGRep(r);
-            fails += basicStrucTest(nn, v); 
-            fails += connectionsTest(nn, r, v);
-            fails += outputTest(nn, v);
+            nn.createFromGRep(r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+            fails += basicStrucTest(nn, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS, v); 
+            fails += connectionsTest(nn, r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS, v);
+            fails += outputTest(nn, NUM_INPUTS, NUM_OUTPUTS, v);
         }
         if (v)
             System.out.println("Failures in 1000 randomised tests: " + fails);
@@ -86,37 +88,37 @@ public class EncogAdapterTest {
         return false;
     }
     
-    public static int basicStrucTest(EncogAdapter nn, boolean v) {
+    public static int basicStrucTest(EncogAdapter nn, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS, boolean v) {
         int fails = 0;
-        if (nn.getLayerCount() > SimConsts.getMAX_LAYERS() + 2) {
+        if (nn.getLayerCount() > MAX_LAYERS + 2) {
             fails++;
             if (v)
-                System.out.println("Layer count mismatch: max " + (SimConsts.getMAX_LAYERS()+2) + " expected, " + nn.getLayerCount() + " found.");      
+                System.out.println("Layer count mismatch: max " + (MAX_LAYERS+2) + " expected, " + nn.getLayerCount() + " found.");      
         }
-        if (!(nn.getInputCount() == SimConsts.getNumInputs())) {
+        if (!(nn.getInputCount() == NUM_INPUTS)) {
             fails++;
             if (v)
-                System.out.println("Inputs mismatch: " + SimConsts.getNumInputs() + " expected, " + nn.getInputCount() + " found.");
+                System.out.println("Inputs mismatch: " + NUM_INPUTS + " expected, " + nn.getInputCount() + " found.");
         }   
-        if (!(nn.getOutputCount() == SimConsts.getNumOutputs())) {
+        if (!(nn.getOutputCount() == NUM_OUTPUTS)) {
             fails++;
             if (v)
-                System.out.println("Outputs mismatch: " + SimConsts.getNumOutputs() + " expected, " + nn.getOutputCount() + " found.");
+                System.out.println("Outputs mismatch: " + NUM_OUTPUTS + " expected, " + nn.getOutputCount() + " found.");
         }          
         for (int i = 1; i < nn.getLayerCount(); i++) {
-            if (nn.getNodesInLayer(i) > SimConsts.getMAX_NODES_PER_LAYER()) {
+            if (nn.getNodesInLayer(i) > MAX_NODES_PER_LAYER) {
                 fails++;
                 if (v)
-                    System.out.println("Number of nodes mismatch in layer " + i + ": " + SimConsts.getMAX_NODES_PER_LAYER() + " expected, " + nn.getNodesInLayer(i) + " found.");               
+                    System.out.println("Number of nodes mismatch in layer " + i + ": " + MAX_NODES_PER_LAYER + " expected, " + nn.getNodesInLayer(i) + " found.");               
             }     
         }
         return fails;
     }
     
     
-    public static int connectionsTest(EncogAdapter nn, GRep r, boolean v) {
+    public static int connectionsTest(EncogAdapter nn, GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS, boolean v) {
         int fails = 0;
-        if (!EncogAdapter.testWeightsList(r).containsAll(nn.weights())) {
+        if (!EncogAdapter.testWeightsList(r, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS).containsAll(nn.weights())) {
             fails++;
             if (v)
                 System.out.println("Connections test failed: neural network connection list is not contained in genetic representation full active weight list.");        
@@ -124,14 +126,14 @@ public class EncogAdapterTest {
         return fails;
     }    
     
-    public static int outputTest(EncogAdapter nn, boolean v) {
+    public static int outputTest(EncogAdapter nn, int NUM_INPUTS, int NUM_OUTPUTS, boolean v) {
         int fails = 0;
-        double[] in = new double[SimConsts.getNumInputs()];
+        double[] in = new double[NUM_INPUTS];
         double[] out = nn.output(in);
-        if (out.length != SimConsts.getNumOutputs()) {
+        if (out.length != NUM_OUTPUTS) {
             fails++;
             if (v)
-                System.out.println("Number of outputs mismatch: " + SimConsts.getNumOutputs() + " expected, " + out.length + " found.");             
+                System.out.println("Number of outputs mismatch: " + NUM_OUTPUTS + " expected, " + out.length + " found.");             
         }
         for (double x : out) {
             if (x > 1 || x < 0) {

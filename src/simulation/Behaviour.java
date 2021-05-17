@@ -5,14 +5,11 @@
  */
 package simulation;
 
-import java.util.Set;
-
 /**
  *
  * @author Kathryn Andrew
  */
-public abstract class Sense {
+public abstract class Behaviour {
     
-    abstract void sensoryInput(Bot bot);
-    abstract Set<Integer> inputSlots();
+    abstract void execute(Bot bot);
 }
