@@ -7,6 +7,7 @@ package simulation;
 
 import controls.SimConsts;
 import java.util.Random;
+import utility.Point;
 
 /**
  *
@@ -119,25 +120,33 @@ public class ScalarFieldTest {
     
     public static int cornerTest(ScalarField s, double xmax, double ymax, double expected0, double expected1, double expected2, double expected3, boolean v) {
         int fails = 0;
-        double test = s.trueValueAt(0, 0);
+        
+        Point p = new Point(0,0);
+        
+        double test = s.trueValueAt(p);
         if(!approxEquals(test, expected0, 0.0000001)) {
             fails++;
             if (v)
                 System.out.println("(0,0): " + expected0 + " expected, actual value " + test);
         }
-        test = s.trueValueAt(0, ymax);
+        
+        p = new Point(0, ymax);
+        test = s.trueValueAt(p);
         if(!approxEquals(test, expected1, 0.0000001)) {
             fails++;
             if (v)
                 System.out.println("(0,ymax): " + expected1 + " expected, actual value " + test);
         }
-        test = s.trueValueAt(xmax, 0);
+        
+        p = new Point(xmax, 0);      
+        test = s.trueValueAt(p);
         if(!approxEquals(test, expected2, 0.0000001)) {
             fails++;
             if (v)
                 System.out.println("(xmax,0): " + expected2 + " expected, actual value " + test);
         }    
-        test = s.trueValueAt(xmax, ymax);
+        p = new Point(xmax, ymax);
+        test = s.trueValueAt(p);
         if(!approxEquals(test, expected3, 0.0000001)) {
             fails++;
             if (v)
@@ -150,25 +159,29 @@ public class ScalarFieldTest {
 
     public static int edgeTest(ScalarField s, double xmax, double ymax, double expected0, double expected1, double expected2, double expected3, boolean v) {
         int fails = 0;
-        double test = s.trueValueAt(xmax*0.5, 0);
+        Point p = new Point(xmax*0.5, 0);
+        double test = s.trueValueAt(p);
         if(!approxEquals(test, expected0, 0.0000001)) {
             fails++;
             if (v)
                 System.out.println("(xmax*0.5, 0): " + expected0 + " expected, actual value " + test);
         }
-        test = s.trueValueAt(0, ymax*0.5);
+        p = new Point(0, ymax*0.5);
+        test = s.trueValueAt(p);
         if(!approxEquals(test, expected1, 0.0000001)) {
             fails++;
             if (v)
                 System.out.println("(0, ymax*0.5): " + expected1 + " expected, actual value " + test);
         }
-        test = s.trueValueAt(xmax, ymax*0.5);
+        p = new Point(xmax, ymax*0.5);
+        test = s.trueValueAt(p);
         if(!approxEquals(test, expected2, 0.0000001)) {
             fails++;
             if (v)
                 System.out.println("(xmax, ymax*0.5): " + expected2 + " expected, actual value " + test);
         }    
-        test = s.trueValueAt(xmax*0.5, ymax);
+        p = new Point(xmax*0.5, ymax);
+        test = s.trueValueAt(p);
         if(!approxEquals(test, expected3, 0.0000001)) {
             fails++;
             if (v)
@@ -181,7 +194,8 @@ public class ScalarFieldTest {
     
     public static int centreTest(ScalarField s, double xmax, double ymax, double expected0, boolean v) {
         int fails = 0;
-        double test = s.trueValueAt(xmax*0.5, ymax*0.5);
+        Point p = new Point(xmax*0.5, ymax*0.5);
+        double test = s.trueValueAt(p);
         if(!approxEquals(test, expected0, 0.0000001)) {
             fails++;
             if (v)

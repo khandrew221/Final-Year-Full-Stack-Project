@@ -5,10 +5,10 @@
  */
 package simulation;
 
-import controls.SimConsts;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import utility.Point;
 
 /**
  *
@@ -113,14 +113,13 @@ public class Environment {
     /**
      * Returns the normalised value of the field with name n at position x,y, or 0 if name not found or position out of bounds 
      * @param n  
-     * @param x 
-     * @param y 
+     * @param p
      * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
      */
-    public double normValueAt(String n, double x, double y) {
+    public double normValueAt(String n, Point p) {
         if (fields.containsKey(n)) {
-            if (x >= 0 && x <= xSize && y >= 0 && y <= ySize)
-                return fields.get(n).normValueAt(x, y);
+            if (inField(p))
+                return fields.get(n).normValueAt(p);
             return 0;
         } else
             return 0;
@@ -129,18 +128,31 @@ public class Environment {
     /**
      * Returns the value at position x,y for the field with name n, or 0 if name not found or position out of bounds 
      * @param n  
-     * @param x 
-     * @param y 
+     * @param p
      * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
      */
-    public double trueValueAt(String n, double x, double y) {
+    public double trueValueAt(String n, Point p) {
         if (fields.containsKey(n)) {
-            if (x >= 0 && x <= xSize && y >= 0 && y <= ySize)
-                return fields.get(n).trueValueAt(x, y);
+            if (inField(p))
+                return fields.get(n).trueValueAt(p);
             return 0;
         } else
             return 0;
     }     
+    
+    /**
+     * 
+     * Req for: utility
+     * 
+     * @param p
+     * @return 
+     */
+    public boolean inField(Point p) {
+        if (p.getX() >= 0 && p.getX() <= xSize && p.getY() >= 0 && p.getY() <= ySize) {
+            return true;
+        }
+        return false;
+    }
 
     
     /*

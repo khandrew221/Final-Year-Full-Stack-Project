@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.Random;
+import utility.Point;
 
 /**
  *
@@ -70,16 +71,15 @@ public class ScalarField {
     
     /**
      * Returns the normal interpolated value at the given x,y location
-     * @param x between 0 and xSize inclusive
-     * @param y between 0 and ySize inclusive
+     * @param p point within the field
      * @return interpolated value at location between 0 and 1
      */
-    public double normValueAt(double x, double y) {
+    public double normValueAt(Point p) {
         
-        int x1 = getLeftX(x);
-        int x2 = getRightX(x);
-        int y1 = getLowerY(y);
-        int y2 = getUpperY(y); 
+        int x1 = getLeftX(p.getX());
+        int x2 = getRightX(p.getX());
+        int y1 = getLowerY(p.getY());
+        int y2 = getUpperY(p.getY()); 
         
         /*System.out.println("x1: " + x1);
         System.out.println("x2: " + x2);
@@ -97,7 +97,7 @@ public class ScalarField {
         System.out.println("Q21: " + Q21);
         System.out.println("Q22: " + Q22);  */      
 
-        double f = (x % xUnit) / xUnit;
+        double f = (p.getX() % xUnit) / xUnit;
         
         //System.out.println("f: " + f);
         
@@ -107,7 +107,7 @@ public class ScalarField {
         //System.out.println("R1: " + R1);
         //System.out.println("R2: " + R2); 
         
-        f = (y % yUnit) / yUnit;
+        f = (p.getY() % yUnit) / yUnit;
         
         //System.out.println("f: " + f);
         
@@ -116,12 +116,11 @@ public class ScalarField {
 
     /**
      * Returns the true interpolated value at the given x,y location
-     * @param x between 0 and xSize inclusive
-     * @param y between 0 and ySize inclusive
+     * @param p point within the field
      * @return interpolated value at location between 0 and 1
      */    
-    public double trueValueAt(double x, double y) {   
-        return valMin + (normValueAt(x, y) * (valMax - valMin));
+    public double trueValueAt(Point p) {   
+        return valMin + (normValueAt(p) * (valMax - valMin));
     } 
 
     
@@ -228,7 +227,7 @@ public class ScalarField {
         double[][] newValues = new double[newXSamples][newYSamples];       
         for (int i = 0; i < newXSamples; i++) {
             for (int i2 = 0; i2 < newYSamples; i2++) {
-                newValues[i][i2] = this.normValueAt(resampleXUnit*i, resampleYUnit*i2);
+                newValues[i][i2] = this.normValueAt(new Point(resampleXUnit*i, resampleYUnit*i2));
             }
         } 
         this.xSize = x;

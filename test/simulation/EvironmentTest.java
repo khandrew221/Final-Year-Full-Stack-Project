@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 import static simulation.ScalarFieldTest.ScalarFieldTest;
+import utility.Point;
 
 /**
  *
@@ -147,10 +148,10 @@ public class EvironmentTest {
             e = new Environment(x,y);
             e.addField("Test1", d, 0, 100);
             //System.out.println(x + ", " + y + ", " + d);
-            fails += testGetFixedValues(e, "Test1", 0, false);
+            fails += testGetFixedValues(e, "Test1", 0, true);
             int val = -1000 + random.nextInt(2000);
             e.setField("Test1", val);
-            fails += testGetFixedValues(e, "Test1", val, false);
+            fails += testGetFixedValues(e, "Test1", val, true);
             int min = -1000 + random.nextInt(2000);
             int max = -1000 + random.nextInt(2000);   
             if (min > max) {
@@ -159,7 +160,7 @@ public class EvironmentTest {
                 max = hold;
             }
             e.randomiseField("Test1", min, max);
-            fails += testGetRandomisedValues(e, "Test1", min, max, false);
+            fails += testGetRandomisedValues(e, "Test1", min, max, true);
         }
         
         if (v)
@@ -220,25 +221,27 @@ public class EvironmentTest {
         int fails = 0;
         Random random = new Random();
 
-        if (!approxEquals(e.trueValueAt(name, 0, 0), expected, 0.0000001)) {
+        Point p = new Point(0, 0);
+        
+        if (!approxEquals(e.trueValueAt(name, p), expected, 0.0000001)) {
             fails++;
             if (v)
-                    System.out.println("Failure on accessing field " + name + " at 0,0: " + expected + " expected, actual result " + e.trueValueAt(name, 0, 0));
+                    System.out.println("Failure on accessing field " + name + " at 0,0: " + expected + " expected, actual result " + e.trueValueAt(name, p));
         }
         
-        if (!approxEquals(e.trueValueAt(name, e.getXSize(), e.getYSize()), expected, 0.0000001)) {
+        p = new Point(e.getXSize(), e.getYSize());
+        if (!approxEquals(e.trueValueAt(name, p), expected, 0.0000001)) {
             fails++;
             if (v)
-                    System.out.println("Failure on accessing field " + name + " at max,max: " + expected + " expected, actual result " + e.trueValueAt(name, e.getXSize(), e.getYSize()));
+                    System.out.println("Failure on accessing field " + name + " at max,max: " + expected + " expected, actual result " + e.trueValueAt(name, p));
         }        
         
         for (int i = 0; i < 100; i++) {
-            int x = random.nextInt(e.getXSize()+1);
-            int y = random.nextInt(e.getYSize()+1);
-            if (!approxEquals(e.trueValueAt(name, x,y), expected, 0.0000001)) {
+            p = new Point(random.nextInt(e.getXSize()+1), random.nextInt(e.getYSize()+1));
+            if (!approxEquals(e.trueValueAt(name, p), expected, 0.0000001)) {
                 fails++;
                 if (v)
-                        System.out.println("Failure on accessing field " + name + " at " + x + "," + y + " : " + expected + " expected, actual result " + e.trueValueAt(name, x,y));                
+                        System.out.println("Failure on accessing field " + name + " at " + p.getX() + "," + p.getY() + " : " + expected + " expected, actual result " + e.trueValueAt(name, p));                
             }
         };
         
@@ -254,13 +257,12 @@ public class EvironmentTest {
         Random random = new Random();
         
         for (int i = 0; i < 100; i++) {
-            int x = random.nextInt(e.getXSize()+1);
-            int y = random.nextInt(e.getYSize()+1);
-            double val = e.trueValueAt(name, x, y);
+            Point p = new Point(random.nextInt(e.getXSize()+1), random.nextInt(e.getYSize()+1));
+            double val = e.trueValueAt(name, p);
             if (val > max || val < min) {
                 fails++;
                 if (v) 
-                        System.out.println("Failure on accessing field " + name + " at " + x + "," + y + " : " + max + " max " + min + " min expected, actual result " + val);                
+                        System.out.println("Failure on accessing field " + name + " at " + p.getX() + "," + p.getY() + " : " + max + " max " + min + " min expected, actual result " + val);                
             }
         };
         
