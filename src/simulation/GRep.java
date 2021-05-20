@@ -19,12 +19,14 @@ public class GRep {
     private final int MAX_NODES_PER_LAYER;
     private final int MAX_LAYERS;
     private final int NUM_INPUTS;
+    private final int NUM_OUTPUTS;
     private BitSet genome;
     
-    public GRep(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS) {
+    public GRep(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
         this.MAX_LAYERS = MAX_LAYERS;
         this.MAX_NODES_PER_LAYER = MAX_NODES_PER_LAYER;
         this.NUM_INPUTS = NUM_INPUTS;
+        this.NUM_OUTPUTS = NUM_OUTPUTS;
         genome = new BitSet(requiredLength());
     }
     
@@ -139,6 +141,38 @@ public class GRep {
     public int inputConnectionsLength() {        
         return  9*NUM_INPUTS*MAX_NODES_PER_LAYER;
     }         
+
+    /**
+     *  Req for: UC008 
+     * @return 
+     */    
+    public int getMAX_NODES_PER_LAYER() {
+        return MAX_NODES_PER_LAYER;
+    }
+    /**
+     *  Req for: UC008 
+     * @return 
+     */       
+    public int getMAX_LAYERS() {
+        return MAX_LAYERS;
+    }
+    /**
+     *  Req for: UC008 
+     * @return 
+     */       
+    public int getNUM_INPUTS() {
+        return NUM_INPUTS;
+    }
+    /**
+     *  Req for: UC008 
+     * @return 
+     */       
+    public int getNUM_OUTPUTS() {
+        return NUM_OUTPUTS;
+    }
+    
+    
+    
     
     /**
      * Makes all bits 1 to the required length

@@ -26,6 +26,14 @@ public class Bot {
     
     
     
+    public Bot(GRep g) {
+        genetics = g;
+        nn = new EncogAdapter();
+        nn.createFromGRep(g);
+    }
+    
+    
+    
     /**
      * Returns the output from the specified slot
      * @param slot

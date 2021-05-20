@@ -34,7 +34,13 @@ public class EncogAdapter implements NNAdapter {
      * @param NUM_OUTPUTS
      */    
     @Override
-    public void createFromGRep(GRep g, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {        
+    public void createFromGRep(GRep g) {    
+        
+        int MAX_LAYERS = g.getMAX_LAYERS();
+        int MAX_NODES_PER_LAYER = g.getMAX_NODES_PER_LAYER();
+        int NUM_INPUTS = g.getNUM_INPUTS();
+        int NUM_OUTPUTS = g.getNUM_OUTPUTS();
+        
         //add input layer
         //no activation function (direct value pass), no bias node, SimConsts.getNumInputs nodes
         nn.addLayer(new BasicLayer(null,false,NUM_INPUTS));

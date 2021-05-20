@@ -11,7 +11,7 @@ package simulation;
  */
 public interface NNAdapter {
 
-    public void createFromGRep(GRep g, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS);
+    public void createFromGRep(GRep g);
     public double[] output(double[] input);
     
     
