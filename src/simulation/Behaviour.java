@@ -5,11 +5,15 @@
  */
 package simulation;
 
+import java.util.Set;
+
 /**
  *
  * @author Kathryn Andrew
  */
 public abstract class Behaviour {
     
-    abstract void execute(Bot bot);
+    public abstract void execute(Bot bot);
+    public abstract Set<Integer> outputSlots();
+    public abstract void renumberOutputs(int startSlot);    
 }

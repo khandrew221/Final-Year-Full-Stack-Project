@@ -5,15 +5,20 @@
  */
 package simulation;
 
-import java.util.Set;
-
 /**
  *
  * @author Kathryn Andrew
  */
-public abstract class Sense {
+public class SenseFactory {
     
-    public abstract void sensoryInput(Bot bot);
-    public abstract Set<Integer> inputSlots();
-    public abstract void renumberInputs(int startSlot);
+    
+    
+    /**
+     * Creates a simple one point envirosense.
+     * @return 
+     */
+    public static SenseEnviro Enviro(String target, Environment e) {
+        return new SenseEnviro(target, e);
+    }
+    
 }

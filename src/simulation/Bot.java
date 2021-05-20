@@ -5,12 +5,34 @@
  */
 package simulation;
 
+import java.util.Set;
+import utility.Point;
+
 /**
  *
  * @author Kathryn Andrew
  */
 public class Bot {
     
+    GRep genetics;
     NNAdapter nn;
+    Set<Sense> senses;
+    Set<Behaviour> behaviours;
+    double[] inputs;
+    double[] outputs;
+    
+    double energy;
+    Point position;
+    
+    
+    
+    /**
+     * Returns the output from the specified slot
+     * @param slot
+     * @return 
+     */
+    public double getOutput(int slot) {
+        return outputs[slot];
+    }
     
 }

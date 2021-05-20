@@ -33,7 +33,7 @@ public class Point {
         double x1 = this.x - b.getX();
         double y1 = this.y - b.getY();
         return Math.sqrt(x1*x1 + y1*y1);
-    }
+    }    
 
     @Override
     //same xy values but different CoordSystemIndex with return false
