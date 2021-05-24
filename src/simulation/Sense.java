@@ -14,6 +14,6 @@ import java.util.Set;
 public abstract class Sense {
     
     public abstract void sensoryInput(Bot bot);
-    public abstract Set<Integer> inputSlots();
-    public abstract void renumberInputs(int startSlot);
+    public abstract Set<Integer> outputSlots();
+    public abstract void renumberOutputs(int startSlot);
 }

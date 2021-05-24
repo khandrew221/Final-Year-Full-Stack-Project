@@ -29,7 +29,7 @@ public class SenseEnviro extends Sense {
     
     
     @Override
-    public Set<Integer> inputSlots() {
+    public Set<Integer> outputSlots() {
         return points.keySet();
     }
     
@@ -39,7 +39,7 @@ public class SenseEnviro extends Sense {
     }    
     
     @Override
-    public void renumberInputs(int startSlot) {
+    public void renumberOutputs(int startSlot) {
         Map<Integer, Point> newPoints = new HashMap<>();
         int slot = startSlot;
         for (int k : points.keySet()) {

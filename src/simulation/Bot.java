@@ -14,20 +14,26 @@ import utility.Point;
  */
 public class Bot {
     
-    GRep genetics;
-    NNAdapter nn;
-    Set<Sense> senses;
-    Set<Behaviour> behaviours;
-    double[] inputs;
-    double[] outputs;
+    private GRep genetics;
+    private NNAdapter nn;
+    private Set<Sense> senses;
+    private Set<Behaviour> behaviours;
+    private double[] inputs;
+    private double[] outputs;
     
-    double energy;
-    Point position;
+    private double energy;
+    private Point position;
     
     
     
-    public Bot(GRep g) {
+    public Bot(GRep g, Set<Sense> s, Set<Behaviour> b, double e) {
         genetics = g;
+        senses = s;
+        behaviours = b; 
+        inputs = new double[g.getNUM_INPUTS()];
+        outputs = new double[g.getNUM_OUTPUTS()];
+        position = new Point(0,0);
+        energy = e;
         nn = new EncogAdapter();
         nn.createFromGRep(g);
     }

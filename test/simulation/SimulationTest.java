@@ -22,8 +22,27 @@ public class SimulationTest {
         
         testAddSense(s, true);
         testAddBehaviour(s, true);
+        
+        testAddRandomBot(s, true);
+        
     }
     
+    public static int testAddRandomBot(Simulation s, boolean v) {
+        int fails = 0;
+        for (int i = 0; i < 4; i++) {
+            int pop = s.population();
+            s.addStarterBot(10, 12, 23);            
+            if (s.population() != (pop+1)) {
+                fails++;
+                if (v)
+                    System.out.println("Bot collection not one larger.");
+            }               
+        }
+        if (v)
+            System.out.println("Failures: " + fails);        
+        
+        return fails;
+    }
     
     public static int testAddSense(Simulation s, boolean v) {
         int fails = 0;
@@ -31,7 +50,7 @@ public class SimulationTest {
             int inp = s.getNnInputs();
             Sense sen = SenseFactory.Enviro("Test1", s.getEnv());
             s.addSense(sen);            
-            if (!setIsRange(sen.inputSlots(), inp, inp+sen.inputSlots().size())) {
+            if (!setIsRange(sen.outputSlots(), inp, inp+sen.outputSlots().size())) {
                 fails++;
                 if (v)
                     System.out.println("Input set is not correct range.");
@@ -60,7 +79,7 @@ public class SimulationTest {
             int outp = s.getNnOutputs();
             Behaviour beh = new BehaviourMove();
             s.addBehaviour(beh);            
-            if (!setIsRange(beh.outputSlots(), outp, outp+beh.outputSlots().size())) {
+            if (!setIsRange(beh.inputSlots(), outp, outp+beh.inputSlots().size())) {
                 fails++;
                 if (v)
                     System.out.println("Output set is not correct range.");

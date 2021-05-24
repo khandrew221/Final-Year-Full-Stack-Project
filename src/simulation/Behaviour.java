@@ -14,6 +14,6 @@ import java.util.Set;
 public abstract class Behaviour {
     
     public abstract void execute(Bot bot);
-    public abstract Set<Integer> outputSlots();
-    public abstract void renumberOutputs(int startSlot);    
+    public abstract Set<Integer> inputSlots();
+    public abstract void renumberInputs(int startSlot);    
 }

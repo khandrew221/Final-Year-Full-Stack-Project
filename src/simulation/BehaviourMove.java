@@ -33,7 +33,7 @@ public class BehaviourMove extends Behaviour {
      * 
      * @return 
      */
-    public Set<Integer> outputSlots() {
+    public Set<Integer> inputSlots() {
         Set<Integer> out = new HashSet<>();
         out.add(moveDirSlot);
         out.add(moveSpeedSlot);
@@ -42,13 +42,14 @@ public class BehaviourMove extends Behaviour {
     
     
     /**
-     * Renumbers the output slots.
+     * Renumbers the output slots.  This must be called after adding the sense,
+     * and called for all senses when one is removed.
      * 
      * Req for: UC004
      * 
      * @return 
      */    
-    public void renumberOutputs(int startSlot) {
+    public void renumberInputs(int startSlot) {
         moveDirSlot = startSlot;
         moveSpeedSlot = startSlot+1;        
     }   

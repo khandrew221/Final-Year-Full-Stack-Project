@@ -35,7 +35,7 @@ public class Simulation {
      * @param s 
      */
     public void addSense(Sense s) {
-        s.renumberInputs(nnInputs);
+        s.renumberOutputs(nnInputs);
         senses.add(s);
         setNNInputs();
     }
@@ -48,7 +48,7 @@ public class Simulation {
      * @param b 
      */
     public void addBehaviour(Behaviour b) {
-        b.renumberOutputs(nnOutputs);
+        b.renumberInputs(nnOutputs);
         behaviours.add(b);
         setNNOutputs();
     }    
@@ -62,7 +62,7 @@ public class Simulation {
     private void setNNInputs() {
         nnInputs = 0;
         for (Sense s : senses) {
-            nnInputs += s.inputSlots().size();
+            nnInputs += s.outputSlots().size();
         }     
     }
     
@@ -74,11 +74,30 @@ public class Simulation {
     private void setNNOutputs() {
         nnOutputs = 0;
         for (Behaviour b : behaviours) {
-            nnOutputs += b.outputSlots().size();
+            nnOutputs += b.inputSlots().size();
         }
     }
     
+    /**
+     * Adds a randomised bot with no ancestors to the simulation.
+     * 
+     * Req for: UC006
+     */
+    public void addStarterBot(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int startEnergy) {
+        GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
+        g.randomise();
+        Bot bot = new Bot(g, senses, behaviours, startEnergy);
+        bots.add(bot);
+    }    
     
+    /**
+     * Returns the current bot population
+     * 
+     * Req for: testing
+     */
+    public int population() {
+        return bots.size();
+    }    
     
     /**
      * 
@@ -88,7 +107,7 @@ public class Simulation {
     public Set<Integer> getInputSlots() {
         Set<Integer> out = new HashSet<>();
         for (Sense s : senses) {
-            out.addAll(s.inputSlots());
+            out.addAll(s.outputSlots());
         }
         return out;
     }
@@ -101,7 +120,7 @@ public class Simulation {
     public Set<Integer> getOutputSlots() {
         Set<Integer> out = new HashSet<>();
         for (Behaviour b : behaviours) {
-            out.addAll(b.outputSlots());
+            out.addAll(b.inputSlots());
         }
         return out;
     }    
