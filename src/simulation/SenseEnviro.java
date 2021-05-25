@@ -33,9 +33,20 @@ public class SenseEnviro extends Sense {
         return points.keySet();
     }
     
-    
+    /**
+     * Runs the environment sense.  
+     * 
+     * Req for: UC012
+     *
+     * @param bot 
+     */    
     @Override
-    public void sensoryInput(Bot bot) {
+    public void sensoryInput(Bot bot) {        
+        for (int slot : points.keySet()) {   
+            Point samplePoint = Point.displace(bot.getPosition(), points.get(slot));
+            double val = env.normValueAt(target, samplePoint);
+            bot.setInput(slot, val);
+        }        
     }    
     
     @Override

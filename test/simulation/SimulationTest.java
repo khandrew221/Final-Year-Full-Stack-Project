@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.Set;
+import utility.Point;
 
 /**
  *
@@ -21,8 +22,7 @@ public class SimulationTest {
         Simulation s = new Simulation(1000,1000);
         
         testAddSense(s, true);
-        testAddBehaviour(s, true);
-        
+        testAddBehaviour(s, true);        
         testAddRandomBot(s, true);
         
     }
@@ -35,7 +35,7 @@ public class SimulationTest {
             if (s.population() != (pop+1)) {
                 fails++;
                 if (v)
-                    System.out.println("Bot collection not one larger.");
+                    System.out.println("Bot collection not one larger.  Size: " + s.population());
             }               
         }
         if (v)
@@ -77,7 +77,7 @@ public class SimulationTest {
         int fails = 0;
         for (int i = 0; i < 4; i++) {
             int outp = s.getNnOutputs();
-            Behaviour beh = new BehaviourMove();
+            Behaviour beh = new BehaviourMove(10, new Point(0,0), new Point(s.getEnv().getXSize(), s.getEnv().getYSize()));
             s.addBehaviour(beh);            
             if (!setIsRange(beh.inputSlots(), outp, outp+beh.inputSlots().size())) {
                 fails++;

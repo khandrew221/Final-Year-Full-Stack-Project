@@ -7,6 +7,8 @@ package simulation;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
+import utility.Point;
 
 /**
  *
@@ -17,17 +19,28 @@ public class Simulation {
     private int nnInputs = 0;
     private int nnOutputs = 0;
     private Environment environment;
-    private Set<Bot> bots;
+    private TreeSet<Bot> bots;
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
     
     public Simulation(int envXsize, int envYsize) {
         environment = new Environment(envXsize, envYsize);
-        bots = new HashSet<>();
+        bots = new TreeSet<>();
         senses = new HashSet<>();
         behaviours = new HashSet<>();
     }
+      
+    /**
+     * Runs a single simulation cycle.
+     * 
+     * Req for: UC010
+     * @param s 
+     */    
+    public void run() {
         
+
+    }
+    
     /**
      * Adds a sense and sets its corresponding input slots.
      * 
@@ -86,7 +99,7 @@ public class Simulation {
     public void addStarterBot(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int startEnergy) {
         GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
         g.randomise();
-        Bot bot = new Bot(g, senses, behaviours, startEnergy);
+        Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(0,0));
         bots.add(bot);
     }    
     

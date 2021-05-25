@@ -7,6 +7,7 @@ package simulation;
 
 import java.util.HashSet;
 import java.util.Set;
+import utility.Point;
 
 /**
  *
@@ -14,16 +15,37 @@ import java.util.Set;
  */
 public class BehaviourMove extends Behaviour {
     
+    private double maxSpeed;
+    private Point min;
+    private Point max;
+    
     int moveDirSlot;
     int moveSpeedSlot;
     
     
+    public BehaviourMove(double maxSpd, Point min, Point max) {
+        maxSpeed = maxSpd;
+        this.max = max;
+        this.min = min;
+    }
+    
+    
+    
+    @Override
     public void execute(Bot bot) {
         
-        double dir = bot.getOutput(moveDirSlot);
-        double speed = bot.getOutput(moveSpeedSlot);
+        double dir = bot.getOutput(moveDirSlot) * 2*Math.PI; 
+        double speed = bot.getOutput(moveSpeedSlot) * maxSpeed;
         
+        Point displace = new Point(speed * Math.cos(dir), speed * Math.sin(dir));
+        Point newLoc = Point.displace(bot.getPosition(), displace);
+        if (newLoc.inBounds(min, max))
+            bot.setPosition(newLoc);
     }
+    
+    
+
+    
     
     
     /**
