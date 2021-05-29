@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import java.util.HashSet;
 import java.util.Set;
 import utility.Point;
 
@@ -19,17 +20,113 @@ public class SimulationTest {
      */
     public static void main(String[] args) {
 
-        Simulation s = new Simulation(1000,1000);
+        Simulation s = new Simulation(1000,1000,50);
         
         testAddSense(s, true);
         testAddBehaviour(s, true);        
         testAddRandomBot(s, true);
         
+        testClear(s, true);
+       
+        testInitialise(s, true);
+        
+        testRun(s, true);
+           
+        
     }
+    
+    public static int testClear(Simulation s, boolean v) {
+        int fails = 0;
+        s.clearSimulation();  
+        if (s.population() != 0) {
+            fails++;
+            if (v)
+                System.out.println("Bot collection not empty.");
+        } 
+        if (!s.listFields().isEmpty()) {
+            fails++;
+            if (v)
+                System.out.println("Environment not empty.");
+        }
+        if (!s.getBehaviours().isEmpty()) {
+            fails++;
+            if (v)
+                System.out.println("Behaviours not empty.");
+        }    
+        if (!s.getSenses().isEmpty()) {
+            fails++;
+            if (v)
+                System.out.println("Senses not empty.");
+        } 
+        if (s.getNnInputs() != 0) {
+            fails++;
+            if (v)
+                System.out.println("Number of inputs incorrect. 0 expected, " + s.getNnInputs() + " found.");
+        }  
+         if (s.getNnOutputs() != 0) {
+            fails++;
+            if (v)
+                System.out.println("Number of outputs incorrect. 0 expected, " + s.getNnOutputs() + " found.");
+        }            
+        
+        if (v)
+            System.out.println("Clear test failures: " + fails);        
+        
+        return fails;
+    }    
+    
+    
+    public static int testInitialise(Simulation s, boolean v) {
+        int fails = 0;
+        int startPop = 100;
+        Set<String> fields = new HashSet<>();
+        fields.add("Test1");
+        s.initialise();  
+        if (s.population() != startPop) {
+            fails++;
+            if (v)
+                System.out.println("Population size incorrect."  + startPop + " expected, " + s.population() + " found.");
+        } 
+        if (!s.listFields().equals(fields)) {
+            fails++;
+            if (v)
+                System.out.println("Environment fields list not correct." + fields + " expected, " + s.listFields() + " found.");
+        }
+        if (s.getBehaviours().size() != 1) {
+            fails++;
+            if (v)
+                System.out.println("Number of behaviours incorrect. 1 expected, " + s.getBehaviours().size() + " found.");
+        }    
+         if (s.getSenses().size() != 1) {
+            fails++;
+            if (v)
+                System.out.println("Number of senses incorrect. 1 expected, " + s.getSenses().size() + " found.");
+        }  
+         if (s.getNnInputs() != 1) {
+            fails++;
+            if (v)
+                System.out.println("Number of inputs incorrect. 1 expected, " + s.getNnInputs() + " found.");
+        }  
+         if (s.getNnOutputs() != 2) {
+            fails++;
+            if (v)
+                System.out.println("Number of outputs incorrect. 2 expected, " + s.getNnOutputs() + " found.");
+        }
+        if (s.getMaxPop() != 100) {
+            fails++;
+            if (v)
+                System.out.println("Max population incorrect. 100 expected, " + s.getMaxPop() + " found.");
+        }          
+        
+        if (v)
+            System.out.println("Initialise failures: " + fails);        
+        
+        return fails;
+    }     
     
     public static int testAddRandomBot(Simulation s, boolean v) {
         int fails = 0;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 50; i++) {
             int pop = s.population();
             s.addStarterBot(10, 12, 23);            
             if (s.population() != (pop+1)) {
@@ -38,9 +135,15 @@ public class SimulationTest {
                     System.out.println("Bot collection not one larger.  Size: " + s.population());
             }               
         }
+        int pop = s.population();
+        s.addStarterBot(10, 12, 23);            
+        if (s.population() != pop) {
+            fails++;
+            if (v)
+               System.out.println("Bot added over population limit.");
+        }        
         if (v)
-            System.out.println("Failures: " + fails);        
-        
+            System.out.println("Add random bot failures: " + fails);                
         return fails;
     }
     
@@ -68,7 +171,7 @@ public class SimulationTest {
         }
 
         if (v)
-            System.out.println("Failures: " + fails);        
+            System.out.println("Add sense failures: " + fails);        
         
         return fails;
     }
@@ -97,10 +200,35 @@ public class SimulationTest {
         }
 
         if (v)
-            System.out.println("Failures: " + fails);        
+            System.out.println("Add behaviour failures: " + fails);        
         
         return fails;
     }    
+    
+    public static int testRun(Simulation s, boolean v) { 
+        int fails = 0;
+        
+        s.initialise();
+        s.run();
+        
+        int energyFails = 0;
+        for (boolean x : s.listIsDead()) {
+            if (x) {
+                energyFails++;   
+            }                
+        }        
+        if (v && (energyFails > 0))
+            System.out.println(energyFails + " dead bots still present.");        
+        fails += energyFails;
+ 
+        if (s.population() > s.getMaxPop()) {
+            fails++;
+            System.out.println("Population overflow. " + s.getMaxPop() + " maximum, " + s.population() + " found."); 
+        }
+            
+        
+        return fails;        
+    }
     
     
     public static boolean setIsRange(Set<Integer> s, int start, int end) {
