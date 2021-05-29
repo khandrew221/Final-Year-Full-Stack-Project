@@ -41,6 +41,19 @@ public class BehaviourMove extends Behaviour {
         Point newLoc = Point.displace(bot.getPosition(), displace);
         if (newLoc.inBounds(min, max))
             bot.setPosition(newLoc);
+        else {
+            double newX = newLoc.getX();
+            double newY = newLoc.getX();            
+            if (newLoc.getX() > max.getX())
+                newX = max.getX();
+            if (newLoc.getX() < min.getX())
+                newX = min.getX();
+            if (newLoc.getY() > max.getY())
+                newY = max.getY();
+            if (newLoc.getY() < min.getY())
+                newY = min.getX();  
+            bot.setPosition(new Point(newX, newY));
+        }
     }
     
     

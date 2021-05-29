@@ -10,6 +10,8 @@ package controls;
  * @author Kathryn Andrew
  */
 public class SimControl {
+     
+    
     
     SimConsts settings = new SimConsts();
     
@@ -19,14 +21,6 @@ public class SimControl {
 
     public void setMAX_NODES_PER_LAYER(int MAX_NODES_PER_LAYER) {
         SimConsts.setMAX_NODES_PER_LAYER(MAX_NODES_PER_LAYER);
-    }
-
-    public void setNumInputs(int numInputs) {
-        SimConsts.setNumInputs(numInputs);
-    }
-
-    public void setNumOutputs(int numOutputs) {
-        SimConsts.setNumOutputs(numOutputs);
-    }    
+    }  
     
 }

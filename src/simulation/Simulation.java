@@ -5,7 +5,11 @@
  */
 package simulation;
 
+import controls.SimConsts;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import utility.Point;
@@ -16,6 +20,7 @@ import utility.Point;
  */
 public class Simulation {
     
+    private int maxPop;
     private int nnInputs = 0;
     private int nnOutputs = 0;
     private Environment environment;
@@ -23,22 +28,69 @@ public class Simulation {
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
     
-    public Simulation(int envXsize, int envYsize) {
+    public Simulation(int envXsize, int envYsize, int maxPop) {
+        this.maxPop = maxPop;
         environment = new Environment(envXsize, envYsize);
         bots = new TreeSet<>();
         senses = new HashSet<>();
         behaviours = new HashSet<>();
     }
       
+    
+    /**
+     *Initialises the simulation. TEMPORARY HARDCODED
+     * 
+     * Req for: UC002
+     */    
+    public void initialise() {
+              
+        clearSimulation();
+        maxPop = 100;
+        
+        environment.addField("Test1", 11, 0, 100);
+        
+        addSense(new SenseEnviro("Test1", environment));
+        addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
+        
+        
+        Random random = new Random();
+        
+        for (int i = 0; i < 100; i++) {
+            addStarterBot(10, 5, random.nextInt(6));
+        }
+    }
+
+    /**
+     * Clears all for re initialising
+     * 
+     * Req for: UC002
+     * 
+     */
+    public void clearSimulation() {        
+        bots.clear();
+        environment.clearAllFields();
+        senses.clear();
+        behaviours.clear();  
+        nnInputs = 0;
+        nnOutputs = 0;
+    }
+    
     /**
      * Runs a single simulation cycle.
      * 
      * Req for: UC010
      * @param s 
      */    
-    public void run() {
-        
-
+    public void run() {        
+        for (Bot bot : bots) {        
+            bot.run();
+        }
+        bots.removeIf(i -> i.isDead());
+ 
+        if (population() < maxPop) {
+            addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), 10);
+        }
+                    
     }
     
     /**
@@ -97,10 +149,12 @@ public class Simulation {
      * Req for: UC006
      */
     public void addStarterBot(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int startEnergy) {
-        GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
-        g.randomise();
-        Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(0,0));
-        bots.add(bot);
+        if (population() < maxPop) {
+            GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
+            g.randomise();
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(0,0));
+            bots.add(bot);            
+        }
     }    
     
     /**
@@ -174,7 +228,29 @@ public class Simulation {
     Set<Sense> getSenses() {
         return senses;
     }
+    
+    /**
+     * 
+     * 
+     * Req for: TESTING
+     */       
+    int getMaxPop() {
+        return maxPop;
+    }    
 
+    /**
+     * 
+     * 
+     * Req for: TESTING
+     */       
+    List<Boolean> listIsDead() {
+        List<Boolean> out = new ArrayList<>();
+        for (Bot bot : bots) {
+            out.add(bot.isDead());
+        }
+        return out;
+    }     
+    
     /**
      * 
      * 
@@ -184,7 +260,14 @@ public class Simulation {
         return behaviours;
     }
     
-    
+    /**
+     * 
+     * 
+     * Req for: TESTING
+     */     
+    public Set<String> listFields() {
+        return environment.listFields();
+    }    
     
     
 }

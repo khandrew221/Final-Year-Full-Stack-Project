@@ -14,6 +14,10 @@ import utility.Point;
  */
 public class Bot implements Comparable<Bot> {
     
+    private static long nextID = 0;
+    
+    private long id;
+    
     private GRep genetics;
     private NNAdapter nn;
     private Set<Sense> senses;
@@ -36,6 +40,8 @@ public class Bot implements Comparable<Bot> {
      */
     
     public Bot(GRep g, Set<Sense> s, Set<Behaviour> b, double e, Point p) {
+        id = nextID;
+        nextID++;
         genetics = g;
         senses = s;
         behaviours = b; 
@@ -99,7 +105,7 @@ public class Bot implements Comparable<Bot> {
      * Req for: UC013
      *
      */
-    public void runNN() {
+    private void runNN() {
         outputs = nn.output(inputs);
     }     
     
@@ -109,18 +115,18 @@ public class Bot implements Comparable<Bot> {
      * Req for: UC011
      *
      */
-    public void run() {
-        
+    public void run() {   
+        metabolise();
         if (energy > 0) {            
             for (Sense s : senses) {
                 s.sensoryInput(this);
             }            
             runNN();
             for (Behaviour b : behaviours) {
-                b.execute(this);
+                if (energy > 0)
+                    b.execute(this);
             }           
-        }
-        
+        }        
     }     
     
     
@@ -134,6 +140,17 @@ public class Bot implements Comparable<Bot> {
         return inputs.clone();
     }    
     
+    /**
+     * 
+     * Temporary hard coded
+     * 
+     * Req for: UC011
+     * 
+     */
+    private void metabolise() {
+        energy -= 1;
+    }
+    
     
      /**
      * Returns a copy of the neural network outputs
@@ -145,17 +162,104 @@ public class Bot implements Comparable<Bot> {
         return outputs.clone();
     }      
     
+     /**
+     * Returns whether or not the bot is dead
+     * 
+     * Req for: UC010
+     *
+     */
+    public boolean isDead() {
+        if (energy > 0)
+            return false;
+        else
+            return true;
+    }       
+    
+    
+    /**
+     * Return's the bot's current energy.
+     * 
+     * Req for: testing
+     * 
+     * @return 
+     */
+    public double getEnergy() {
+        return energy;
+    }
+    
+    
+    
     
     @Override
     /**
-     * Allows autosorting via treeset in the simulation by bot energy 
+     * Allows autosorting by bot energy via treeset in the simulation.  
      */
     public int compareTo(Bot bot) {
-        if (this.energy > bot.energy)
+        if (this.equals(bot)) 
+            return 0;
+        if (this.energy < bot.energy)
             return 1;
         else
             return -1; 
     }
+    
+    
+    /**
+     * Returns the genetic representation 
+     * 
+     * Req for: TESTING
+     *
+     */
+    GRep getGRep() {
+        return this.genetics;
+    } 
+    
+    /**
+     * Returns the sense set
+     * 
+     * Req for: TESTING
+     *
+     */
+    Set<Sense> getSenses() {
+        return this.senses;
+    }   
+    
+    /**
+     * Returns the behaviour set
+     * 
+     * Req for: TESTING
+     *
+     */
+    Set<Behaviour> getBehaviours() {
+        return this.behaviours;
+    }     
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + (int) (this.id ^ (this.id >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bot other = (Bot) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+    
+
     
     
 }
