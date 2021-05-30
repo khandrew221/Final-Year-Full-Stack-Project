@@ -76,9 +76,6 @@ public class BehaviourTest {
         
         b.execute(bot);
         
-    
-          
-        
         if (newLoc.inBounds(new Point(0,0), testVal)) {
             //new location good, bot should move to new location
             if (bot.getPosition().equals(botPos) && bot.getOutput(0) != 0) {
@@ -119,9 +116,7 @@ public class BehaviourTest {
                 if (v)
                     System.out.println("Bot not moved to correct location. " + newLoc + " expected, " + bot.getPosition() + " found.");
             }            
-        }
-        
-        
+        }       
         return fails;
     }    
 }

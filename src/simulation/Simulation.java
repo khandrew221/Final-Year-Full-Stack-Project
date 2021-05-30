@@ -152,10 +152,10 @@ public class Simulation {
         if (population() < maxPop) {
             GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
             g.randomise();
-            Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(0,0));
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
             bots.add(bot);            
         }
-    }    
+    }     
     
     /**
      * Returns the current bot population

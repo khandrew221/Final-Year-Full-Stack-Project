@@ -7,6 +7,7 @@ package simulation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import utility.Point;
 
@@ -156,6 +157,17 @@ public class Environment {
         return false;
     }
 
+    /**
+     * Returns a random position within the environment
+     * Currently excludes max values due to .nextDouble()'s 0 inclusive to 1 
+     * exclusive range 
+     * 
+     * Req for: UC006
+     */
+    public Point randomPosition() {
+        Random random = new Random();
+        return new Point(random.nextDouble()*xSize, random.nextDouble()*ySize);
+    }      
     
     /*
      * !!!! necessary?
