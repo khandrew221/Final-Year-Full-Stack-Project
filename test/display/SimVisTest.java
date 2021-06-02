@@ -56,13 +56,13 @@ public class SimVisTest {
             public void run() {
                 runSim(s, comp);
             }
-        }, 0, 1, TimeUnit.MILLISECONDS); 
+        }, 0, 10, TimeUnit.MILLISECONDS); 
     }
     
     
     private static void runSim(Simulation s, SimVis comp) {
         s.run();
-        comp.repaint();        
+        comp.updateData();
     }
     
 }

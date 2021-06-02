@@ -37,7 +37,7 @@ public class SimVis extends JComponent {
         for(String str : s.listFields()) {
             bgImg.put(str, new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB));  
         }
-        
+        buildEnviroImage();
         updateData();
     }
     
@@ -77,16 +77,10 @@ public class SimVis extends JComponent {
     }
     
     protected void paintBots(Graphics g) {
-        int r = 5;
-        g.setColor(Color.DARK_GRAY);
-        
-        synchronized(botReport) {
-            Iterator i = botReport.iterator(); // Must be in synchronized block
-            Point p = new Point(0,0);
-            while (i.hasNext()) {
-                p = (Point) i.next();
-                g.fillOval((int)Math.round(p.getX() - r/2), (int)Math.round(p.getY() - r/2), (int)Math.round(r), (int)Math.round(r));;
-            }    
+        int r = 7;
+        g.setColor(Color.RED);        
+        for (Point p : botReport) {
+            g.fillOval((int)Math.round(p.getX() - r/2), (int)Math.round(p.getY() - r/2), (int)Math.round(r), (int)Math.round(r));;
         }
     }    
     
@@ -102,10 +96,7 @@ public class SimVis extends JComponent {
     
     public void updateData() {
         botReport = sim.botReport();
-        if (botReport.isEmpty()) {
-            System.out.println("Empty!");
-        }
-        buildEnviroImage();
+        //buildEnviroImage();
         repaint();
     }
     

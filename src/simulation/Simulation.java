@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -30,7 +31,7 @@ public class Simulation {
     //private TreeSet<Bot> bots;
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
-    private List<Point> botReport  = Collections.synchronizedList(new ArrayList<>());;
+    //private List<Point> botReport  = Collections.synchronizedList(new ArrayList<>());;
     private SortedSet<Bot> bots = Collections.synchronizedSortedSet(new TreeSet<Bot>());
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
@@ -64,9 +65,7 @@ public class Simulation {
         
         for (int i = 0; i < maxPop; i++) {
             addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
-        }
-        
-        makeBotReport();    
+        }  
     }
 
     /**
@@ -82,7 +81,7 @@ public class Simulation {
         behaviours.clear();  
         nnInputs = 0;
         nnOutputs = 0;
-        botReport.clear();
+        //botReport.clear();
     }
     
     /**
@@ -93,17 +92,20 @@ public class Simulation {
      */    
     public void run() {        
         
-        for (Bot bot : bots) {        
-            bot.run();
-        }
-        
-        bots.removeIf(i -> i.isDead());
- 
+        synchronized(bots) {
+            Iterator i = bots.iterator();
+            Bot b;
+            while (i.hasNext()) {
+                b = (Bot) i.next();
+                b.run();
+            }    
+            
+            bots.removeIf(a -> a.isDead());
+        } 
+
         if (population() < maxPop) {
             addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
         }  
-        
-        makeBotReport();
     }
     
     /**
@@ -192,26 +194,33 @@ public class Simulation {
      * Constructs a list of bot positions
      * 
      * Req for: UC017
-     */     
+     */
+    /*
     private void makeBotReport() {
         botReport.clear();
-        /*Bot[] botArray = bots.toArray(new Bot[0]);  // conversion to array prevents ConcurrentModificationException errors
-            for (int i = 0; i < botArray.length; i++) {
-                botReport.add(botArray[i].getPosition());
-            }*/
         for (Bot bot : bots) {
             botReport.add(bot.getPosition());
         }
-    }
+    }*/
     
     /**
      * 
      * Returns a list of bot positions
      * 
+     * 
      * Req for: UC017
      */     
     public List<Point> botReport() { 
-        return botReport;
+        List<Point> out = new ArrayList<>();        
+        synchronized(bots) {
+            Iterator i = bots.iterator();
+            Bot b;
+            while (i.hasNext()) {
+                b = (Bot) i.next();
+                out.add(b.getPosition());
+            }    
+        }        
+        return out;
     }      
     
     /**
