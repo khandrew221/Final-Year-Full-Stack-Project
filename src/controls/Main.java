@@ -25,7 +25,6 @@ public class Main {
         Simulation s = new Simulation(100,100,100);
         s.initialise();
         s.run();
-        
     }
     
 }

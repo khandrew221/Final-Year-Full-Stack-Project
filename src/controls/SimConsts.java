@@ -18,6 +18,8 @@ public class SimConsts {
     private static int ENV_MAX_SIZE = 3000;
     private static int ENV_MIN_DENSITY = 2;
     private static int ENV_MAX_DENSITY = 10;
+    
+    private static int START_ENERGY = 600;
 
     public static int getMAX_LAYERS() {
         return MAX_LAYERS;
@@ -65,6 +67,14 @@ public class SimConsts {
 
     static void setENV_MAX_DENSITY(int ENV_MAX_DENSITY) {
         SimConsts.ENV_MAX_DENSITY = ENV_MAX_DENSITY;
+    }
+
+    public static int getSTART_ENERGY() {
+        return START_ENERGY;
+    }
+
+    static void setSTART_ENERGY(int START_ENERGY) {
+        SimConsts.START_ENERGY = START_ENERGY;
     }
     
     

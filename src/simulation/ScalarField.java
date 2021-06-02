@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import java.awt.Color;
 import java.util.Random;
 import utility.Point;
 
@@ -24,9 +25,10 @@ public class ScalarField {
     private double valMin;
     private double valMax;    
     private double[][] values;
+    private Color color;
     
     
-    public ScalarField(int x, int y, int d, double min, double max) {
+    public ScalarField(int x, int y, int d, double min, double max, Color color) {
         this.xSize = x;
         this.ySize = y;
         this.density = d;
@@ -38,6 +40,7 @@ public class ScalarField {
         //(double) required for correct double result
         this.xUnit = (double) xSize / (xSamples-1);
         this.yUnit = (double) ySize / (ySamples-1);
+        this.color = color;
     }
     
     /**
@@ -72,7 +75,7 @@ public class ScalarField {
     /**
      * Returns the normal interpolated value at the given x,y location
      * @param p point within the field
-     * @return interpolated value at location between 0 and 1
+     * @return interpolated value between 0 and 1 at location 
      */
     public double normValueAt(Point p) {
         
@@ -255,6 +258,10 @@ public class ScalarField {
     
     private double normalise(double x) {
         return (x-valMin)/(valMax-valMin);        
+    }
+    
+    public Color getColor() {
+        return color;
     }
     
 }

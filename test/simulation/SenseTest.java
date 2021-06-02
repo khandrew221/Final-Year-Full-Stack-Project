@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 import utility.Point;
@@ -53,7 +54,7 @@ public class SenseTest {
         int fails = 0;   
         
         Environment e = new Environment(100,100);
-        e.addField("Test1", 11, 0, 100);
+        e.addField("Test1", 11, 0, 100, Color.GREEN);
         e.randomiseField("Test1", 0, 100);
         Sense s = new SenseEnviro("Test1", e);
         s.renumberOutputs(0);

@@ -6,11 +6,14 @@
 package simulation;
 
 import controls.SimConsts;
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import utility.Point;
 
@@ -24,9 +27,11 @@ public class Simulation {
     private int nnInputs = 0;
     private int nnOutputs = 0;
     private Environment environment;
-    private TreeSet<Bot> bots;
+    //private TreeSet<Bot> bots;
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
+    private List<Point> botReport  = Collections.synchronizedList(new ArrayList<>());;
+    private SortedSet<Bot> bots = Collections.synchronizedSortedSet(new TreeSet<Bot>());
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
         this.maxPop = maxPop;
@@ -47,17 +52,21 @@ public class Simulation {
         clearSimulation();
         maxPop = 100;
         
-        environment.addField("Test1", 11, 0, 100);
+        environment.addField("Test1", 11, 0, 100, Color.GREEN);
+        environment.randomiseField("Test1", 0, 100);
+        environment.addField("Test2", 11, 0, 100, Color.BLUE);
+        environment.randomiseField("Test2", 0, 100);        
         
         addSense(new SenseEnviro("Test1", environment));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
-        
-        
+  
         Random random = new Random();
         
-        for (int i = 0; i < 100; i++) {
-            addStarterBot(10, 5, random.nextInt(6));
+        for (int i = 0; i < maxPop; i++) {
+            addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
         }
+        
+        makeBotReport();    
     }
 
     /**
@@ -73,6 +82,7 @@ public class Simulation {
         behaviours.clear();  
         nnInputs = 0;
         nnOutputs = 0;
+        botReport.clear();
     }
     
     /**
@@ -82,15 +92,18 @@ public class Simulation {
      * @param s 
      */    
     public void run() {        
+        
         for (Bot bot : bots) {        
             bot.run();
         }
+        
         bots.removeIf(i -> i.isDead());
  
         if (population() < maxPop) {
-            addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), 10);
-        }
-                    
+            addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
+        }  
+        
+        makeBotReport();
     }
     
     /**
@@ -153,8 +166,64 @@ public class Simulation {
             GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
             g.randomise();
             Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
-            bots.add(bot);            
+            bots.add(bot);                
         }
+    }     
+    
+    
+    /**
+     * 
+     * Returns the normalised value of the given environment field at the given positions
+     * Returns 0 if position is out of bounds.
+     * 
+     * Req for: UC017
+     */     
+    public double envNormValueAt(String field, double x, double y) {
+        Point p = new Point(x, y);
+        if (p.inBounds(new Point(0,0), new Point(environment.getXSize(), environment.getYSize()))) {
+            return environment.normValueAt(field, p);
+        } else {
+            return 0;
+        }   
+    } 
+    
+    /**
+     * 
+     * Constructs a list of bot positions
+     * 
+     * Req for: UC017
+     */     
+    private void makeBotReport() {
+        botReport.clear();
+        /*Bot[] botArray = bots.toArray(new Bot[0]);  // conversion to array prevents ConcurrentModificationException errors
+            for (int i = 0; i < botArray.length; i++) {
+                botReport.add(botArray[i].getPosition());
+            }*/
+        for (Bot bot : bots) {
+            botReport.add(bot.getPosition());
+        }
+    }
+    
+    /**
+     * 
+     * Returns a list of bot positions
+     * 
+     * Req for: UC017
+     */     
+    public List<Point> botReport() { 
+        return botReport;
+    }      
+    
+    /**
+     * returns the color of the named field, or white if no field with that name
+     * is found.
+     * 
+     * Req for: UC017
+     * 
+     * @param name 
+     */
+    public Color getFieldColor(String name) {
+        return environment.getColor(name);
     }     
     
     /**

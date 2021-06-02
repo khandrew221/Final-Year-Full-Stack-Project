@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -49,9 +50,9 @@ public class Environment {
      * 
      * @param name name of the new field
      */
-    void addField(String name, int d, double min, double max) {
+    void addField(String name, int d, double min, double max, Color color) {
         if (!fields.containsKey(name))
-            fields.put(name, new ScalarField(xSize, ySize, d, min, max));
+            fields.put(name, new ScalarField(xSize, ySize, d, min, max, color));
     }     
     
     
@@ -69,7 +70,20 @@ public class Environment {
         }
     }
     
-    
+    /**
+     * returns the color of the named field, or white if no field with that name
+     * is found.
+     * 
+     * Req for: UC017
+     * 
+     * @param name 
+     */
+    Color getColor(String name) {
+        if (fields.containsKey(name))
+            return fields.get(name).getColor();
+        else
+            return Color.WHITE;
+    }    
    
     
     /**
@@ -168,6 +182,8 @@ public class Environment {
         Random random = new Random();
         return new Point(random.nextDouble()*xSize, random.nextDouble()*ySize);
     }      
+    
+    
     
     /*
      * !!!! necessary?
