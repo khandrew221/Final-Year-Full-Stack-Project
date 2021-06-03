@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
-import static javax.swing.SwingUtilities.isEventDispatchThread;
+import simulation.SimStateFacade;
 import simulation.Simulation;
 
 /**
@@ -38,9 +38,10 @@ public class SimVisTest {
         
         Simulation s = new Simulation(envXsize, envYsize, maxPop);
         s.initialise();
+        SimStateFacade facade = new SimStateFacade(s);
         
         
-        SimVis comp = new SimVis(s, envXsize, envYsize);
+        SimVis comp = new SimVis(facade, envXsize, envYsize);
         comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         comp.buildEnviroImage();
         
@@ -48,15 +49,13 @@ public class SimVisTest {
         testFrame.pack();
         testFrame.setVisible(true);
         
-
-        //delay important for avoiding concurrent modification errors
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 runSim(s, comp);
             }
-        }, 0, 10, TimeUnit.MILLISECONDS); 
+        }, 0, 1, TimeUnit.MILLISECONDS); 
     }
     
     

@@ -8,12 +8,12 @@ package display;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
-import simulation.Simulation;
+import simulation.SimStateFacade;
 import utility.Point;
 
 /**
@@ -24,13 +24,13 @@ public class SimVis extends JComponent {
     
     private int HEIGHT;  
     private int WIDTH; 
-    private Simulation sim;
+    private SimStateFacade sim;
     private Map<String, BufferedImage> bgImg = new HashMap<String, BufferedImage>();  
     
     private List<Point> botReport;
     
     
-    public SimVis(Simulation s, int w, int h) {
+    public SimVis(SimStateFacade s, int w, int h) {
         HEIGHT = h;
         WIDTH = w;
         sim = s;       

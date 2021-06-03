@@ -28,10 +28,8 @@ public class Simulation {
     private int nnInputs = 0;
     private int nnOutputs = 0;
     private Environment environment;
-    //private TreeSet<Bot> bots;
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
-    //private List<Point> botReport  = Collections.synchronizedList(new ArrayList<>());;
     private SortedSet<Bot> bots = Collections.synchronizedSortedSet(new TreeSet<Bot>());
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
@@ -81,7 +79,6 @@ public class Simulation {
         behaviours.clear();  
         nnInputs = 0;
         nnOutputs = 0;
-        //botReport.clear();
     }
     
     /**
@@ -93,14 +90,10 @@ public class Simulation {
     public void run() {        
         
         synchronized(bots) {
-            Iterator i = bots.iterator();
-            Bot b;
-            while (i.hasNext()) {
-                b = (Bot) i.next();
-                b.run();
-            }    
-            
-            bots.removeIf(a -> a.isDead());
+            for (Bot bot : bots) {
+                bot.run();
+            }
+            bots.removeIf(bot -> bot.isDead());
         } 
 
         if (population() < maxPop) {
@@ -188,20 +181,6 @@ public class Simulation {
             return 0;
         }   
     } 
-    
-    /**
-     * 
-     * Constructs a list of bot positions
-     * 
-     * Req for: UC017
-     */
-    /*
-    private void makeBotReport() {
-        botReport.clear();
-        for (Bot bot : bots) {
-            botReport.add(bot.getPosition());
-        }
-    }*/
     
     /**
      * 
