@@ -14,9 +14,9 @@ import utility.Point;
  */
 public class Bot implements Comparable<Bot> {
     
-    private static int nextID = 0;
+    private static long nextID = 0;
     
-    private int id;
+    private long id;
     
     private GRep genetics;
     private NNAdapter nn;
@@ -41,7 +41,7 @@ public class Bot implements Comparable<Bot> {
     
     public Bot(GRep g, Set<Sense> s, Set<Behaviour> b, double e, Point p) {
         id = nextID;
-        if (nextID++ == Integer.MIN_VALUE)
+        if (nextID++ == Long.MIN_VALUE)
             nextID = 0; 
         genetics = g;
         senses = s;
@@ -194,7 +194,7 @@ public class Bot implements Comparable<Bot> {
      * Req for: UC020
      *
      */
-    public int getID() {
+    public long getID() {
         return id;
     }    
     

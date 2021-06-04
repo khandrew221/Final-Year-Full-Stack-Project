@@ -25,6 +25,8 @@ import utility.Point;
  */
 public class Simulation {
     
+    private long simTime;
+    
     private int maxPop;
     private int nnInputs = 0;
     private int nnOutputs = 0;
@@ -71,7 +73,8 @@ public class Simulation {
      * Req for: UC002
      * 
      */
-    public void clearSimulation() {        
+    public void clearSimulation() {     
+        simTime = 0;
         bots.clear();
         environment.clearAllFields();
         senses.clear();
@@ -98,6 +101,8 @@ public class Simulation {
         if (population() < maxPop) {
             addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
         }  
+        
+        simTime++;
     }
     
     /**
@@ -200,19 +205,23 @@ public class Simulation {
     
     /**
      * 
-     * Returns a list of maps describing bot status.
+     * Returns a list of maps describing bot status.  All map values should be
+     * primitive types (inc. String).
      * 
+     * PosX     double      bot's X position in the environment 
+     * PosY     double      bot's Y position in the environment 
+     * ID       long        bot's ID number
      * 
      * Req for: UC020
      */     
-    public List<Map<String, Double>> botReport() { 
-        List<Map<String, Double>> out = Collections.synchronizedList(new ArrayList<>());   
+    public List<Map<String, Object>> botReport() { 
+        List<Map<String, Object>> out = Collections.synchronizedList(new ArrayList<>());   
         synchronized(bots) {
             for (Bot bot : bots) {
-                Map<String, Double> b = new HashMap<>();  
+                Map<String, Object> b = new HashMap<>();  
                 b.put("PosX", bot.getPosition().getX());
                 b.put("PosY", bot.getPosition().getY());
-                b.put("ID", (double) bot.getID());
+                b.put("ID", bot.getID());
                 out.add(b);
             }   
         }        
@@ -230,6 +239,15 @@ public class Simulation {
     public Color getFieldColor(String name) {
         return environment.getColor(name);
     }     
+    
+    /**
+     * 
+     * 
+     * Req for: UC002
+     */    
+    public long time() {
+        return simTime;
+    }    
     
     /**
      * Returns the current bot population

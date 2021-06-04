@@ -32,14 +32,18 @@ public class SimulationTest {
        
         testInitialise(s, true);
         
-        testRun(s, true);
-           
+        System.out.println("Run failures: " + testRun(s, true));   
         System.out.println("Bot report failures: " + testBotReport(s, true));
     }
     
     public static int testClear(Simulation s, boolean v) {
         int fails = 0;
         s.clearSimulation();  
+        if (s.time() != 0) {
+            fails++;
+            if (v)
+                System.out.println("Simulation time incorrect. 0 expected, " + s.time() + " found.");
+        }
         if (s.population() != 0) {
             fails++;
             if (v)
@@ -83,7 +87,12 @@ public class SimulationTest {
         int startPop = 100;
         Set<String> fields = new HashSet<>();
         fields.add("Test1");
-        s.initialise();  
+        s.initialise();          
+        if (s.time() != 0) {
+            fails++;
+            if (v)
+                System.out.println("Simulation time incorrect. 0 expected, " + s.time() + " found.");
+        }        
         if (s.population() != startPop) {
             fails++;
             if (v)
@@ -211,7 +220,11 @@ public class SimulationTest {
         int fails = 0;
         
         s.initialise();
+        
+        long oldTime = s.time();
+        
         s.run();
+        
         
         int energyFails = 0;
         for (boolean x : s.listIsDead()) {
@@ -219,6 +232,11 @@ public class SimulationTest {
                 energyFails++;   
             }                
         }        
+        if (s.time() != oldTime+1) {
+            fails++;
+            if (v)
+                System.out.println("Simulation time incorrect. " + (oldTime+1) + " expected, " + s.time() + " found.");
+        }
         if (v && (energyFails > 0))
             System.out.println(energyFails + " dead bots still present.");        
         fails += energyFails;
@@ -235,29 +253,50 @@ public class SimulationTest {
     public static int testBotReport(Simulation s, boolean v) {     
         int fails = 0;
         
-        List<Map<String, Double>> r = s.botReport();
+        List<Map<String, Object>> r = s.botReport();
 
         if (s.population() != r.size()) {
             fails++;
             System.out.println("List size not population size. " + s.getMaxPop() + " population, " + r.size() + " list size."); 
         }        
         
-        for (Map<String, Double> m : r) {
+        for (Map<String, Object> m : r) {
             if (!m.containsKey("PosX")) {
                 fails++;
                 if (v)
                     System.out.println("Key PosX not present."); 
+            } else {
+                try {
+                    double test = (double) m.get("PosX");
+                } catch (Exception e) {
+                    fails++;
+                    e.printStackTrace();
+                }
             }
             if (!m.containsKey("PosY")) {
                 fails++;
                 if (v)
                     System.out.println("Key PosY not present."); 
-            } 
+            }  else {
+                try {
+                    double test = (double) m.get("PosY");
+                } catch (Exception e) {
+                    fails++;
+                    e.printStackTrace();
+                }
+            }
             if (!m.containsKey("ID")) {
                 fails++;
                 if (v)
                     System.out.println("Key ID not present."); 
-            }             
+            } else {
+                try {
+                    long test = (long) m.get("ID");
+                } catch (Exception e) {
+                    fails++;
+                    e.printStackTrace();
+                }
+            }         
         }
         
         return fails;

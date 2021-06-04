@@ -36,7 +36,7 @@ public class SimStateFacade {
      * Req for: UC020
      * @return 
      */
-    public  List<Map<String, Double>> botReport() {
+    public  List<Map<String, Object>> botReport() {
         return sim.botReport();
     }    
 

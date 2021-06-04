@@ -25,7 +25,7 @@ public class SimVis extends JComponent {
     private SimStateFacade sim;
     private Map<String, BufferedImage> bgImg = new HashMap<String, BufferedImage>();  
     
-    private  List<Map<String, Double>> botReport;
+    private  List<Map<String, Object>> botReport;
     
     
     public SimVis(SimStateFacade s, int w, int h) {
@@ -78,9 +78,9 @@ public class SimVis extends JComponent {
         int r = 7;
         g.setColor(Color.RED);        
         synchronized (botReport) {
-            for (Map<String, Double> m : botReport) {
-                double x = m.get("PosX");
-                double y = m.get("PosY");
+            for (Map<String, Object> m : botReport) {
+                double x = (double) m.get("PosX");
+                double y = (double) m.get("PosY");
                 g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));
             }
         }
