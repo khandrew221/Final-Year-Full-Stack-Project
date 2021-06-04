@@ -49,14 +49,14 @@ public class SimVisTest {
         testFrame.pack();
         testFrame.setVisible(true);
            
-        //note: simulation run and display update MUST be in the same thread to avoid concurrent modification exceptions!!! 
+        //note: simulation run and display data update MUST be in the same thread to avoid concurrent modification exceptions!!! 
         final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 runDisplay(s, comp);
             }
-        }, 0, 15, TimeUnit.MILLISECONDS); 
+        }, 0, 1, TimeUnit.MILLISECONDS); 
          
     }
     

@@ -209,7 +209,6 @@ public class Simulation {
         List<Map<String, Double>> out = Collections.synchronizedList(new ArrayList<>());   
         synchronized(bots) {
             for (Bot bot : bots) {
-                int id = bot.getID();
                 Map<String, Double> b = new HashMap<>();  
                 b.put("PosX", bot.getPosition().getX());
                 b.put("PosY", bot.getPosition().getY());

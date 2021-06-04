@@ -8,13 +8,11 @@ package display;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
 import simulation.SimStateFacade;
-import utility.Point;
 
 /**
  *
@@ -102,7 +100,6 @@ public class SimVis extends JComponent {
         botReport = sim.botReport();
         //buildEnviroImage();
         repaint();
-       
     }
     
 }

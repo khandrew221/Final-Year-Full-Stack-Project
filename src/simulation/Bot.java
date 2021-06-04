@@ -93,7 +93,7 @@ public class Bot implements Comparable<Bot> {
     /**
      * 
      * 
-     * Req for: UC012
+     * Req for: UC012, UC020
      *
      */
     public Point getPosition() {
@@ -189,9 +189,9 @@ public class Bot implements Comparable<Bot> {
     }
     
      /**
-     * Returns a copy of the neural network outputs
+     * Returns the bot's id number
      * 
-     * Req for: UC017
+     * Req for: UC020
      *
      */
     public int getID() {
