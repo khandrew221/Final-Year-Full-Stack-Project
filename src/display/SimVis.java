@@ -50,10 +50,10 @@ public class SimVis extends JComponent {
             for(int y = 0; y < HEIGHT; y++) {
                 for(int x = 0; x < WIDTH; x++) {
 
-                    Color c = sim.getFieldColor(field);
-                    int red = c.getRed();
-                    int green = c.getGreen();
-                    int blue = c.getBlue();
+                    int[] c = sim.getFieldRGB(field);
+                    int red = c[0];
+                    int green = c[1];
+                    int blue = c[2];
                     int alpha = 0 + (int) Math.round(sim.envNormValueAt(field, x, y)*200);
 
                     //bitwise colour 

@@ -53,8 +53,13 @@ public class SimStateFacade {
      * Req for: UC017
      * @return 
      */
-    public Color getFieldColor(String s) {
-        return sim.getFieldColor(s);
+    public int[] getFieldRGB(String s) {
+        int[] out = new int[3];
+        Color c = sim.getFieldColor(s);
+        out[0] = c.getRed();
+        out[1] = c.getGreen();
+        out[2] = c.getBlue();
+        return out;
     }        
     
 
