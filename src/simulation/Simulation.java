@@ -226,19 +226,45 @@ public class Simulation {
             }   
         }        
         return out;
-    }     
+    }    
+    
+    /**
+     * 
+     * Returns a list of maps describing the environment fields.  All map values 
+     * should be primitive types (inc. String).
+     * 
+     * name     String      field name
+     * RGB      int[]        
+     * 
+     * Req for: UC021
+     */     
+    public List<Map<String, Object>> fieldsReport() { 
+        List<Map<String, Object>> out = new ArrayList<>();   
+        for (String field : listFields()) {
+            Map<String, Object> n = new HashMap<>();  
+            n.put("name", field);
+            n.put("RGB", getFieldRGB(field));
+            out.add(n);
+        }           
+        return out;
+    }    
     
     /**
      * returns the color of the named field, or white if no field with that name
      * is found.
      * 
-     * Req for: UC017
+     * Req for: UC017, UC021
      * 
      * @param name 
      */
-    public Color getFieldColor(String name) {
-        return environment.getColor(name);
-    }     
+    public int[] getFieldRGB(String s) {
+        int[] out = new int[3];
+        Color c = environment.getColor(s);
+        out[0] = c.getRed();
+        out[1] = c.getGreen();
+        out[2] = c.getBlue();
+        return out;
+    }    
     
     /**
      * 

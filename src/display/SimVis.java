@@ -26,6 +26,7 @@ public class SimVis extends JComponent {
     private Map<String, BufferedImage> bgImg = new HashMap<String, BufferedImage>();  
     
     private  List<Map<String, Object>> botReport;
+    private  List<Map<String, Object>> fieldsReport;
     
     
     public SimVis(SimStateFacade s, int w, int h) {
@@ -35,31 +36,30 @@ public class SimVis extends JComponent {
         for(String str : s.listFields()) {
             bgImg.put(str, new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB));  
         }
+        fieldsReport = sim.fieldsReport();
         buildEnviroImage();
         updateData();
     }
     
     
     
-    protected void buildEnviroImage() {
-        
-        
-        for(String field : bgImg.keySet()) {
+    protected void buildEnviroImage() {        
+        for(Map m : fieldsReport) {
             for(int y = 0; y < HEIGHT; y++) {
                 for(int x = 0; x < WIDTH; x++) {
+                    String field = (String) m.get("name");
+                    if (bgImg.containsKey(field)) {
+                        int[] rgb = (int[]) m.get("RGB");
+                        int red = rgb[0];
+                        int green = rgb[1];
+                        int blue = rgb[2];
+                        int alpha = 0 + (int) Math.round(sim.envNormValueAt(field, x, y)*200);
 
-                    int[] c = sim.getFieldRGB(field);
-                    int red = c[0];
-                    int green = c[1];
-                    int blue = c[2];
-                    int alpha = 0 + (int) Math.round(sim.envNormValueAt(field, x, y)*200);
+                        //bitwise colour 
+                        int p = (alpha<<24) | (red<<16) | (green<<8) | blue;
 
-                    //bitwise colour 
-                    int p = (alpha<<24) | (red<<16) | (green<<8) | blue;
-
-                    bgImg.get(field).setRGB(x, y, p);
-
-                    //(int)(Math.random()*256); 
+                        bgImg.get(field).setRGB(x, y, p);
+                    }
                 }
             }            
         }

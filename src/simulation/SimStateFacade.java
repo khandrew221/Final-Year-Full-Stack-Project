@@ -39,6 +39,15 @@ public class SimStateFacade {
     public  List<Map<String, Object>> botReport() {
         return sim.botReport();
     }    
+    
+    /**
+     * 
+     * Req for: UC021
+     * @return 
+     */
+    public  List<Map<String, Object>> fieldsReport() {
+        return sim.fieldsReport();
+    }      
 
     /**
      * 
@@ -49,20 +58,7 @@ public class SimStateFacade {
         return sim.listFields();
     }    
     
-    /**
-     * 
-     * Req for: UC017
-     * @return 
-     */
-    public int[] getFieldRGB(String s) {
-        int[] out = new int[3];
-        Color c = sim.getFieldColor(s);
-        out[0] = c.getRed();
-        out[1] = c.getGreen();
-        out[2] = c.getBlue();
-        return out;
-    }        
-    
+         
 
     /**
      * 

@@ -34,6 +34,8 @@ public class SimulationTest {
         
         System.out.println("Run failures: " + testRun(s, true));   
         System.out.println("Bot report failures: " + testBotReport(s, true));
+        
+        System.out.println("Fields report failures: " + testFieldsReport(s, true));
     }
     
     public static int testClear(Simulation s, boolean v) {
@@ -257,7 +259,7 @@ public class SimulationTest {
 
         if (s.population() != r.size()) {
             fails++;
-            System.out.println("List size not population size. " + s.getMaxPop() + " population, " + r.size() + " list size."); 
+            System.out.println("List size not population size. " + s.population() + " population, " + r.size() + " list size."); 
         }        
         
         for (Map<String, Object> m : r) {
@@ -302,7 +304,48 @@ public class SimulationTest {
         return fails;
     }
     
-    
+    public static int testFieldsReport(Simulation s, boolean v) {     
+        int fails = 0;
+        
+        List<Map<String, Object>> r = s.fieldsReport();
+
+        if (s.listFields().size() != r.size()) {
+            fails++;
+            System.out.println("List size not equal to number of fields. " + s.listFields().size() + " population, " + r.size() + " list size."); 
+        }        
+        
+        for (Map<String, Object> m : r) {
+            if (!m.containsKey("name")) {
+                fails++;
+                if (v)
+                    System.out.println("Key name not present."); 
+            } else {
+                try {
+                    String test = (String) m.get("name");
+                } catch (Exception e) {
+                    fails++;
+                    e.printStackTrace();
+                }
+            }             
+            if (!m.containsKey("RGB")) {
+                fails++;
+                if (v)
+                    System.out.println("Key RGB not present."); 
+            } else {
+                try {
+                    int[] test = (int[]) m.get("RGB");
+                    int a = test[0];
+                    int b = test[1];
+                    int c = test[2];
+                } catch (Exception e) {
+                    fails++;
+                    e.printStackTrace();
+                }
+            }        
+        }
+        
+        return fails;
+    }    
     
     public static boolean setIsRange(Set<Integer> s, int start, int end) {
         if (s.size() != end-start)
