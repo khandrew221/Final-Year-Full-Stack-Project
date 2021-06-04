@@ -14,9 +14,9 @@ import utility.Point;
  */
 public class Bot implements Comparable<Bot> {
     
-    private static long nextID = 0;
+    private static int nextID = 0;
     
-    private long id;
+    private int id;
     
     private GRep genetics;
     private NNAdapter nn;
@@ -187,7 +187,15 @@ public class Bot implements Comparable<Bot> {
         return energy;
     }
     
-    
+     /**
+     * Returns a copy of the neural network outputs
+     * 
+     * Req for: UC017
+     *
+     */
+    public int getID() {
+        return id;
+    }    
     
     
     @Override

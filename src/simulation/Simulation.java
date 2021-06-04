@@ -9,9 +9,10 @@ import controls.SimConsts;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
@@ -189,18 +190,37 @@ public class Simulation {
      * 
      * Req for: UC017
      */     
-    public List<Point> botReport() { 
+    public List<Point> botReportDEPREC() { 
         List<Point> out = new ArrayList<>();        
         synchronized(bots) {
-            Iterator i = bots.iterator();
-            Bot b;
-            while (i.hasNext()) {
-                b = (Bot) i.next();
-                out.add(b.getPosition());
-            }    
+            for (Bot bot : bots) {
+                out.add(bot.getPosition());
+            }   
         }        
         return out;
     }      
+    
+    /**
+     * 
+     * Returns a list of maps describing bot status.
+     * 
+     * 
+     * Req for: UC020
+     */     
+    public List<Map<String, Double>> botReport() { 
+        List<Map<String, Double>> out = Collections.synchronizedList(new ArrayList<>());   
+        synchronized(bots) {
+            for (Bot bot : bots) {
+                int id = bot.getID();
+                Map<String, Double> b = new HashMap<>();  
+                b.put("PosX", bot.getPosition().getX());
+                b.put("PosY", bot.getPosition().getY());
+                b.put("ID", (double) bot.getID());
+                out.add(b);
+            }   
+        }        
+        return out;
+    }     
     
     /**
      * returns the color of the named field, or white if no field with that name

@@ -53,13 +53,14 @@ public class SimVisTest {
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                runSim(s, comp);
+                runDisplay(s, comp);
             }
         }, 0, 1, TimeUnit.MILLISECONDS); 
+         
     }
     
     
-    private static void runSim(Simulation s, SimVis comp) {
+    private static void runDisplay(Simulation s, SimVis comp) {
         s.run();
         comp.updateData();
     }

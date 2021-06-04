@@ -7,6 +7,7 @@ package simulation;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import utility.Point;
 
@@ -32,12 +33,12 @@ public class SimStateFacade {
     
     /**
      * 
-     * Req for: UC017
+     * Req for: UC020
      * @return 
      */
-    public List<Point> botReport() {
+    public  List<Map<String, Double>> botReport() {
         return sim.botReport();
-    }
+    }    
 
     /**
      * 
@@ -71,8 +72,5 @@ public class SimStateFacade {
     public double envNormValueAt(String s, double x, double y) {
         return sim.envNormValueAt(s, x, y);
     }      
-    
-    
-    
     
 }
