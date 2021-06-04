@@ -53,9 +53,7 @@ public class Simulation {
         maxPop = 100;
         
         environment.addField("Test1", 11, 0, 100, Color.GREEN);
-        environment.randomiseField("Test1", 0, 100);
-        environment.addField("Test2", 11, 0, 100, Color.BLUE);
-        environment.randomiseField("Test2", 0, 100);        
+        environment.randomiseField("Test1", 0, 100);     
         
         addSense(new SenseEnviro("Test1", environment));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));

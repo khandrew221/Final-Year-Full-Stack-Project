@@ -102,6 +102,7 @@ public class SimVis extends JComponent {
         botReport = sim.botReport();
         //buildEnviroImage();
         repaint();
+       
     }
     
 }

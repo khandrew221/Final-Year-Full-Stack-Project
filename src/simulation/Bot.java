@@ -41,7 +41,8 @@ public class Bot implements Comparable<Bot> {
     
     public Bot(GRep g, Set<Sense> s, Set<Behaviour> b, double e, Point p) {
         id = nextID;
-        nextID++;
+        if (nextID++ == Integer.MIN_VALUE)
+            nextID = 0; 
         genetics = g;
         senses = s;
         behaviours = b; 

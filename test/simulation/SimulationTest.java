@@ -6,6 +6,8 @@
 package simulation;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import utility.Point;
 
@@ -32,7 +34,7 @@ public class SimulationTest {
         
         testRun(s, true);
            
-        
+        System.out.println("Bot report failures: " + testBotReport(s, true));
     }
     
     public static int testClear(Simulation s, boolean v) {
@@ -229,6 +231,38 @@ public class SimulationTest {
         
         return fails;        
     }
+    
+    public static int testBotReport(Simulation s, boolean v) {     
+        int fails = 0;
+        
+        List<Map<String, Double>> r = s.botReport();
+
+        if (s.population() != r.size()) {
+            fails++;
+            System.out.println("List size not population size. " + s.getMaxPop() + " population, " + r.size() + " list size."); 
+        }        
+        
+        for (Map<String, Double> m : r) {
+            if (!m.containsKey("PosX")) {
+                fails++;
+                if (v)
+                    System.out.println("Key PosX not present."); 
+            }
+            if (!m.containsKey("PosY")) {
+                fails++;
+                if (v)
+                    System.out.println("Key PosY not present."); 
+            } 
+            if (!m.containsKey("ID")) {
+                fails++;
+                if (v)
+                    System.out.println("Key ID not present."); 
+            }             
+        }
+        
+        return fails;
+    }
+    
     
     
     public static boolean setIsRange(Set<Integer> s, int start, int end) {
