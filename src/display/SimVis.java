@@ -23,16 +23,20 @@ public class SimVis extends JComponent {
     
     private int HEIGHT;  
     private int WIDTH; 
+    private int simHeight;  
+    private int simWidth;     
     private SimStateFacade sim;
     private Map<String, BufferedImage> bgImg = new HashMap<String, BufferedImage>();  
     
-    private  List<Map<String, Object>> botReport;
-    private  List<Map<String, Object>> fieldsReport;
+    private List<Map<String, Object>> botReport;
+    private List<Map<String, Object>> fieldsReport;
     
     
-    public SimVis(SimStateFacade s, int w, int h) {
+    public SimVis(SimStateFacade s, int simW, int simH, int w, int h) {
         HEIGHT = h;
         WIDTH = w;
+        simHeight = simW;
+        simWidth = simH;
         this.setPreferredSize(new Dimension(w,h));
         sim = s;       
         for(String str : s.listFields()) {
@@ -55,7 +59,7 @@ public class SimVis extends JComponent {
                         int red = rgb[0];
                         int green = rgb[1];
                         int blue = rgb[2];
-                        int alpha = 0 + (int) Math.round(sim.envNormValueAt(field, x, y)*200);
+                        int alpha = 0 + (int) Math.round(sim.envNormValueAt(field, visToSimX(x), visToSimY(y))*200);
 
                         //bitwise colour 
                         int p = (alpha<<24) | (red<<16) | (green<<8) | blue;
@@ -81,8 +85,8 @@ public class SimVis extends JComponent {
         g.setColor(Color.RED);        
         synchronized (botReport) {
             for (Map<String, Object> m : botReport) {
-                double x = (double) m.get("PosX");
-                double y = (double) m.get("PosY");
+                double x = simToVisX((double) m.get("PosX"));
+                double y = simToVisY((double) m.get("PosY"));
                 g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));
             }
         }
@@ -103,5 +107,49 @@ public class SimVis extends JComponent {
         //buildEnviroImage();
         repaint();
     }
+    
+    /**
+     * Converts simulation x value to visualisation x value
+     * @param x
+     * @return 
+     */
+    private double simToVisX(double x) {
+        double w = (double) WIDTH;
+        double sw = (double) simWidth;
+        return w/sw*x;
+    }
+    
+    /**
+     * Converts simulation y value to visualisation y value
+     * @param x
+     * @return 
+     */
+    private double simToVisY(double y) {
+        double h = (double) HEIGHT;
+        double sh = (double) simHeight;
+        return h/sh*y;
+    } 
+    
+    /**
+     * Converts visualisation x value to simulation x value
+     * @param x
+     * @return 
+     */
+    private double visToSimX(double x) {
+        double w = (double) WIDTH;
+        double sw = (double) simWidth;
+        return sw/w*x;
+    }
+    
+    /**
+     * Converts visualisation y value to simulation y value
+     * @param y
+     * @return 
+     */
+    private double visToSimY(double y) {
+        double h = (double) HEIGHT;
+        double sh = (double) simHeight;
+        return sh/h*y;
+    }       
     
 }

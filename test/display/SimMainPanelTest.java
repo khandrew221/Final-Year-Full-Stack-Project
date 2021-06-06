@@ -37,16 +37,13 @@ public class SimMainPanelTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        SimMainPanel comp = new SimMainPanel(facade);
-        //comp.setPreferredSize(new Dimension(envXsize*2,envYsize)); 
+        SimMainPanel comp = new SimMainPanel(facade, 200, 500);
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
 
         
         comp.updateData();
 
-        
-        
         testFrame.pack();
         testFrame.setVisible(true);
         
@@ -55,8 +52,11 @@ public class SimMainPanelTest {
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
+                //long startTime = System.nanoTime();
                 s.run();
                 comp.updateData();
+                //long endTime = System.nanoTime();
+                //System.out.println((endTime - startTime)/1000000);
             }
         }, 0, 15, TimeUnit.MILLISECONDS); 
     }

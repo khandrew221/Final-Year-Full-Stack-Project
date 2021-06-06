@@ -25,11 +25,11 @@ public class SimMainPanel extends JPanel {
     private SimVis simVis;
     
     
-    SimMainPanel(SimStateFacade s) {
+    SimMainPanel(SimStateFacade s, int visX, int visY) {
         this.setLayout(new BorderLayout());
         this.sim = s;
         this.dataPanel = new DataPanel();
-        this.simVis = new SimVis(s, 500, 500);
+        this.simVis = new SimVis(s, s.envXSize(), s.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);
         this.add(dataPanel, BorderLayout.LINE_END);
     }

@@ -78,4 +78,22 @@ public class SimStateFacade {
         return sim.envNormValueAt(s, x, y);
     }      
     
+    /**
+     * 
+     * Req for: UC017
+     * @return 
+     */
+    public int envXSize() {
+        return sim.envXSize();
+    }
+    
+    /**
+     * 
+     * Req for: UC017
+     * @return 
+     */
+    public int envYSize() {
+        return sim.envYSize();
+    }    
+    
 }

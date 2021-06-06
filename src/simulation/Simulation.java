@@ -318,11 +318,29 @@ public class Simulation {
     /**
      * Returns the current bot population
      * 
-     * Req for: testing
+     * Req for: UC022
      */
     public int population() {
         return bots.size();
-    }    
+    }   
+    
+    /**
+     * Returns the environment x size
+     * 
+     * Req for: UC017
+     */
+    public int envXSize() {
+        return environment.getXSize();
+    }  
+    
+    /**
+     * Returns the environment y size
+     * 
+     * Req for: UC017
+     */
+    public int envYSize() {
+        return environment.getYSize();
+    }      
     
     /**
      * 

@@ -56,8 +56,11 @@ public class DataDisplayTest {
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
+                //long startTime = System.nanoTime();
                 s.run();
                 comp.updateData(facade.simReport(), facade.fieldsReport());
+                //long endTime = System.nanoTime();
+                //System.out.println((endTime - startTime)/1000000);
             }
         }, 0, 15, TimeUnit.MILLISECONDS); 
         

@@ -41,7 +41,7 @@ public class SimVisTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        SimVis comp = new SimVis(facade, envXsize, envYsize);
+        SimVis comp = new SimVis(facade, envXsize, envYsize, 600, 600);
         comp.buildEnviroImage();
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
