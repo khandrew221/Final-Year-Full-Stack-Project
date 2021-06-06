@@ -42,7 +42,7 @@ public class SimVisTest {
         
         
         SimVis comp = new SimVis(facade, envXsize, envYsize, 600, 600);
-        comp.buildEnviroImage();
+        comp.buildEnviroImages();
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
         testFrame.pack();

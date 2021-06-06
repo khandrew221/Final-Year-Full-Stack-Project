@@ -8,6 +8,8 @@ package display;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
@@ -38,35 +40,42 @@ public class SimVis extends JComponent {
         simHeight = simW;
         simWidth = simH;
         this.setPreferredSize(new Dimension(w,h));
-        sim = s;       
-        for(String str : s.listFields()) {
-            bgImg.put(str, new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB));  
-        }
+        sim = s;    
+        
         fieldsReport = sim.fieldsReport();
-        buildEnviroImage();
+        for(Map m : fieldsReport) {
+            String field = (String) m.get("name");
+            int xSamples = (int) m.get("Xsamples");
+            int ySamples = (int) m.get("Ysamples");
+            bgImg.put(field, new BufferedImage(xSamples, ySamples, BufferedImage.TYPE_INT_ARGB));            
+        }
+
+        buildEnviroImages();
         updateData();
     }
     
     
     
-    protected void buildEnviroImage() {        
+    protected void buildEnviroImages() {        
         for(Map m : fieldsReport) {
-            for(int y = 0; y < HEIGHT; y++) {
-                for(int x = 0; x < WIDTH; x++) {
-                    String field = (String) m.get("name");
-                    if (bgImg.containsKey(field)) {
-                        int[] rgb = (int[]) m.get("RGB");
-                        int red = rgb[0];
-                        int green = rgb[1];
-                        int blue = rgb[2];
-                        int alpha = 0 + (int) Math.round(sim.envNormValueAt(field, visToSimX(x), visToSimY(y))*200);
-
-                        //bitwise colour 
-                        int p = (alpha<<24) | (red<<16) | (green<<8) | blue;
-
-                        bgImg.get(field).setRGB(x, y, p);
+            String field = (String) m.get("name");
+            if (bgImg.containsKey(field)) {
+                int xSamples = (int) m.get("Xsamples");
+                int ySamples = (int) m.get("Ysamples");
+                int[] rgb = (int[]) m.get("RGB");
+                int red = rgb[0];
+                int green = rgb[1];
+                int blue = rgb[2];
+                double[][] values = (double[][]) m.get("values");
+                int[] pixels = new int[xSamples*ySamples];
+                for(int y = 0; y < xSamples; y++) {
+                    for(int x = 0; x < ySamples; x++) {
+                        int alpha = (int) (values[x][y]*200);
+                        int p = alpha<<24 | red<<16 | green<<8 | blue;
+                        pixels[y*xSamples+x] = p;
                     }
                 }
+                bgImg.get(field).setRGB(0, 0, xSamples, ySamples, pixels, 0, xSamples);
             }            
         }
     }
@@ -76,7 +85,8 @@ public class SimVis extends JComponent {
         g.setColor(Color.white);
         g.fillRect(0, 0, WIDTH, HEIGHT);
         for(String field : bgImg.keySet()) {
-            g.drawImage(bgImg.get(field), 0, 0, this);
+            
+            g.drawImage(scale(bgImg.get(field), WIDTH, HEIGHT), 0, 0, this);
         } 
     }
     
@@ -104,7 +114,7 @@ public class SimVis extends JComponent {
     
     public void updateData() {
         botReport = sim.botReport();
-        //buildEnviroImage();
+        buildEnviroImages();
         repaint();
     }
     
@@ -150,6 +160,23 @@ public class SimVis extends JComponent {
         double h = (double) HEIGHT;
         double sh = (double) simHeight;
         return sh/h*y;
-    }       
+    }    
+    
+    
+    /**
+     * Returns a scaled version of the given BufferedImage using bilinear interpolation 
+     * @param img
+     * @param w
+     * @param h
+     * @return 
+     */
+    BufferedImage scale(BufferedImage img, int w, int h) {
+        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = out.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(img, 0, 0, w, h, null);
+        g.dispose();
+        return out;
+    }
     
 }

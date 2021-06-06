@@ -207,7 +207,7 @@ public class Environment {
 
     public int getYSize() {
         return ySize;
-    }
+    }  
 
     public int getDensity(String n) {
         if (fields.containsKey(n)) {
@@ -215,5 +215,25 @@ public class Environment {
         }        
         return 0;
     }
-        
+    
+    public int getXSamples(String n) {
+        if (fields.containsKey(n)) {
+            return fields.get(n).getXSamples();
+        }        
+        return 0;
+    }    
+    
+   public int getYSamples(String n) {
+        if (fields.containsKey(n)) {
+            return fields.get(n).getYSamples();
+        }        
+        return 0;
+    }    
+       
+   public double[][] getValues(String n) {
+        if (fields.containsKey(n)) {
+            return fields.get(n).getValues();
+        }        
+        return new double[0][0];
+    }   
 }

@@ -37,7 +37,7 @@ public class SimMainPanelTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        SimMainPanel comp = new SimMainPanel(facade, 200, 500);
+        SimMainPanel comp = new SimMainPanel(facade, 500, 500);
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
 
@@ -52,11 +52,11 @@ public class SimMainPanelTest {
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                //long startTime = System.nanoTime();
+                long startTime = System.nanoTime();
                 s.run();
                 comp.updateData();
-                //long endTime = System.nanoTime();
-                //System.out.println((endTime - startTime)/1000000);
+                long endTime = System.nanoTime();
+                System.out.println((endTime - startTime)/1000000);
             }
         }, 0, 15, TimeUnit.MILLISECONDS); 
     }

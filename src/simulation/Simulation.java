@@ -37,10 +37,10 @@ public class Simulation {
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
         this.maxPop = maxPop;
-        environment = new Environment(envXsize, envYsize);
-        bots = new TreeSet<>();
-        senses = new HashSet<>();
-        behaviours = new HashSet<>();
+        this.environment = new Environment(envXsize, envYsize);
+        this.bots = new TreeSet<>();
+        this.senses = new HashSet<>();
+        this.behaviours = new HashSet<>();
     }
       
     
@@ -59,8 +59,6 @@ public class Simulation {
         
         addSense(new SenseEnviro("Test1", environment));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
-  
-        Random random = new Random();
         
         for (int i = 0; i < maxPop; i++) {
             addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
@@ -236,6 +234,9 @@ public class Simulation {
      * 
      * name     String      field name
      * RGB      int[]       R, G and B colour components
+     * Xsamples int         number of samples on the x axis
+     * Ysamples int         number of samples on the y axis
+     * values   double[][]  multidimensional array of normalised values
      * 
      * Req for: UC021
      * @return 
@@ -246,6 +247,9 @@ public class Simulation {
             Map<String, Object> n = new HashMap<>();  
             n.put("name", field);
             n.put("RGB", getFieldRGB(field));
+            n.put("Xsamples", environment.getXSamples(field));
+            n.put("Ysamples", environment.getYSamples(field));
+            n.put("values", environment.getValues(field));
             out.add(n);
         }           
         return out;
@@ -304,7 +308,8 @@ public class Simulation {
         out[1] = c.getGreen();
         out[2] = c.getBlue();
         return out;
-    }    
+    }     
+    
     
     /**
      * 

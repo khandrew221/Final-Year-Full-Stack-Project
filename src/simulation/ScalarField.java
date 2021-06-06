@@ -263,5 +263,17 @@ public class ScalarField {
     public Color getColor() {
         return color;
     }
+
+    public int getXSamples() {
+        return xSamples;
+    }
+
+    public int getYSamples() {
+        return ySamples;
+    }
+    
+    public double[][] getValues() {
+        return values.clone();
+    }    
     
 }

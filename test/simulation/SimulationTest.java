@@ -298,7 +298,28 @@ public class SimulationTest {
                     fails++;
                     e.printStackTrace();
                 }
-            }        
+            } 
+            fails += testInt(m, "Xsamples", v);
+            fails += testInt(m, "Ysamples", v);
+            if (!m.containsKey("values")) {
+                fails++;
+                if (v)
+                    System.out.println("Key values not present."); 
+            } else {
+                try {
+                    double[][] test = (double[][]) m.get("values");
+                    int xSize = (int) m.get("Xsamples");
+                    int ySize = (int) m.get("Ysamples");
+                    for (int x = 0; x < xSize; x++) {
+                        for (int y = 0; y < ySize; y++) {
+                            double a = test[x][y];
+                        }
+                    }
+                } catch (Exception e) {
+                    fails++;
+                    e.printStackTrace();
+                }
+            }            
         }        
         return fails;
     }    
