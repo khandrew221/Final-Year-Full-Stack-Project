@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import simulation.SimStateFacade;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
@@ -37,7 +37,8 @@ public class DataPanel extends JComponent {
         this.add(behaviours);
         behaviours.setFont(font);
         this.add(fields);
-        fields.setFont(font);        
+        fields.setFont(font); 
+        this.setBorder(new EmptyBorder(10, 10, 10, 10));
     }
     
     public void updateData(Map<String, Object> simReport, List<Map<String, Object>> fieldsReport) {
