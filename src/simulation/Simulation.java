@@ -206,7 +206,8 @@ public class Simulation {
     /**
      * 
      * Returns a list of maps describing bot status.  All map values should be
-     * primitive types (inc. String).
+     * primitive types (inc. String) or standard 
+     * collections of primitive types.
      * 
      * PosX     double      bot's X position in the environment 
      * PosY     double      bot's Y position in the environment 
@@ -231,12 +232,13 @@ public class Simulation {
     /**
      * 
      * Returns a list of maps describing the environment fields.  All map values 
-     * should be primitive types (inc. String).
+     * should be primitive types (inc. String) or arrays of primitive types.
      * 
      * name     String      field name
-     * RGB      int[]        
+     * RGB      int[]       R, G and B colour components
      * 
      * Req for: UC021
+     * @return 
      */     
     public List<Map<String, Object>> fieldsReport() { 
         List<Map<String, Object>> out = new ArrayList<>();   
@@ -247,7 +249,45 @@ public class Simulation {
             out.add(n);
         }           
         return out;
-    }    
+    }
+
+    /**
+     * 
+     * Returns a map of data describing the overall simulation state.  
+     * All map values should be primitive types (inc. String) or arrays of 
+     * primitive types.
+     * 
+     * time         long            current simulation cycle
+     * population   int             current population
+     * senses       String[]        all senses text described
+     * behaviours   String[]        all behaviours text described 
+     * 
+     * Req for: UC021
+     * @return 
+     */     
+    public Map<String, Object> simulationReport() { 
+        Map<String, Object> out = new HashMap<>();
+        out.put("time", simTime);
+        out.put("population", population());
+        
+        String[] sens = new String[senses.size()];
+        int i = 0;
+        for (Sense s : senses) {
+            sens[i] = s.toString();
+            i++;
+        }        
+        out.put("senses", sens);
+        
+        String[] beh = new String[behaviours.size()];
+        i = 0;
+        for (Behaviour b : behaviours) {
+            beh[i] = b.toString();
+            i++;
+        }        
+        out.put("behaviours", beh);        
+        
+        return out;
+    }        
     
     /**
      * returns the color of the named field, or white if no field with that name

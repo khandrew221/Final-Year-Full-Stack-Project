@@ -16,4 +16,5 @@ public abstract class Sense {
     public abstract void sensoryInput(Bot bot);
     public abstract Set<Integer> outputSlots();
     public abstract void renumberOutputs(int startSlot);
+    public abstract String toString();
 }

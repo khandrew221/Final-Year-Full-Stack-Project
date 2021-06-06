@@ -88,5 +88,12 @@ public class BehaviourMove extends Behaviour {
         moveDirSlot = startSlot;
         moveSpeedSlot = startSlot+1;        
     }   
+
+    @Override
+    public String toString() {
+        return "Type: move, " + 
+                "Max speed: " +  maxSpeed +
+                ", Rectangle: " + min + max;
+    }
     
 }

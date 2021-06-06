@@ -37,4 +37,9 @@ public class SenseDEBUG extends Sense {
         outSlot = startSlot;
     }
     
+    @Override 
+    public String toString() {
+        return "Type: debug, value: " + testVal;
+    }    
+    
 }

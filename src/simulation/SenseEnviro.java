@@ -60,4 +60,11 @@ public class SenseEnviro extends Sense {
         points = newPoints;
     }
     
+    @Override
+    public String toString() {
+        return "Type: Enviro, " + 
+                "Field: " +  target +
+                ", sample points: " + points.size();
+    }
+    
 }

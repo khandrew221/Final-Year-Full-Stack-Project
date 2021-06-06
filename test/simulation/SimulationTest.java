@@ -36,6 +36,7 @@ public class SimulationTest {
         System.out.println("Bot report failures: " + testBotReport(s, true));
         
         System.out.println("Fields report failures: " + testFieldsReport(s, true));
+        System.out.println("Simulation report failures: " + testSimulationReport(s, true));
     }
     
     public static int testClear(Simulation s, boolean v) {
@@ -263,42 +264,9 @@ public class SimulationTest {
         }        
         
         for (Map<String, Object> m : r) {
-            if (!m.containsKey("PosX")) {
-                fails++;
-                if (v)
-                    System.out.println("Key PosX not present."); 
-            } else {
-                try {
-                    double test = (double) m.get("PosX");
-                } catch (Exception e) {
-                    fails++;
-                    e.printStackTrace();
-                }
-            }
-            if (!m.containsKey("PosY")) {
-                fails++;
-                if (v)
-                    System.out.println("Key PosY not present."); 
-            }  else {
-                try {
-                    double test = (double) m.get("PosY");
-                } catch (Exception e) {
-                    fails++;
-                    e.printStackTrace();
-                }
-            }
-            if (!m.containsKey("ID")) {
-                fails++;
-                if (v)
-                    System.out.println("Key ID not present."); 
-            } else {
-                try {
-                    long test = (long) m.get("ID");
-                } catch (Exception e) {
-                    fails++;
-                    e.printStackTrace();
-                }
-            }         
+            fails += testDouble(m, "PosX", v);
+            fails += testDouble(m, "PosY", v);
+            fails += testLong(m, "ID", v);    
         }
         
         return fails;
@@ -315,18 +283,7 @@ public class SimulationTest {
         }        
         
         for (Map<String, Object> m : r) {
-            if (!m.containsKey("name")) {
-                fails++;
-                if (v)
-                    System.out.println("Key name not present."); 
-            } else {
-                try {
-                    String test = (String) m.get("name");
-                } catch (Exception e) {
-                    fails++;
-                    e.printStackTrace();
-                }
-            }             
+            fails += testString(m, "name", v);
             if (!m.containsKey("RGB")) {
                 fails++;
                 if (v)
@@ -342,10 +299,57 @@ public class SimulationTest {
                     e.printStackTrace();
                 }
             }        
-        }
-        
+        }        
         return fails;
     }    
+    
+    public static int testSimulationReport(Simulation s, boolean v) {     
+        int fails = 0;
+        
+        Map<String, Object> m = s.simulationReport();
+        int exSize = 4;
+
+        if (m.size() != exSize) {
+            fails++;
+            System.out.println("List size not equal to expected size. " + exSize + " expected, " + m.size() + " list size."); 
+        }        
+        
+        fails += testLong(m, "time", v);   
+        fails += testInt(m, "population", v);
+        
+        if (!m.containsKey("senses")) {
+            fails++;
+            if (v)
+                System.out.println("Key senses not present."); 
+        } else {
+            try {
+                String[] test = (String[]) m.get("senses");
+                for (String str : test) {
+                    String a = str;
+                }
+            } catch (Exception e) {
+                fails++;
+                e.printStackTrace();
+            }
+        }  
+        if (!m.containsKey("behaviours")) {
+            fails++;
+            if (v)
+                System.out.println("Key behaviours not present."); 
+        } else {
+            try {
+                String[] test = (String[]) m.get("behaviours");
+                for (String str : test) {
+                    String a = str;
+                }
+            } catch (Exception e) {
+                fails++;
+                e.printStackTrace();
+            }
+        }         
+ 
+        return fails;
+    }     
     
     public static boolean setIsRange(Set<Integer> s, int start, int end) {
         if (s.size() != end-start)
@@ -355,6 +359,75 @@ public class SimulationTest {
                 return false;
         }
         return true;
+    }    
+    
+    
+    public static int testInt(Map m, String key, boolean v) {
+        int fails = 0;
+        if (!m.containsKey(key)) {
+            fails++;
+            if (v)
+                System.out.println("Key " + key + " not present."); 
+        } else {
+            try {
+                int test = (int) m.get(key);
+            } catch (Exception e) {
+                fails++;
+                e.printStackTrace();
+            }
+        }     
+        return fails;
     }
+              
+    public static int testLong(Map m, String key, boolean v) {
+        int fails = 0;
+        if (!m.containsKey(key)) {
+            fails++;
+            if (v)
+                System.out.println("Key " + key + " not present."); 
+        } else {
+            try {
+                long test = (long) m.get(key);
+            } catch (Exception e) {
+                fails++;
+                e.printStackTrace();
+            }
+        }     
+        return fails;
+    }
+    
+    public static int testDouble(Map m, String key, boolean v) {
+        int fails = 0;
+        if (!m.containsKey(key)) {
+            fails++;
+            if (v)
+                System.out.println("Key " + key + " not present."); 
+        } else {
+            try {
+                double test = (double) m.get(key);
+            } catch (Exception e) {
+                fails++;
+                e.printStackTrace();
+            }
+        }     
+        return fails;
+    }       
+    
+    public static int testString(Map m, String key, boolean v) {
+        int fails = 0;
+        if (!m.containsKey(key)) {
+            fails++;
+            if (v)
+                System.out.println("Key " + key + " not present."); 
+        } else {
+            try {
+                String test = (String) m.get(key);
+            } catch (Exception e) {
+                fails++;
+                e.printStackTrace();
+            }
+        }     
+        return fails;
+    }     
     
 }

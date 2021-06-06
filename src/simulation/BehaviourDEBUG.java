@@ -54,5 +54,10 @@ public class BehaviourDEBUG extends Behaviour {
      */    
     public void renumberInputs(int startSlot) {
        
-    } 
+    }
+    
+    @Override 
+    public String toString() {
+        return "Type: debug, value: " + testVal;
+    }  
 }

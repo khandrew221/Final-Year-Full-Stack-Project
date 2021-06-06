@@ -47,7 +47,16 @@ public class SimStateFacade {
      */
     public  List<Map<String, Object>> fieldsReport() {
         return sim.fieldsReport();
-    }      
+    }     
+    
+    /**
+     * 
+     * Req for: UC022
+     * @return 
+     */
+    public  Map<String, Object> simReport() {
+        return sim.simulationReport();
+    }     
 
     /**
      * 

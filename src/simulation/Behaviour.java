@@ -15,5 +15,6 @@ public abstract class Behaviour {
     
     public abstract void execute(Bot bot);
     public abstract Set<Integer> inputSlots();
-    public abstract void renumberInputs(int startSlot);    
+    public abstract void renumberInputs(int startSlot);   
+    public abstract String toString();    
 }
