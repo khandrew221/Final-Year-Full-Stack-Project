@@ -11,7 +11,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import simulation.SimStateFacade;
 import simulation.Simulation;
 
@@ -19,7 +18,7 @@ import simulation.Simulation;
  *
  * @author Kathryn Andrew
  */
-public class DataDisplayTest {
+public class SimMainPanelTest {
 
     /**
      * @param args the command line arguments
@@ -38,13 +37,13 @@ public class DataDisplayTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        DataPanel comp = new DataPanel();
-        comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
+        SimMainPanel comp = new SimMainPanel(facade);
+        //comp.setPreferredSize(new Dimension(envXsize*2,envYsize)); 
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
 
         
-        comp.updateData(facade.simReport(), facade.fieldsReport());
+        comp.updateData();
 
         
         
@@ -57,11 +56,9 @@ public class DataDisplayTest {
             @Override
             public void run() {
                 s.run();
-                comp.updateData(facade.simReport(), facade.fieldsReport());
+                comp.updateData();
             }
         }, 0, 15, TimeUnit.MILLISECONDS); 
-        
-        
     }
     
 }

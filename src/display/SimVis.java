@@ -6,6 +6,7 @@
 package display;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class SimVis extends JComponent {
     public SimVis(SimStateFacade s, int w, int h) {
         HEIGHT = h;
         WIDTH = w;
+        this.setPreferredSize(new Dimension(w,h));
         sim = s;       
         for(String str : s.listFields()) {
             bgImg.put(str, new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB));  

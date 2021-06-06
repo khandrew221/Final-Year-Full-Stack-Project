@@ -19,18 +19,13 @@ import simulation.SimStateFacade;
  */
 public class DataPanel extends JComponent {
     
-    private SimStateFacade sim;
-    private Map<String, Object> simReport;
-    private  List<Map<String, Object>> fieldsReport;
-    
     private JLabel population = new JLabel("Population: ");
     private JLabel cycles = new JLabel("Simulation Cycles: ");
     private JLabel senses = new JLabel("Senses: ");
     private JLabel behaviours = new JLabel("Behaviours: ");
     private JLabel fields = new JLabel("Environment fields: ");
     
-    DataPanel(SimStateFacade s) {
-        this.sim = s;
+    DataPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.add(population);
         Font font = population.getFont().deriveFont(Font.PLAIN);
@@ -44,14 +39,8 @@ public class DataPanel extends JComponent {
         this.add(fields);
         fields.setFont(font);        
     }
-
     
-    
-    
-    
-    public void updateData() {
-        simReport = sim.simReport();  
-        fieldsReport = sim.fieldsReport();
+    public void updateData(Map<String, Object> simReport, List<Map<String, Object>> fieldsReport) {
         
         population.setText("<html><b>Population:</b> " + (int) simReport.get("population") + "</html>");        
         cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");

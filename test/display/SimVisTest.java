@@ -42,7 +42,6 @@ public class SimVisTest {
         
         
         SimVis comp = new SimVis(facade, envXsize, envYsize);
-        comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         comp.buildEnviroImage();
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
@@ -54,14 +53,14 @@ public class SimVisTest {
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                runDisplay(s, comp);
+                runDisplay(s, comp, facade);
             }
         }, 0, 1, TimeUnit.MILLISECONDS); 
          
     }
     
     
-    private static void runDisplay(Simulation s, SimVis comp) {
+    private static void runDisplay(Simulation s, SimVis comp, SimStateFacade facade) {
         s.run();
         comp.updateData();
     }
