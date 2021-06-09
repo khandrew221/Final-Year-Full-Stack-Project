@@ -10,6 +10,10 @@ package controls;
  * @author Kathryn Andrew
  */
 public enum SimState {
+
+    /**
+     *
+     */
     RUNNING,
     STOPPED,
     PAUSED

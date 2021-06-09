@@ -21,17 +21,16 @@ public class ControlPanel extends JPanel {
     private SimControl simControl;
     private SimMainPanel main;
     private JButton pausePlay;
-    private JButton reset;
+    private JButton restart;
     
     
     public ControlPanel(SimMainPanel main, SimControl control) {
         this.simControl = control;
         this.main = main;
-        
-        reset = new JButton("Reset");
-        this.add(reset);    
+           
         
         makePausePlayButton();
+        makeRestartButton();
     }
     
     
@@ -45,12 +44,23 @@ public class ControlPanel extends JPanel {
                 if (simControl.isRunning()) {
                     simControl.pause();
                     pausePlay.setText("Play");
-                } else if(simControl.isPaused()) {
+                } else if(simControl.isPaused() || simControl.isStopped()) {
                     simControl.play();
                     pausePlay.setText("Pause");
                 }
             }
         }); 
     }
+    
+    private void makeRestartButton() {
+        restart = new JButton("Restart");
+        this.add(restart);
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                simControl.restart();
+            }
+        }); 
+    }    
     
 }

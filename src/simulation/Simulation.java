@@ -52,7 +52,7 @@ public class Simulation {
      * 
      * Req for: UC002
      */    
-    public void initialise() {
+    public synchronized void initialise() {
               
         clearSimulation();
         maxPop = 100;
@@ -71,12 +71,12 @@ public class Simulation {
     }
 
     /**
-     * Clears all for re initialising
+     * Clears all for reinitialising.
      * 
      * Req for: UC002
      * 
      */
-    public void clearSimulation() {     
+    public synchronized void clearSimulation() {     
         simTime = 0;
         bots.clear();
         environment.clearAllFields();
@@ -92,17 +92,17 @@ public class Simulation {
      * Req for: UC010
      * @param s 
      */    
-    public void run() {        
+    public synchronized void run() {        
         
         if (runState == SimState.RUNNING) {
         
-            //synchronized(bots) {
+            synchronized(bots) {
                 for (Bot bot : bots) {
                     bot.run();
                 }
                 
                 bots.removeIf(bot -> bot.isDead());
-            //}
+            }
 
             if (population() < maxPop) {
                 addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
@@ -222,7 +222,7 @@ public class Simulation {
      * 
      * Req for: UC020
      */     
-    public List<Map<String, Object>> botReport() { 
+    public synchronized List<Map<String, Object>> botReport() { 
         List<Map<String, Object>> out = Collections.synchronizedList(new ArrayList<>());   
         synchronized(bots) {
             for (Bot bot : bots) {
@@ -250,7 +250,7 @@ public class Simulation {
      * Req for: UC021
      * @return 
      */     
-    public List<Map<String, Object>> fieldsReport() { 
+    public synchronized List<Map<String, Object>> fieldsReport() { 
         List<Map<String, Object>> out = new ArrayList<>();   
         for (String field : listFields()) {
             Map<String, Object> n = new HashMap<>();  
@@ -278,7 +278,7 @@ public class Simulation {
      * Req for: UC021
      * @return 
      */     
-    public Map<String, Object> simulationReport() { 
+    public synchronized Map<String, Object> simulationReport() { 
         Map<String, Object> out = new HashMap<>();
         out.put("time", simTime);
         out.put("population", population());
@@ -355,6 +355,25 @@ public class Simulation {
     public int envYSize() {
         return environment.getYSize();
     }      
+    
+    
+    /**
+     * Restarts the simulation with the same settings but new bots.  
+     * TEMPORARILY HARDCODED
+     * 
+     * Req for: UC026
+     */    
+    public synchronized void restart() {
+        
+        simTime = 0;
+        
+        synchronized(bots) {
+            bots.clear();
+            for (int i = 0; i < maxPop; i++) {
+                addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
+            }          
+        }
+    }    
     
     /**
      * 

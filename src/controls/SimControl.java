@@ -61,7 +61,28 @@ public class SimControl {
             return true;
         else
             return false;
+    }   
+    
+    /**
+     * Returns if the simulation is paused 
+     * 
+     * Req. for: UC024, UC025
+     */
+    public boolean isStopped() {
+        if (simulation.getState() == SimState.STOPPED)
+            return true;
+        else
+            return false;
     }     
+    
+    /**
+     * Restarts the simulation with the same parameters but fresh bots.
+     * 
+     * Req. for: UC026
+     */
+    public void restart() {
+        simulation.restart();
+    }      
     
     
     public void setMAX_LAYERS(int MAX_LAYERS) {
