@@ -37,15 +37,15 @@ public class DataDisplayTest {
         s.initialise();
         SimStateFacade facade = new SimStateFacade(s);
         
-        
-        DataPanel comp = new DataPanel();
+        SimMainPanel sup = new SimMainPanel(facade, 500, 500);
+        DataPanel comp = new DataPanel(sup);
         comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
 
         
-        comp.updateData(facade.simReport(), facade.fieldsReport());
-
+        //comp.updateData(facade.simReport(), facade.fieldsReport());
+        comp.resetAll(facade.simReport(), facade.fieldsReport());
         
         
         testFrame.pack();

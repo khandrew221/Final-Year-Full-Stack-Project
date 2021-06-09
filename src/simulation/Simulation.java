@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -55,7 +54,7 @@ public class Simulation {
         maxPop = 100;
         
         environment.addField("Test1", 11, 0, 100, Color.GREEN);
-        environment.randomiseField("Test1", 0, 100);     
+        environment.randomiseField("Test1", 0, 100);             
         
         addSense(new SenseEnviro("Test1", environment));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));

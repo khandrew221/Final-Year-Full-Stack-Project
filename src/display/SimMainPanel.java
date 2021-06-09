@@ -23,17 +23,32 @@ public class SimMainPanel extends JPanel {
     
     private DataPanel dataPanel;
     private SimVis simVis;
+    private ControlPanel controlPanel;
     
     
     SimMainPanel(SimStateFacade s, int visX, int visY) {
         this.setLayout(new BorderLayout());
         this.sim = s;
-        this.dataPanel = new DataPanel();
+        this.dataPanel = new DataPanel(this);
+        this.controlPanel = new ControlPanel(this);
         this.simVis = new SimVis(s, s.envXSize(), s.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);
         this.add(dataPanel, BorderLayout.LINE_END);
+        this.add(controlPanel, BorderLayout.NORTH);
     }
     
+
+    public void resetAll() {
+        simReport = sim.simReport();  
+        fieldsReport = sim.fieldsReport();
+        
+        dataPanel.resetAll(simReport, fieldsReport);
+        //dataPanel.updateData(simReport, fieldsReport);
+        simVis.updateData();
+        
+        repaint();
+    }
+
     
     public void updateData() {
         simReport = sim.simReport();  
@@ -44,5 +59,11 @@ public class SimMainPanel extends JPanel {
         
         repaint();
     }
+    
+
+    public void updateFieldSelect(Map<String, Boolean> newActiveFields) {
+        simVis.setActiveFields(newActiveFields);
+        repaint();
+    }    
     
 }

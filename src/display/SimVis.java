@@ -32,6 +32,7 @@ public class SimVis extends JComponent {
     
     private List<Map<String, Object>> botReport;
     private List<Map<String, Object>> fieldsReport;
+    private Map<String, Boolean> activeFields = new HashMap<>();
     
     
     public SimVis(SimStateFacade s, int simW, int simH, int w, int h) {
@@ -47,7 +48,8 @@ public class SimVis extends JComponent {
             String field = (String) m.get("name");
             int xSamples = (int) m.get("Xsamples");
             int ySamples = (int) m.get("Ysamples");
-            bgImg.put(field, new BufferedImage(xSamples, ySamples, BufferedImage.TYPE_INT_ARGB));            
+            bgImg.put(field, new BufferedImage(xSamples, ySamples, BufferedImage.TYPE_INT_ARGB));
+            activeFields.put(field, false);
         }
 
         buildEnviroImages();
@@ -84,9 +86,10 @@ public class SimVis extends JComponent {
     protected void paintBackground(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        for(String field : bgImg.keySet()) {
-            
-            g.drawImage(scale(bgImg.get(field), WIDTH, HEIGHT), 0, 0, this);
+        for(String field : bgImg.keySet()) {      
+            if (activeFields.get(field)) {
+                g.drawImage(scale(bgImg.get(field), WIDTH, HEIGHT), 0, 0, this);
+            }
         } 
     }
     
@@ -114,6 +117,7 @@ public class SimVis extends JComponent {
     
     public void updateData() {
         botReport = sim.botReport();
+        fieldsReport = sim.fieldsReport();
         buildEnviroImages();
         repaint();
     }
@@ -178,5 +182,10 @@ public class SimVis extends JComponent {
         g.dispose();
         return out;
     }
+    
+    
+    void setActiveFields(Map<String, Boolean> newActiveFields) {
+        activeFields = newActiveFields;
+    } 
     
 }

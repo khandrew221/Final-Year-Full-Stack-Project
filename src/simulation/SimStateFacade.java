@@ -5,11 +5,8 @@
  */
 package simulation;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import utility.Point;
 
 /**
  *
@@ -58,26 +55,6 @@ public class SimStateFacade {
         return sim.simulationReport();
     }     
 
-    /**
-     * 
-     * Req for: UC017
-     * @return 
-     */
-    public Set<String> listFields() {
-        return sim.listFields();
-    }    
-    
-         
-
-    /**
-     * 
-     * Req for: UC017
-     * @return 
-     */
-    public double envNormValueAt(String s, double x, double y) {
-        return sim.envNormValueAt(s, x, y);
-    }      
-    
     /**
      * 
      * Req for: UC017
