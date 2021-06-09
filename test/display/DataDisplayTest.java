@@ -26,7 +26,7 @@ public class DataDisplayTest {
      */
     public static void main(String[] args) {
         JFrame testFrame = new JFrame();
-        testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
         int envXsize = 500;
@@ -37,7 +37,7 @@ public class DataDisplayTest {
         s.initialise();
         SimStateFacade facade = new SimStateFacade(s);
         
-        SimMainPanel sup = new SimMainPanel(facade, 500, 500);
+        SimMainPanel sup = new SimMainPanel(s, facade, 500, 500);
         DataPanel comp = new DataPanel(sup);
         comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         

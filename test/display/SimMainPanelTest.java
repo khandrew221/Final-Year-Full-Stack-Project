@@ -25,7 +25,7 @@ public class SimMainPanelTest {
      */
     public static void main(String[] args) {
         JFrame testFrame = new JFrame();
-        testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
         int envXsize = 500;
@@ -37,7 +37,7 @@ public class SimMainPanelTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        SimMainPanel comp = new SimMainPanel(facade, 500, 500);
+        SimMainPanel comp = new SimMainPanel(s, facade, 500, 500);
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
  

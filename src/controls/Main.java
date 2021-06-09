@@ -19,7 +19,6 @@ public class Main {
     public static void main(String[] args) {
         
         SimConsts consts = new SimConsts();
-        SimControl control = new SimControl();
         
         
         Simulation s = new Simulation(100,100,100);

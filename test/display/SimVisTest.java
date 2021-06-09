@@ -29,7 +29,7 @@ public class SimVisTest {
                 // TODO code application logic here
         
         JFrame testFrame = new JFrame();
-        testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
         int envXsize = 500;

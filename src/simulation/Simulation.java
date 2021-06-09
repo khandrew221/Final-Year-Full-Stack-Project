@@ -6,6 +6,7 @@
 package simulation;
 
 import controls.SimConsts;
+import controls.SimState;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +26,7 @@ import utility.Point;
 public class Simulation {
     
     private long simTime;
+    private SimState runState;
     
     private int maxPop;
     private int nnInputs = 0;
@@ -33,6 +35,7 @@ public class Simulation {
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
     private SortedSet<Bot> bots = Collections.synchronizedSortedSet(new TreeSet<Bot>());
+   
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
         this.maxPop = maxPop;
@@ -40,6 +43,7 @@ public class Simulation {
         this.bots = new TreeSet<>();
         this.senses = new HashSet<>();
         this.behaviours = new HashSet<>();
+        this.runState = SimState.RUNNING;
     }
       
     
@@ -62,6 +66,8 @@ public class Simulation {
         for (int i = 0; i < maxPop; i++) {
             addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
         }  
+        
+        this.runState = SimState.RUNNING;
     }
 
     /**
@@ -88,18 +94,22 @@ public class Simulation {
      */    
     public void run() {        
         
-        synchronized(bots) {
-            for (Bot bot : bots) {
-                bot.run();
-            }
-            bots.removeIf(bot -> bot.isDead());
-        } 
-
-        if (population() < maxPop) {
-            addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
-        }  
+        if (runState == SimState.RUNNING) {
         
-        simTime++;
+            //synchronized(bots) {
+                for (Bot bot : bots) {
+                    bot.run();
+                }
+                
+                bots.removeIf(bot -> bot.isDead());
+            //}
+
+            if (population() < maxPop) {
+                addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
+            }  
+
+            simTime++;
+        }
     }
     
     /**
@@ -447,6 +457,29 @@ public class Simulation {
      */     
     public Set<String> listFields() {
         return environment.listFields();
+    }   
+    
+    /**
+     * Sets the simulation's running state. Should be set from a SimControl 
+     * object's specific methods.
+     * 
+     * Req for: UC024, UC025, UC026
+     * 
+     * @param newState 
+     */
+    public void setState(SimState newState) {
+        runState = newState;
+    }
+    
+    /**
+     * Gets the simulation's running state. 
+     * 
+     * Req for: UC024, UC025, UC026
+     * 
+     * @param newState 
+     */
+    public SimState getState() {
+        return runState;
     }    
     
     

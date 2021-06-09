@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import controls.SimState;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,8 @@ public class SimulationTest {
             if (v)
                 System.out.println("Number of outputs incorrect. 0 expected, " + s.getNnOutputs() + " found.");
         }            
-        
+
+         
         if (v)
             System.out.println("Clear test failures: " + fails);        
         
@@ -130,7 +132,12 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Max population incorrect. 100 expected, " + s.getMaxPop() + " found.");
-        }          
+        } 
+        if (s.getState() != SimState.RUNNING) {
+            fails++;
+            if (v)
+                System.out.println("Run state incorrect, " + SimState.RUNNING + "expected, " + s.getState() + " found.");
+        }        
         
         if (v)
             System.out.println("Initialise failures: " + fails);        
@@ -226,6 +233,7 @@ public class SimulationTest {
         
         long oldTime = s.time();
         
+        
         s.run();
         
         
@@ -234,22 +242,40 @@ public class SimulationTest {
             if (x) {
                 energyFails++;   
             }                
-        }        
+        }     
+        if (v && (energyFails > 0))
+            System.out.println(energyFails + " dead bots still present.");        
+        fails += energyFails;        
         if (s.time() != oldTime+1) {
             fails++;
             if (v)
                 System.out.println("Simulation time incorrect. " + (oldTime+1) + " expected, " + s.time() + " found.");
-        }
-        if (v && (energyFails > 0))
-            System.out.println(energyFails + " dead bots still present.");        
-        fails += energyFails;
- 
+        } 
         if (s.population() > s.getMaxPop()) {
             fails++;
             System.out.println("Population overflow. " + s.getMaxPop() + " maximum, " + s.population() + " found."); 
         }
-            
         
+        
+        s.setState(SimState.STOPPED);
+        oldTime = s.time();
+        s.run();
+        if (s.time() != oldTime) {
+            fails++;
+            if (v)
+                System.out.println("Error: Simulation time changing when simulation is stopped.");
+        }     
+        
+        s.setState(SimState.PAUSED);
+        oldTime = s.time();
+        s.run();
+        if (s.time() != oldTime) {
+            fails++;
+            if (v)
+                System.out.println("Error: Simulation time changing when simulation is paused.");
+        }         
+        
+        s.setState(SimState.RUNNING);
         return fails;        
     }
     

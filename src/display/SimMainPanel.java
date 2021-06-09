@@ -5,11 +5,13 @@
  */
 package display;
 
+import controls.SimControl;
 import java.awt.BorderLayout;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JPanel;
 import simulation.SimStateFacade;
+import simulation.Simulation;
 
 /**
  *
@@ -26,12 +28,12 @@ public class SimMainPanel extends JPanel {
     private ControlPanel controlPanel;
     
     
-    SimMainPanel(SimStateFacade s, int visX, int visY) {
+    SimMainPanel(Simulation simulation, SimStateFacade simFacade, int visX, int visY) {
         this.setLayout(new BorderLayout());
-        this.sim = s;
+        this.sim = simFacade;
         this.dataPanel = new DataPanel(this);
-        this.controlPanel = new ControlPanel(this);
-        this.simVis = new SimVis(s, s.envXSize(), s.envYSize(), visX, visY);
+        this.controlPanel = new ControlPanel(this, new SimControl(simulation));
+        this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);
         this.add(dataPanel, BorderLayout.LINE_END);
         this.add(controlPanel, BorderLayout.NORTH);
