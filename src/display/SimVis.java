@@ -28,18 +28,17 @@ public class SimVis extends JComponent {
     private int simHeight;  
     private int simWidth;     
     private SimStateFacade sim;
-    private Map<String, BufferedImage> bgImg = new HashMap<String, BufferedImage>();  
+    private Map<String, BufferedImage> fieldImages = new HashMap<String, BufferedImage>();  
     
     private List<Map<String, Object>> botReport;
     private List<Map<String, Object>> fieldsReport;
     private Map<String, Boolean> activeFields = new HashMap<>();
     
-    
     public SimVis(SimStateFacade s, int simW, int simH, int w, int h) {
         HEIGHT = h;
         WIDTH = w;
-        simHeight = simW;
-        simWidth = simH;
+        simHeight = simH;
+        simWidth = simW;
         this.setPreferredSize(new Dimension(w,h));
         sim = s;    
         
@@ -48,20 +47,20 @@ public class SimVis extends JComponent {
             String field = (String) m.get("name");
             int xSamples = (int) m.get("Xsamples");
             int ySamples = (int) m.get("Ysamples");
-            bgImg.put(field, new BufferedImage(xSamples, ySamples, BufferedImage.TYPE_INT_ARGB));
+            fieldImages.put(field, new BufferedImage(xSamples, ySamples, BufferedImage.TYPE_INT_ARGB));
             activeFields.put(field, false);
         }
 
-        buildEnviroImages();
+        buildFieldImages();
         updateData();
     }
     
     
     
-    protected void buildEnviroImages() {        
+    private void buildFieldImages() {        
         for(Map m : fieldsReport) {
             String field = (String) m.get("name");
-            if (bgImg.containsKey(field)) {
+            if (fieldImages.containsKey(field)) {
                 int xSamples = (int) m.get("Xsamples");
                 int ySamples = (int) m.get("Ysamples");
                 int[] rgb = (int[]) m.get("RGB");
@@ -77,7 +76,7 @@ public class SimVis extends JComponent {
                         pixels[y*xSamples+x] = p;
                     }
                 }
-                bgImg.get(field).setRGB(0, 0, xSamples, ySamples, pixels, 0, xSamples);
+                fieldImages.get(field).setRGB(0, 0, xSamples, ySamples, pixels, 0, xSamples);
             }            
         }
     }
@@ -86,9 +85,9 @@ public class SimVis extends JComponent {
     protected void paintBackground(Graphics g) {
         g.setColor(Color.white);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-        for(String field : bgImg.keySet()) {      
+        for(String field : fieldImages.keySet()) {      
             if (activeFields.get(field)) {
-                g.drawImage(scale(bgImg.get(field), WIDTH, HEIGHT), 0, 0, this);
+                g.drawImage(scale(fieldImages.get(field), WIDTH, HEIGHT), 0, 0, this);
             }
         } 
     }
@@ -118,7 +117,7 @@ public class SimVis extends JComponent {
     public void updateData() {
         botReport = sim.botReport();
         fieldsReport = sim.fieldsReport();
-        buildEnviroImages();
+        buildFieldImages();
         repaint();
     }
     
@@ -174,7 +173,7 @@ public class SimVis extends JComponent {
      * @param h
      * @return 
      */
-    BufferedImage scale(BufferedImage img, int w, int h) {
+    public BufferedImage scale(BufferedImage img, int w, int h) {
         BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = out.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);

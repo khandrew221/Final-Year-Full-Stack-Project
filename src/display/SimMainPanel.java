@@ -56,7 +56,23 @@ public class SimMainPanel extends JPanel {
         simReport = sim.simReport();  
         fieldsReport = sim.fieldsReport();
         
-        dataPanel.updateData(simReport, fieldsReport);
+        
+        int population = 0;
+        long time = 0;
+        
+        try {
+            population  = (int) simReport.get("population");
+        } catch (Exception e) {
+            System.out.println("Error casting population to int.");
+        }
+        try {
+            time  = (long) simReport.get("time");
+        } catch (Exception e) {
+            System.out.println("Error casting timen to long.");
+        }
+        
+        
+        dataPanel.updateData(population, time);
         simVis.updateData();
         
         repaint();

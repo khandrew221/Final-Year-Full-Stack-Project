@@ -57,8 +57,23 @@ public class DataDisplayTest {
             @Override
             public void run() {
                 //long startTime = System.nanoTime();
+                
                 s.run();
-                comp.updateData(facade.simReport(), facade.fieldsReport());
+                
+                int population = 0;
+                long time = 0;                
+                try {
+                    population  = (int) facade.simReport().get("population");
+                } catch (Exception e) {
+                    System.out.println("Error casting population to int.");
+                }
+                try {
+                    time  = (long) facade.simReport().get("time");
+                } catch (Exception e) {
+                    System.out.println("Error casting timen to long.");
+                }
+                
+                comp.updateData(population, time);
                 //long endTime = System.nanoTime();
                 //System.out.println((endTime - startTime)/1000000);
             }

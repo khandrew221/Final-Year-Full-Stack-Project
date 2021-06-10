@@ -58,9 +58,11 @@ public class Environment {
     
     /**
      * Resizes the environment and all scalar fields.
+     * 
+     * req for: UNUSED BUT TESTED
+     * 
      * @param x
      * @param y
-     * @param d 
      */
     void resize(int x, int y) {
         xSize = x;
@@ -86,30 +88,12 @@ public class Environment {
     }    
    
     
-    /**
-     * removes field with the given String as name/key from the field map if it exists
-     * If the name is already present as a map key, nothing is added.
-     * @param name name of the field to be removed
-     */
-    void removeField(String name) {
-        if (fields.containsKey(name))
-            fields.remove(name);
-    }
 
-    /**
-     * fills the field with the given String as name/key with the given value
-     * If the name is already present as a map key, nothing is added.
-     * @param name name of the field
-     * @param value value for sample points to be set to
-     */
-    void setField(String name, double value) {
-        if (fields.containsKey(name))
-            fields.get(name).setTo(value);
-    } 
 
     /**
      * randomises the field with the given String as name/key 
      * If the name is already present as a map key, nothing is added.
+     * 
      * @param name name of the field to be randomised
      */
     void randomiseField(String name, double min, double max) {
@@ -129,6 +113,9 @@ public class Environment {
     
     /**
      * Returns the normalised value of the field with name n at position x,y, or 0 if name not found or position out of bounds 
+     * 
+     * Req for: envirosense
+     * 
      * @param n  
      * @param p
      * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
@@ -141,21 +128,6 @@ public class Environment {
         } else
             return 0;
     }    
-    
-    /**
-     * Returns the value at position x,y for the field with name n, or 0 if name not found or position out of bounds 
-     * @param n  
-     * @param p
-     * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
-     */
-    public double trueValueAt(String n, Point p) {
-        if (fields.containsKey(n)) {
-            if (inField(p))
-                return fields.get(n).trueValueAt(p);
-            return 0;
-        } else
-            return 0;
-    }     
     
     /**
      * 
@@ -184,23 +156,6 @@ public class Environment {
     }      
     
     
-    
-    /*
-     * !!!! necessary?
-     * Checks that the field size and density is the same as the Environment settings.
-     * @param n
-     * @return true if field size and density is the same as the Environment settings, otherwise false
-     
-    private boolean verifyField(String n) {
-        if (fields.containsKey(n)) {
-            ScalarField s = fields.get(n);
-            if (s.getXSize() == xSize && s.getYSize() == ySize && s.getDensity() == density)
-                return true;
-            return false;
-        } else
-            return false;             
-    }*/
-    
     public int getXSize() {
         return xSize;
     }
@@ -216,6 +171,13 @@ public class Environment {
         return 0;
     }
     
+    /**
+     * 
+     * Req for: UC021
+     * 
+     * @param n
+     * @return 
+     */
     public int getXSamples(String n) {
         if (fields.containsKey(n)) {
             return fields.get(n).getXSamples();
@@ -223,17 +185,90 @@ public class Environment {
         return 0;
     }    
     
+    /**
+     * 
+     * Req for: UC021
+     * 
+     * @param n
+     * @return 
+     */    
    public int getYSamples(String n) {
         if (fields.containsKey(n)) {
             return fields.get(n).getYSamples();
         }        
         return 0;
     }    
-       
+
+    /**
+     * 
+     * Req for: UC021
+     * 
+     * @param n
+     * @return 
+     */   
    public double[][] getValues(String n) {
         if (fields.containsKey(n)) {
             return fields.get(n).getValues();
         }        
         return new double[0][0];
     }   
+   
+   
+       /**
+     * Returns the value at position x,y for the field with name n, or 0 if name not found or position out of bounds 
+     * @param n  
+     * @param p
+     * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
+     */
+    public double trueValueAt(String n, Point p) {
+        if (fields.containsKey(n)) {
+            if (inField(p))
+                return fields.get(n).trueValueAt(p);
+            return 0;
+        } else
+            return 0;
+    }    
+   
+       /**
+     * removes field with the given String as name/key from the field map if it exists
+     * If the name is already present as a map key, nothing is added.
+     * @param name name of the field to be removed
+     */
+    void removeField(String name) {
+        if (fields.containsKey(name))
+            fields.remove(name);
+    }
+
+    /**
+     * fills the field with the given String as name/key with the given value
+     * If the name is already present as a map key, nothing is added.
+     * @param name name of the field
+     * @param value value for sample points to be set to
+     */
+    void setField(String name, double value) {
+        if (fields.containsKey(name))
+            fields.get(name).setTo(value);
+    } 
+    
+      /*
+     * !!!! necessary?
+     * Checks that the field size and density is the same as the Environment settings.
+     * @param n
+     * @return true if field size and density is the same as the Environment settings, otherwise false
+     
+    private boolean verifyField(String n) {
+        if (fields.containsKey(n)) {
+            ScalarField s = fields.get(n);
+            if (s.getXSize() == xSize && s.getYSize() == ySize && s.getDensity() == density)
+                return true;
+            return false;
+        } else
+            return false;             
+    }
+   
+    */
+   
+   
+
+
 }

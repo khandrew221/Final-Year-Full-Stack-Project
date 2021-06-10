@@ -266,9 +266,5 @@ public class Bot implements Comparable<Bot> {
             return false;
         }
         return true;
-    }
-    
-
-    
-    
+    }    
 }

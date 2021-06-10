@@ -29,9 +29,7 @@ public class DataPanel extends JComponent {
     private JLabel population = new JLabel("Population: ");
     private JLabel cycles = new JLabel("Simulation Cycles: ");
     private JLabel senses = new JLabel("Senses: ");
-    private JLabel behaviours = new JLabel("Behaviours: ");
-    
-    
+    private JLabel behaviours = new JLabel("Behaviours: ");    
     private JPanel fieldsSelect = new JPanel();
     private JLabel fieldsLabel = new JLabel("Environment fields: ");
     private Map<String, JCheckBox> fieldsCheckBoxes = new HashMap<>();
@@ -56,11 +54,9 @@ public class DataPanel extends JComponent {
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
     }
     
-    public void updateData(Map<String, Object> simReport, List<Map<String, Object>> fieldsReport) {
-        
-        population.setText("<html><b>Population:</b> " + (int) simReport.get("population") + "</html>");        
-        cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");     
-        
+    public void updateData(int currentPopulation, long currentTime) {        
+        population.setText("<html><b>Population:</b> " + currentPopulation + "</html>");        
+        cycles.setText("<html><b>Simulation Cycles:</b> " + currentTime + "</html>");             
         repaint();
     }
     

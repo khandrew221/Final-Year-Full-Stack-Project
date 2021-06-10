@@ -290,14 +290,13 @@ public class EncogAdapter implements NNAdapter {
      * If the index is invalid, returns 0.
      * @return number of nodes in the neural network
      */
+    /*
     public int getTotalNodeCount(){
         int total = 0;
         for (int i = 0; i < nn.getLayerCount(); i++) {
             total += nn.getLayerNeuronCount(i);
         }        
         return total;
-    }
+    }*/
 
-
-   
 }

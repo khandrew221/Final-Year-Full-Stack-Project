@@ -48,7 +48,7 @@ public class Simulation {
       
     
     /**
-     *Initialises the simulation. TEMPORARY HARDCODED
+     * Initialises the simulation. TEMPORARY HARDCODED
      * 
      * Req for: UC002
      */    
@@ -191,24 +191,7 @@ public class Simulation {
         } else {
             return 0;
         }   
-    } 
-    
-    /**
-     * 
-     * Returns a list of bot positions
-     * 
-     * 
-     * Req for: UC017
-     */     
-    public List<Point> botReportDEPREC() { 
-        List<Point> out = new ArrayList<>();        
-        synchronized(bots) {
-            for (Bot bot : bots) {
-                out.add(bot.getPosition());
-            }   
-        }        
-        return out;
-    }      
+    }    
     
     /**
      * 
@@ -310,9 +293,9 @@ public class Simulation {
      * 
      * @param name 
      */
-    public int[] getFieldRGB(String s) {
+    private int[] getFieldRGB(String field) {
         int[] out = new int[3];
-        Color c = environment.getColor(s);
+        Color c = environment.getColor(field);
         out[0] = c.getRed();
         out[1] = c.getGreen();
         out[2] = c.getBlue();
@@ -374,6 +357,29 @@ public class Simulation {
             }          
         }
     }    
+    
+    /**
+     * Sets the simulation's running state. Should be set from a SimControl 
+     * object's specific methods.
+     * 
+     * Req for: UC024, UC025, UC026
+     * 
+     * @param newState 
+     */
+    public void setState(SimState newState) {
+        runState = newState;
+    }
+    
+    /**
+     * Gets the simulation's running state. 
+     * 
+     * Req for: UC024, UC025, UC026
+     * 
+     * @param newState 
+     */
+    public SimState getState() {
+        return runState;
+    }        
     
     /**
      * 
@@ -478,28 +484,7 @@ public class Simulation {
         return environment.listFields();
     }   
     
-    /**
-     * Sets the simulation's running state. Should be set from a SimControl 
-     * object's specific methods.
-     * 
-     * Req for: UC024, UC025, UC026
-     * 
-     * @param newState 
-     */
-    public void setState(SimState newState) {
-        runState = newState;
-    }
-    
-    /**
-     * Gets the simulation's running state. 
-     * 
-     * Req for: UC024, UC025, UC026
-     * 
-     * @param newState 
-     */
-    public SimState getState() {
-        return runState;
-    }    
+
     
     
 }

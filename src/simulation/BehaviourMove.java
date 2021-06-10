@@ -23,6 +23,13 @@ public class BehaviourMove extends Behaviour {
     int moveSpeedSlot;
     
     
+    /**
+     * Creates a move behaviour.
+     * 
+     * @param maxSpd
+     * @param min
+     * @param max 
+     */
     public BehaviourMove(double maxSpd, Point min, Point max) {
         maxSpeed = maxSpd;
         this.max = max;
@@ -62,7 +69,7 @@ public class BehaviourMove extends Behaviour {
     
     
     /**
-     * Returns the set of output slots.
+     * Returns the set of behaviour input slots.
      * 
      * Req for: TESTING
      * 
@@ -77,8 +84,8 @@ public class BehaviourMove extends Behaviour {
     
     
     /**
-     * Renumbers the output slots.  This must be called after adding the sense,
-     * and called for all senses when one is removed.
+     * Renumbers the input slots.  This must be called after adding the behaviour,
+     * and called for all behaviours when a behaviour is removed.
      * 
      * Req for: UC004
      * 
@@ -89,6 +96,7 @@ public class BehaviourMove extends Behaviour {
         moveSpeedSlot = startSlot+1;        
     }   
 
+    
     @Override
     public String toString() {
         return "Type: move, " + 
