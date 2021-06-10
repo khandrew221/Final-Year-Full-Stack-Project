@@ -60,7 +60,7 @@ public class Simulation {
         environment.addField("Test1", 11, 0, 100, Color.GREEN);
         environment.randomiseField("Test1", 0, 100);             
         
-        addSense(new SenseEnviro("Test1", environment));
+        addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 1, 4, 10));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
         
         for (int i = 0; i < maxPop; i++) {

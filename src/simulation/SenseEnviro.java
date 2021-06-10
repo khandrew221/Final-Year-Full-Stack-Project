@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import utility.Point;
@@ -18,19 +19,21 @@ public class SenseEnviro extends Sense {
     
     private final Environment env;
     private final String target; 
-    private Map<Integer, Point> points = new HashMap<>();
+    private Map<Integer, Point> samplePoints = new HashMap<>();
     
     
-    public SenseEnviro(String targ, Environment e) {
+    public SenseEnviro(String targ, Environment e, List<Point> points) {
         this.env = e;
-        points.put(0, new Point(0,0));
+        for (int i = 0; i < points.size(); i++) {
+            samplePoints.put(i, points.get(i));
+        }
         target = targ;
-    }
+    }    
     
     
     @Override
     public Set<Integer> outputSlots() {
-        return points.keySet();
+        return samplePoints.keySet();
     }
     
     /**
@@ -42,8 +45,8 @@ public class SenseEnviro extends Sense {
      */    
     @Override
     public void sensoryInput(Bot bot) {        
-        for (int slot : points.keySet()) {   
-            Point samplePoint = Point.displace(bot.getPosition(), points.get(slot));
+        for (int slot : samplePoints.keySet()) {   
+            Point samplePoint = Point.displace(bot.getPosition(), samplePoints.get(slot));
             double val = env.normValueAt(target, samplePoint);
             bot.setInput(slot, val);
         }        
@@ -53,18 +56,18 @@ public class SenseEnviro extends Sense {
     public void renumberOutputs(int startSlot) {
         Map<Integer, Point> newPoints = new HashMap<>();
         int slot = startSlot;
-        for (int k : points.keySet()) {
-            newPoints.put(slot, points.get(k));
+        for (int k : samplePoints.keySet()) {
+            newPoints.put(slot, samplePoints.get(k));
             slot++;
         }
-        points = newPoints;
+        samplePoints = newPoints;
     }
     
     @Override
     public String toString() {
         return "Type: Enviro, " + 
                 "Field: " +  target +
-                ", sample points: " + points.size();
+                ", sample points: " + samplePoints.size();
     }
     
 }

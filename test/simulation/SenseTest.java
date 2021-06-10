@@ -24,6 +24,7 @@ public class SenseTest {
     
         testBasicExecution(true);
         testEnviro1point(true);
+        testEnviroMultipoint(true);
     }
     
     public static int testBasicExecution(boolean v) {        
@@ -56,7 +57,7 @@ public class SenseTest {
         Environment e = new Environment(100,100);
         e.addField("Test1", 11, 0, 100, Color.GREEN);
         e.randomiseField("Test1", 0, 100);
-        Sense s = new SenseEnviro("Test1", e);
+        Sense s = SenseFactory.MakeEnvironmentSense("Test1", e, true, 0, 0, 0);
         s.renumberOutputs(0);
         
         //no need to add the sense, we're testing it directly. 
@@ -88,6 +89,49 @@ public class SenseTest {
         return fails;
     }    
 
+    public static int testEnviroMultipoint(boolean v) {        
+        int fails = 0;   
+        
+        Environment e = new Environment(100,100);
+        e.addField("Test1", 11, 0, 100, Color.GREEN);
+        e.randomiseField("Test1", 0, 100);
+        Sense s = SenseFactory.MakeEnvironmentSense("Test1", e, true, 3, 4, 7);
+        s.renumberOutputs(0);
+        
+        //no need to add the sense, we're testing it directly. 
+        //Only required for a bot to pass to the sense.  
+        Set<Sense> senses = new HashSet<>();
+        Set<Behaviour> behaviours = new HashSet<>();
+        GRep g = new GRep(10, 5, s.outputSlots().size(), 1);
+        Bot b = new Bot(g, senses, behaviours, 1, new Point (10,10));
+        
+        s.sensoryInput(b);
+        
+        if (b.getInputs().length != s.outputSlots().size()) {
+            fails++;
+            if (v)
+                System.out.println("Failure: wrong number of bot input slots. " + s.outputSlots().size() + " expected, " + b.getInputs().length + " found.");            
+        }
+        
+        if (b.getInputs()[0] != e.normValueAt("Test1", b.getPosition())) {
+            fails++;
+            if (v)
+                System.out.println("Failure: bot input not set correctly. " + e.normValueAt("Test1", b.getPosition()) + " expected, " + b.getInputs()[0] + " found.");
+        }
+        if (b.getInputs()[0] > 1) {
+           fails++;
+            if (v)
+                System.out.println("Failure: bot input over 1. " + b.getInputs()[0] + " found.");            
+        }
+        if (b.getInputs()[0] < 0) {
+           fails++;
+            if (v)
+                System.out.println("Failure: bot input less than zero. " + b.getInputs()[0] + " found.");            
+        }        
+                   
+        return fails;
+    }        
+    
 /*
 
         Environment e = new Environment(500, 500);

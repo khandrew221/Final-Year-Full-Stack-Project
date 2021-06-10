@@ -231,7 +231,7 @@ public class SimulationTest {
         int fails = 0;
         for (int i = 0; i < 4; i++) {
             int inp = s.getNnInputs();
-            Sense sen = SenseFactory.Enviro("Test1", s.getEnv());
+            Sense sen = SenseFactory.MakeEnvironmentSense("Test1", s.getEnv(), true, 0, 0, 0);
             s.addSense(sen);            
             if (!setIsRange(sen.outputSlots(), inp, inp+sen.outputSlots().size())) {
                 fails++;
