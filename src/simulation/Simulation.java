@@ -58,7 +58,11 @@ public class Simulation {
         maxPop = 100;
         
         environment.addField("Test1", 11, 0, 100, Color.GREEN);
-        environment.randomiseField("Test1", 0, 100);             
+        environment.randomiseField("Test1", 0, 100);    
+        
+              environment.addField("Test2", 50, 0, 100, Color.BLUE);
+        environment.randomiseField("Test2", 0, 100);            
+        
         
         addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 1, 4, 10));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
@@ -339,6 +343,14 @@ public class Simulation {
         return environment.getYSize();
     }      
     
+    /**
+     * Adds an environment field.
+     * 
+     * Req for: UC007
+     */
+    public void addField(String name, int density, Color color) {
+        environment.addField(name, density, 0, 1, color);
+    }
     
     /**
      * Restarts the simulation with the same settings but new bots.  
@@ -478,7 +490,7 @@ public class Simulation {
     /**
      * 
      * 
-     * Req for: TESTING
+     *  Req for: UC007
      */     
     public Set<String> listFields() {
         return environment.listFields();

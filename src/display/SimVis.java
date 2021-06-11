@@ -8,12 +8,9 @@ package display;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JComponent;
 import simulation.SimStateFacade;
 
@@ -28,11 +25,7 @@ public class SimVis extends JComponent {
     private int simHeight;  
     private int simWidth;     
     private SimStateFacade sim;
-    private Map<String, BufferedImage> fieldImages = new HashMap<String, BufferedImage>();  
-    
-    private List<Map<String, Object>> botReport;
-    private List<Map<String, Object>> fieldsReport;
-    private Map<String, Boolean> activeFields = new HashMap<>();
+    FieldsGraphics fieldsGraphics;
     
     public SimVis(SimStateFacade s, int simW, int simH, int w, int h) {
         HEIGHT = h;
@@ -41,83 +34,26 @@ public class SimVis extends JComponent {
         simWidth = simW;
         this.setPreferredSize(new Dimension(w,h));
         sim = s;    
-        
-        fieldsReport = sim.fieldsReport();
-        for(Map m : fieldsReport) {
-            String field = (String) m.get("name");
-            int xSamples = (int) m.get("Xsamples");
-            int ySamples = (int) m.get("Ysamples");
-            fieldImages.put(field, new BufferedImage(xSamples, ySamples, BufferedImage.TYPE_INT_ARGB));
-            activeFields.put(field, false);
-        }
-
-        buildFieldImages();
+        fieldsGraphics = new FieldsGraphics(w, h, sim.fieldsReport());
+        this.add(fieldsGraphics);        
         updateData();
-    }
-    
-    
-    
-    private void buildFieldImages() {        
-        for(Map m : fieldsReport) {
-            String field = (String) m.get("name");
-            if (fieldImages.containsKey(field)) {
-                int xSamples = (int) m.get("Xsamples");
-                int ySamples = (int) m.get("Ysamples");
-                int[] rgb = (int[]) m.get("RGB");
-                int red = rgb[0];
-                int green = rgb[1];
-                int blue = rgb[2];
-                double[][] values = (double[][]) m.get("values");
-                int[] pixels = new int[xSamples*ySamples];
-                for(int y = 0; y < xSamples; y++) {
-                    for(int x = 0; x < ySamples; x++) {
-                        int alpha = (int) (values[x][y]*200);
-                        int p = alpha<<24 | red<<16 | green<<8 | blue;
-                        pixels[y*xSamples+x] = p;
-                    }
-                }
-                fieldImages.get(field).setRGB(0, 0, xSamples, ySamples, pixels, 0, xSamples);
-            }            
-        }
-    }
-    
-    
-    protected void paintBackground(Graphics g) {
-        g.setColor(Color.white);
-        g.fillRect(0, 0, WIDTH, HEIGHT);
-        for(String field : fieldImages.keySet()) {      
-            if (activeFields.get(field)) {
-                g.drawImage(scale(fieldImages.get(field), WIDTH, HEIGHT), 0, 0, this);
-            }
-        } 
     }
     
     protected void paintBots(Graphics g) {
         int r = 7;
         g.setColor(Color.RED);        
-        synchronized (botReport) {
-            for (Map<String, Object> m : botReport) {
-                double x = simToVisX((double) m.get("PosX"));
-                double y = simToVisY((double) m.get("PosY"));
-                g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));
-            }
+        for (Map<String, Object> m : sim.botReport()) {
+            double x = simToVisX((double) m.get("PosX"));
+            double y = simToVisY((double) m.get("PosY"));
+            g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));
         }
-    }    
+    }  
     
-    
-    // paint all components
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        this.paintBackground(g);
-        this.paintBots(g);
-    } 
-    
-    
+    /**
+     * Call every frame.
+     */
     public void updateData() {
-        botReport = sim.botReport();
-        fieldsReport = sim.fieldsReport();
-        buildFieldImages();
+        fieldsGraphics.updateData(sim.fieldsReport());
         repaint();
     }
     
@@ -165,26 +101,20 @@ public class SimVis extends JComponent {
         return sh/h*y;
     }    
     
-    
     /**
-     * Returns a scaled version of the given BufferedImage using bilinear interpolation 
-     * @param img
-     * @param w
-     * @param h
-     * @return 
+     * Allows fieldsGraphics to set the active fields.
+     * @param newActiveFields 
      */
-    public BufferedImage scale(BufferedImage img, int w, int h) {
-        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = out.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(img, 0, 0, w, h, null);
-        g.dispose();
-        return out;
-    }
+    public void setActiveFields(Set<String> newActiveFields) {
+        fieldsGraphics.setActiveFields(newActiveFields);
+    } 
     
     
-    void setActiveFields(Map<String, Boolean> newActiveFields) {
-        activeFields = newActiveFields;
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        fieldsGraphics.paintComponent(g);
+        this.paintBots(g);
     } 
     
 }

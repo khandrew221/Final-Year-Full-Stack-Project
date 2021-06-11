@@ -26,9 +26,7 @@ public class ControlPanel extends JPanel {
     
     public ControlPanel(SimMainPanel main, SimControl control) {
         this.simControl = control;
-        this.main = main;
-           
-        
+        this.main = main;     
         makePausePlayButton();
         makeRestartButton();
     }

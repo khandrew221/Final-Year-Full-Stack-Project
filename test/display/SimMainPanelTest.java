@@ -41,7 +41,7 @@ public class SimMainPanelTest {
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
  
-        comp.resetAll();
+        comp.setAll();
         comp.updateData();
 
         testFrame.pack();

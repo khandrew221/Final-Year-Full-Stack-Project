@@ -45,7 +45,7 @@ public class DataDisplayTest {
 
         
         //comp.updateData(facade.simReport(), facade.fieldsReport());
-        comp.resetAll(facade.simReport(), facade.fieldsReport());
+        comp.setAll(facade.simReport(), facade.fieldsReport());
         
         
         testFrame.pack();

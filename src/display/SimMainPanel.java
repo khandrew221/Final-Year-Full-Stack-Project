@@ -9,6 +9,7 @@ import controls.SimControl;
 import java.awt.BorderLayout;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JPanel;
 import simulation.SimStateFacade;
 import simulation.Simulation;
@@ -19,10 +20,7 @@ import simulation.Simulation;
  */
 public class SimMainPanel extends JPanel {
     
-    private SimStateFacade sim;
-    private Map<String, Object> simReport;
-    private List<Map<String, Object>> fieldsReport;    
-    
+    private SimStateFacade sim;       
     private DataPanel dataPanel;
     private SimVis simVis;
     private ControlPanel controlPanel;
@@ -37,29 +35,34 @@ public class SimMainPanel extends JPanel {
         this.add(simVis, BorderLayout.LINE_START);
         this.add(dataPanel, BorderLayout.LINE_END);
         this.add(controlPanel, BorderLayout.NORTH);
+        setAll();
     }
     
 
-    public void resetAll() {
-        simReport = sim.simReport();  
-        fieldsReport = sim.fieldsReport();
-        
-        dataPanel.resetAll(simReport, fieldsReport);
-        //dataPanel.updateData(simReport, fieldsReport);
-        simVis.updateData();
-        
+    /**
+     * sets all subcomponent data.  Only call if changes to senses or behaviours
+     * have occurred.
+     */
+    public void setAll() {
+        dataPanel.setAll(sim.simReport(),  sim.fieldsReport());
+        simVis.updateData();       
         repaint();
     }
 
-    
-    public void updateData() {
-        simReport = sim.simReport();  
-        fieldsReport = sim.fieldsReport();
-        
-        
+    /**
+     * updates frequently updating information:
+     *  - population
+     *  - simulation time
+     *  - visualisation
+     * 
+     * Call every frame.
+     * 
+     */
+    public void updateData() {        
+        Map<String, Object> simReport = sim.simReport(); 
+        List<Map<String, Object>> fieldsReport = sim.fieldsReport();         
         int population = 0;
-        long time = 0;
-        
+        long time = 0;        
         try {
             population  = (int) simReport.get("population");
         } catch (Exception e) {
@@ -70,18 +73,17 @@ public class SimMainPanel extends JPanel {
         } catch (Exception e) {
             System.out.println("Error casting timen to long.");
         }
-        
-        
         dataPanel.updateData(population, time);
-        simVis.updateData();
-        
+        simVis.updateData();        
         repaint();
     }
     
-
-    public void updateFieldSelect(Map<String, Boolean> newActiveFields) {
+    /**
+     * Allows the datapanel FieldsSelect to update the SimVis
+     * @param newActiveFields 
+     */
+    public void setSelected(Set<String> newActiveFields) {
         simVis.setActiveFields(newActiveFields);
-        repaint();
-    }    
-    
+    }
+  
 }

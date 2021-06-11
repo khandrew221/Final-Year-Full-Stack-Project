@@ -43,7 +43,7 @@ public class Environment {
     }
     
     /**
-     * adds an empty (all 0 value) field with the given String as name/key to the field map.
+     * adds a randomised field with the given String as name/key to the field map.
      * If the name is already present as a map key, nothing is added.
      * 
      * UC002
@@ -51,8 +51,10 @@ public class Environment {
      * @param name name of the new field
      */
     void addField(String name, int d, double min, double max, Color color) {
-        if (!fields.containsKey(name))
+        if (!fields.containsKey(name)) {
             fields.put(name, new ScalarField(xSize, ySize, d, min, max, color));
+            fields.get(name).randomise(min, max);
+        }
     }     
     
     

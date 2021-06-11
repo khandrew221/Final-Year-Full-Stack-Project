@@ -5,6 +5,7 @@
  */
 package controls;
 
+import java.awt.Color;
 import simulation.Simulation;
 
 /**
@@ -82,7 +83,27 @@ public class SimControl {
      */
     public void restart() {
         simulation.restart();
-    }      
+    }    
+    
+    /**
+     * 
+     * Returns true if the name already exists, false otherwise.
+     * 
+     * @param name
+     * @param density
+     * @param r
+     * @param g
+     * @param b
+     * @return 
+     */
+    public boolean addField(String name, int density, int r, int g, int b) {
+        if (simulation.listFields().contains(name)) {
+            return true;
+        } else {
+            simulation.addField(name, density, new Color(r, g, b));
+            return false;
+        }
+    }
     
     
     public void setMAX_LAYERS(int MAX_LAYERS) {

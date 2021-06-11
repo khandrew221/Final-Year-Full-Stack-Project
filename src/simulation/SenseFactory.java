@@ -33,7 +33,6 @@ public class SenseFactory {
             double radianStep = Math.PI*2/pointsPerRing;
             for (int ring = 0; ring < rings; ring++) {
                 for (double radians = 0; radians < Math.PI*2; radians+=radianStep) {
-                    System.out.println(radians);
                     double x = radius*(ring+1)*Math.cos(radians);
                     double y = radius*(ring+1)*Math.sin(radians);
                     samplePoints.add(new Point(x, y));

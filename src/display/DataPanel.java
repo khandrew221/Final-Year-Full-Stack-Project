@@ -6,16 +6,11 @@
 package display;
 
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -25,16 +20,14 @@ import javax.swing.border.EmptyBorder;
 public class DataPanel extends JComponent {
     
     private SimMainPanel main;
+    private FieldsSelect fieldsSelect;     
     
     private JLabel population = new JLabel("Population: ");
     private JLabel cycles = new JLabel("Simulation Cycles: ");
     private JLabel senses = new JLabel("Senses: ");
     private JLabel behaviours = new JLabel("Behaviours: ");    
-    private JPanel fieldsSelect = new JPanel();
-    private JLabel fieldsLabel = new JLabel("Environment fields: ");
-    private Map<String, JCheckBox> fieldsCheckBoxes = new HashMap<>();
     
-    DataPanel(SimMainPanel main) {
+    public DataPanel(SimMainPanel main) {
         this.main = main;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.add(population);
@@ -47,21 +40,31 @@ public class DataPanel extends JComponent {
         this.add(behaviours);
         behaviours.setFont(font);
         
+        fieldsSelect = new FieldsSelect(this.main);
         this.add(fieldsSelect);
-        fieldsSelect.setLayout(new BoxLayout(fieldsSelect, BoxLayout.PAGE_AXIS));
-        fieldsLabel.setFont(font); 
         
         this.setBorder(new EmptyBorder(10, 10, 10, 10));
     }
     
+    /**
+     * Updates frequently changing data.  Call every frame.
+     * 
+     * @param currentPopulation
+     * @param currentTime 
+     */
     public void updateData(int currentPopulation, long currentTime) {        
         population.setText("<html><b>Population:</b> " + currentPopulation + "</html>");        
         cycles.setText("<html><b>Simulation Cycles:</b> " + currentTime + "</html>");             
         repaint();
     }
     
-    
-    public void resetAll(Map<String, Object> simReport, List<Map<String, Object>> fieldsReport) {
+    /**
+     * sets all data.  Only call if changes to senses or behaviours
+     * have occurred.
+     * @param simReport
+     * @param fieldsReport 
+     */
+    public void setAll(Map<String, Object> simReport, List<Map<String, Object>> fieldsReport) {
         
         population.setText("<html><b>Population:</b> " + (int) simReport.get("population") + "</html>");        
         cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");
@@ -83,48 +86,9 @@ public class DataPanel extends JComponent {
         }        
         behaviours.setText(behavString);       
         
-
-        fieldsPanelSetup(fieldsReport);
+        fieldsSelect.setup(fieldsReport, true, true);
         
         repaint();
-    }    
-    
-    
-    private void fieldsPanelSetup(List<Map<String, Object>> fieldsReport) {
-        fieldsSelect.removeAll();
-        fieldsCheckBoxes.clear();
-        
-        fieldsSelect.add(fieldsLabel);
-        fieldsLabel.setText("<html><br/><b>Fields:</b></html>");
-        boolean first = true;
-        for(Map m : fieldsReport) {
-            String field = (String) m.get("name");
-            JCheckBox checkBox = new JCheckBox(field);
-            if (first) {
-                checkBox.setSelected(true);
-                first = false;
-            }
-            checkBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent event) {
-                    updateMain();
-                }
-            }); 
-            fieldsSelect.add(checkBox);
-            fieldsCheckBoxes.put(field, checkBox);
-        }
-        
-        updateMain();
-    }
-    
-    
-    void updateMain() {        
-        Map<String, Boolean> out = new HashMap<>();
-        for (String f : fieldsCheckBoxes.keySet()) {
-            out.put(f, fieldsCheckBoxes.get(f).isSelected());  
-        }
-        main.updateFieldSelect(out);
-    }
-                        
+    }                    
     
 }
