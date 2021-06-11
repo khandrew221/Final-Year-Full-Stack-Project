@@ -9,14 +9,11 @@ import controls.SimControl;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
@@ -32,10 +29,8 @@ import simulation.SimStateFacade;
  *
  * @author Kathryn Andrew
  */
-public class FieldMaker extends JPanel implements ActionListener {
+public class FieldMaker extends ComponentMaker {
     
-    private SimControl simControl;
-    private SimStateFacade sim;
     private FieldsSelect fieldsSelect; 
     private FieldsGraphics fieldsGraphics;    
     
@@ -44,7 +39,6 @@ public class FieldMaker extends JPanel implements ActionListener {
     JLabel densityLabel; 
     JButton colorChooser;
     JPanel colorSwatch;
-    JButton addFieldButton;
     JPanel makerPanel;
     
     JPanel fieldsPreview;
@@ -53,20 +47,19 @@ public class FieldMaker extends JPanel implements ActionListener {
     
     public FieldMaker(SimControl simControl, SimStateFacade simFacade) {
         
-        this.simControl = simControl;
-        this.sim = simFacade;
+        super(simControl, simFacade);
               
         makerPanel = new JPanel(new GridLayout(4, 1));
         this.add(makerPanel);
         makeNamePanel();
         makeDensityPanel();        
         makeColorPanel();
-        makeAddFieldButton();
+        makeAddComponentButton();
        
-        fieldsGraphics = new FieldsGraphics(200, 200, sim.fieldsReport());
+        fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
         fieldsSelect= new FieldsSelect(this);
         this.add(fieldsSelect);
-        fieldsSelect.setup(sim.fieldsReport(), true, true);
+        fieldsSelect.setup(super.getFacade().fieldsReport(), true, true);
         
         this.add(fieldsGraphics);
     }
@@ -124,10 +117,11 @@ public class FieldMaker extends JPanel implements ActionListener {
         makerPanel.add(colorPanel);               
     }    
 
-    private void makeAddFieldButton() {
-        addFieldButton = new JButton("Add field");
-        addFieldButton.addActionListener(this);        
-        makerPanel.add(addFieldButton);               
+    @Override
+    void makeAddComponentButton() {
+        addComponentButton = new JButton("Add field");
+        addComponentButton.addActionListener(this);        
+        makerPanel.add(addComponentButton);               
     }  
     
     @Override
@@ -136,16 +130,16 @@ public class FieldMaker extends JPanel implements ActionListener {
             Color c=JColorChooser.showDialog(this,"Select colour",Color.GREEN);
             if (c != null)
                 colorSwatch.setBackground(c);
-        } else if (e.getSource().equals(addFieldButton)) {
+        } else if (e.getSource().equals(addComponentButton)) {
             if (nameField.getText().isBlank()) {
                 JOptionPane.showMessageDialog(null, "Invalid name.");
             } else {
                 Color c = colorSwatch.getBackground();
-                boolean existingName = simControl.addField(nameField.getText().strip(), densitySlider.getValue(), c.getRed(), c.getGreen(), c.getBlue());
+                boolean existingName = super.getControl().addField(nameField.getText().strip(), densitySlider.getValue(), c.getRed(), c.getGreen(), c.getBlue());
                 if (existingName)
                     JOptionPane.showMessageDialog(null, "A field with this name already exists.");
                 else {                 
-                    List<Map<String, Object>> fieldsReport = sim.fieldsReport();
+                    List<Map<String, Object>> fieldsReport = super.getFacade().fieldsReport();
                     fieldsSelect.setup(fieldsReport, true, false);
                     fieldsGraphics.updateData(fieldsReport);
                     Set<String> newSelect = fieldsSelect.getSelected();
