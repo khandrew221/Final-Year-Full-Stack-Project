@@ -10,8 +10,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,10 +24,10 @@ import javax.swing.border.EmptyBorder;
  *
  * @author Kathryn Andrew
  */
-public class FieldsSelect extends JPanel {
+public class FieldsSelect extends SelectableList {
 
-    private JPanel container;
-    private Map<String, JCheckBox> checkBoxes = new HashMap<>();    
+    //private JPanel container;
+    //private Map<String, JCheckBox> checkBoxes = new HashMap<>();    
     
     /**
      * Creates a display of fields with tickboxes for each field.
@@ -37,7 +35,7 @@ public class FieldsSelect extends JPanel {
      * @param container
      */    
     public FieldsSelect(JPanel container) {
-        this.container = container;
+        super(container);
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         Font font = this.getFont().deriveFont(Font.PLAIN);
         this.setFont(font);         
@@ -56,7 +54,7 @@ public class FieldsSelect extends JPanel {
     public void setup(List<Map<String, Object>> fieldsReport, boolean interactive, boolean autoSelectFirst) {
         Set<String> oldSelected = getSelected();
         this.removeAll();
-        checkBoxes.clear();
+        super.getCheckBoxes().clear();
         this.setBorder(BorderFactory.createTitledBorder("Fields"));
         boolean first = autoSelectFirst;
         for(Map m : fieldsReport) {
@@ -79,25 +77,26 @@ public class FieldsSelect extends JPanel {
                 checkBox.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent event) {
-                        updateMain();
+                        updateContainer();
                     }
                 }); 
                 entry.add(checkBox);
-                checkBoxes.put(field, checkBox);
+                super.getCheckBoxes().put(field, checkBox);
             } else {
                 JLabel fieldName = new JLabel(field);
                 entry.add(fieldName);            
             }
             this.add(entry);
         }        
-        updateMain();        
+        updateContainer();        
         this.setPreferredSize(new Dimension(200,35*fieldsReport.size() + 30));
     }
     
     /**
      * Updates the container when a checkbox is activated.
      */    
-    private void updateMain() {
+    public void updateContainer() {
+        JPanel container = super.getContainer();
         if (container != null) {
             if (container instanceof SimMainPanel) {
                 SimMainPanel n = (SimMainPanel) container;
@@ -109,35 +108,7 @@ public class FieldsSelect extends JPanel {
             }
         }
     }
-    
-    /**
-     * Returns the set of selected field names.
-     * @return 
-     */
-    public Set<String> getSelected() {
-        Set<String> out = new HashSet<>();
-        for (String s : checkBoxes.keySet()) {
-            if (checkBoxes.get(s).isSelected()) {
-                out.add(s);
-            }
-        }
-        return out;
-    }
-    
-    /**
-     * sets the checkboxes matching the names in the given set to be selected.
-     * All others will be deselected.
-     * @return 
-     */
-    public void setSelected(Set<String> select) {
-        for (String s : checkBoxes.keySet()) {
-            if (select.contains(s)) {
-                checkBoxes.get(s).setSelected(true);
-            } else {
-                checkBoxes.get(s).setSelected(false);
-            }
-        }
-        updateMain();
-    }    
+        
+   
     
 }

@@ -29,7 +29,7 @@ public class SenseFactory {
             samplePoints.add(new Point(0,0));
         } 
         
-        if (rings > 0) {
+        if (rings > 0 && pointsPerRing > 0) {
             double radianStep = Math.PI*2/pointsPerRing;
             for (int ring = 0; ring < rings; ring++) {
                 for (double radians = 0; radians < Math.PI*2; radians+=radianStep) {
