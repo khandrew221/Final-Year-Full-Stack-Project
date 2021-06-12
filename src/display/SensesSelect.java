@@ -5,18 +5,11 @@
  */
 package display;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import javax.swing.BorderFactory;
+import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -57,6 +50,18 @@ public class SensesSelect extends SelectableList{
                 n.repaint();
             }
         }*/
+    }
+    
+    public Set<Integer> getSelectedIDs() {
+        Set<Integer> out = new HashSet<>();
+        Set<String> stringIDs = super.getSelected();
+        try {
+            out = stringIDs.stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return out;
+        }
+        return out;
     }
     
 }

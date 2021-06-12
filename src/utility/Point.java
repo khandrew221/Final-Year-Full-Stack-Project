@@ -62,31 +62,34 @@ public class Point {
     public static Point displace(Point origin, Point displacement) {
         return new Point(origin.x + displacement.x, origin.y + displacement.y);
     }
-    
-    @Override
-    //same xy values but different CoordSystemIndex with return false
-    //equivalent positions in different coordinate systems will return true: checks of this type should be implemented elsewhere, where conversion can be achieved
-    public boolean equals(Object o) {
-        // self check
-        if (this == o) {
-            return true;
-        }
-        // null check
-        if (o == null) {
-            return false;
-        }
-        // type check and cast
-        if (getClass() != o.getClass()) {
-            return false;
-        }
-        Point check = (Point) o;
-        return Objects.equals(check.getX(), this.getX())
-                && Objects.equals(check.getY(), this.getY());
-    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        int hash = 5;
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
+        hash = 17 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Point other = (Point) obj;
+        if (Double.doubleToLongBits(this.x) != Double.doubleToLongBits(other.x)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.y) != Double.doubleToLongBits(other.y)) {
+            return false;
+        }
+        return true;
     }
     
     @Override

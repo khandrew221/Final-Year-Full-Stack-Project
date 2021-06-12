@@ -11,7 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +62,7 @@ public class FieldMaker extends ComponentMaker {
         fieldsSelect= new FieldsSelect(this);
         this.add(fieldsSelect);
         
-        fieldsSelect.setup("Fields", getLabels(), true, true);
+        fieldsSelect.setup("Fields", getIDsAndLabels(), true, true);
 
         
         makeRemoveComponentButton();
@@ -175,7 +175,7 @@ public class FieldMaker extends ComponentMaker {
      */
     public void update() {
         List<Map<String, Object>> fieldsReport = super.getFacade().fieldsReport();
-        fieldsSelect.setup("Fields", getLabels(), true, false);
+        fieldsSelect.setup("Fields", getIDsAndLabels(), true, false);
         fieldsGraphics.updateData(fieldsReport);
         Set<String> newSelect = fieldsSelect.getSelected();
         newSelect.add(nameField.getText().strip());
@@ -185,12 +185,12 @@ public class FieldMaker extends ComponentMaker {
     }    
     
     
-    public Set<String> getLabels() {
-       Set<String> fieldNames = new HashSet<>();
-        for (Map m : super.getFacade().fieldsReport()) {
-            fieldNames.add((String) m.get("name"));
-        }        
-        return fieldNames;    
+    public Map<String, String> getIDsAndLabels() {
+        Map<String, String> out = new HashMap<>();
+        for (String entry : super.getFacade().getFields()) {
+            out.put(entry, entry);
+        }
+        return out;
     }
         
 }

@@ -25,7 +25,7 @@ public class SimulationTest {
 
         Simulation s = new Simulation(1000,1000,50);
         
-        testAddSense(s, true);
+        testAddRemoveSense(s, true);
         testAddBehaviour(s, true);        
         testAddRandomBot(s, true);
         
@@ -227,7 +227,7 @@ public class SimulationTest {
         return fails;
     }
     
-    public static int testAddSense(Simulation s, boolean v) {
+    public static int testAddRemoveSense(Simulation s, boolean v) {
         int fails = 0;
         for (int i = 0; i < 4; i++) {
             int inp = s.getNnInputs();
@@ -249,9 +249,82 @@ public class SimulationTest {
                     System.out.println("Number of inputs is not the same as required number of inputs.");                
             }              
         }
+        
+        Set<Integer> ids = new HashSet<>();
+        s.removeSenses(ids);
+        if (!(s.getSenses().size() == 4)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing empty ID set: wrong final sense set size.");                
+       }   
+       if (!setIsRange(s.getInputSlots(), 0, s.getInputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing empty ID set: Input set is not correct range.");
+        }  
+        if (!(s.getInputSlots().size() == s.getNnInputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing empty ID set: Number of inputs is not the same as required number of inputs.");                
+        }       
+        
+        ids.add(0);
+        ids.add(3);
+        s.removeSenses(ids);
+        if (!(s.getSenses().size() == 2)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing ID set: wrong final sense set size.");                
+       }  
+       if (!setIsRange(s.getInputSlots(), 0, s.getInputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing ID set: Input set is not correct range.");
+        }        
+        if (!(s.getInputSlots().size() == s.getNnInputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing ID set: Number of inputs is not the same as required number of inputs.");                
+        }       
+        
+        s.removeSenses(ids);
+        if (!(s.getSenses().size() == 2)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing nonexistent ID set: wrong final sense set size.");                
+       }   
+       if (!setIsRange(s.getInputSlots(), 0, s.getInputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing nonexistent ID set: Input set is not correct range.");
+        }         
+        if (!(s.getInputSlots().size() == s.getNnInputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing nonexistent ID set: Number of inputs is not the same as required number of inputs.");                
+        }       
+        
+       ids.add(2);
+        s.removeSenses(ids);
+        if (!(s.getSenses().size() == 1)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing mixed existing/nonexisting ID set: wrong final sense set size.");                
+       }    
+       if (!setIsRange(s.getInputSlots(), 0, s.getInputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing mixed existing/nonexisting ID set: Input set is not correct range.");
+        }           
+        if (!(s.getInputSlots().size() == s.getNnInputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing mixed existing/nonexisting ID set: Number of inputs is not the same as required number of inputs.");                
+        }        
+              
 
         if (v)
-            System.out.println("Add sense failures: " + fails);        
+            System.out.println("Add/remove sense failures: " + fails);        
         
         return fails;
     }
@@ -429,9 +502,10 @@ public class SimulationTest {
                 System.out.println("Key senses not present."); 
         } else {
             try {
-                String[] test = (String[]) m.get("senses");
-                for (String str : test) {
-                    String a = str;
+                Map<String, String> test = (Map<String, String>) m.get("senses");
+                for (String str : test.keySet()) {
+                    String a = test.get(str);
+                    Integer in = Integer.parseInt(str); //unsafe warning; ignore
                 }
             } catch (Exception e) {
                 fails++;

@@ -266,16 +266,16 @@ public class Simulation {
         out.put("time", simTime);
         out.put("population", population());
         
-        String[] sens = new String[senses.size()];
+        /*String[] sens = new String[senses.size()];
         int i = 0;
         for (Sense s : senses) {
             sens[i] = s.toString();
             i++;
-        }        
-        out.put("senses", sens);
+        }    */    
+        out.put("senses", senseReport());
         
         String[] beh = new String[behaviours.size()];
-        i = 0;
+        int i = 0;
         for (Behaviour b : behaviours) {
             beh[i] = b.toString();
             i++;
@@ -283,7 +283,20 @@ public class Simulation {
         out.put("behaviours", beh);        
         
         return out;
-    }        
+    }   
+    
+    /**
+     * 
+     * Req for: UC003, UC029
+     * @return 
+     */
+    public synchronized Map<String, String> senseReport() {
+        Map<String, String> out = new HashMap<>();
+        for (Sense s : senses) {
+            out.put(Integer.toString(s.getID()), s.toString());
+        }        
+        return out;
+    }     
     
     /**
      * returns the color of the named field, or white if no field with that name
@@ -495,13 +508,52 @@ public class Simulation {
     /**
      * 
      * 
-     *  Req for: UC007
+     *  Req for: UC003, UC007
      */     
     public Set<String> listFields() {
         return environment.listFields();
     }   
     
 
+    /**
+     * 
+     * 
+     *  Req for: UC003
+     */     
+    public Environment getEnvironment() {
+        return environment;
+    }
     
+    /**
+     * 
+     * Req for: UC003
+     * @param s
+     * @return 
+     */
+    public synchronized boolean containsSense(Sense s) {
+        for (Sense sense : senses) {
+            if(sense.equals(s))
+                return true;
+        }
+        return false;
+    }
+    
+    
+    /**
+     * 
+     * Req for: UC029
+     * @param s
+     * @return 
+     */
+    public synchronized void removeSenses(Set<Integer> ids) {
+        senses.removeIf(sense -> ids.contains(sense.getID()));
+        int startSlot = 0;
+        for (Sense sense : senses) {
+            sense.renumberOutputs(startSlot);
+            startSlot += sense.outputSlots().size();
+        }
+        nnInputs = startSlot;
+    }    
+        
     
 }

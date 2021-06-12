@@ -5,8 +5,11 @@
  */
 package simulation;
 
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -20,13 +23,29 @@ import java.util.Map;
  */
 public class SimStateFacade {
     
-    private Simulation sim;
-    
+    private final Simulation sim;
     
     public SimStateFacade(Simulation s) {
         sim = s;
     }
 
+    /**
+     * req. for: UC003
+     * @return 
+     */
+    public Set<String> getSenseTypes() {
+        Set<String> out = new HashSet<>();
+        EnumSet.allOf(SenseType.class).forEach(sense -> out.add(sense.label));
+        return out;
+    }
+    
+    /**
+     * req. for: UC003
+     * @return 
+     */
+    public Set<String> getFields() {
+        return sim.listFields();
+    }    
     
     /**
      * 
@@ -53,6 +72,15 @@ public class SimStateFacade {
      */
     public  Map<String, Object> simReport() {
         return sim.simulationReport();
+    }     
+    
+    /**
+     * 
+     * Req for: UC003, UC029
+     * @return 
+     */
+    public Map<String, String> senseReport() {
+        return sim.senseReport();
     }     
 
     /**

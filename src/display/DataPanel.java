@@ -7,10 +7,10 @@ package display;
 
 import java.awt.Font;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -76,15 +76,20 @@ public class DataPanel extends JComponent {
         population.setText("<html><b>Population:</b> " + (int) simReport.get("population") + "</html>");        
         cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");
         
-        String[] s = (String[]) simReport.get("senses");
-        sensesSelect.setup("Senses", new HashSet<String>(Arrays.asList(s)), false, false);       
+        Map<String, String> s = (Map<String, String>) simReport.get("senses");
+        sensesSelect.setup("Senses", s, false, false);       
         
         String[] b = (String[]) simReport.get("behaviours");
-        behavioursSelect.setup("Behaviours", new HashSet<String>(Arrays.asList(b)), false, false);          
+        Map<String, String> beh = new HashMap<>();
+        for (String str : b) {
+            beh.put(str, str);
+        } 
+        behavioursSelect.setup("Behaviours", beh, false, false);          
         
-        Set<String> fieldNames = new HashSet<>();
+        Map<String, String> fieldNames = new HashMap<>();
         for (Map m : fieldsReport) {
-            fieldNames.add((String) m.get("name"));
+            String field = (String) m.get("name");
+            fieldNames.put(field, field);
         }        
         fieldsSelect.setup("Fields", fieldNames, true, true);
         

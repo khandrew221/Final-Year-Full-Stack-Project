@@ -7,6 +7,8 @@ package controls;
 
 import java.awt.Color;
 import java.util.Set;
+import simulation.Sense;
+import simulation.SenseFactory;
 import simulation.Simulation;
 
 /**
@@ -40,6 +42,15 @@ public class SimControl {
     public void play() {
         simulation.setState(SimState.RUNNING);
     }        
+    
+    /**
+     * Stops the simulation.  
+     * 
+     * Req. for: UC003
+     */
+    public void stop() {
+        simulation.setState(SimState.STOPPED);
+    }      
     
     /**
      * Returns if the simulation is paused 
@@ -107,6 +118,38 @@ public class SimControl {
     }
     
     /**
+     * 
+     * 0 for no errors
+     * 1 for existing sense
+     * 2 for no points
+     * 3 for modification while running warning
+     * 
+     * @param target
+     * @param centred
+     * @param rings
+     * @param pointsPerRing
+     * @param radius
+     * @return error code
+     */
+    public int addSenseEnviro(String target, boolean centred, int rings, int pointsPerRing, int radius) {
+        if (simulation.getState() == SimState.STOPPED) {
+            Sense sense = SenseFactory.MakeEnvironmentSense(target, simulation.getEnvironment(), centred, rings, pointsPerRing, radius);
+            if (!centred) {
+                if (rings == 0 || pointsPerRing == 0) {
+                    return 2;
+                }
+            }
+            if (simulation.containsSense(sense)) {
+                return 1;
+            }
+
+            simulation.addSense(sense);
+            return 0;
+        } 
+        return 3;
+    }
+    
+    /**
      * Removes fields with the given names.
      * 
      * Req for: UC028
@@ -114,6 +157,15 @@ public class SimControl {
     public void removeFields(Set<String> toRemove) {
         simulation.removeFields(toRemove);
     }    
+    
+    /**
+     * Removes senses with the given ID numbers.
+     * 
+     * Req for: UC029
+     */
+    public void removeSenses(Set<Integer> toRemove) {
+        simulation.removeSenses(toRemove);
+    }      
     
     
     public void setMAX_LAYERS(int MAX_LAYERS) {
