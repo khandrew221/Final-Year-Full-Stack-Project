@@ -21,6 +21,7 @@ public abstract class ComponentMaker extends JPanel implements ActionListener {
     private SimControl simControl;
     private SimStateFacade simFacade;
     JButton addComponentButton;
+    JButton removeComponentButton;    
     
     
     public ComponentMaker(SimControl simControl, SimStateFacade simFacade) {
@@ -41,6 +42,11 @@ public abstract class ComponentMaker extends JPanel implements ActionListener {
      * 
      */
     abstract void makeAddComponentButton(); 
+    
+    /**
+     * 
+     */
+    abstract void makeRemoveComponentButton();     
     
     /**
      *

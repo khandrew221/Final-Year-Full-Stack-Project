@@ -59,6 +59,17 @@ public class Environment {
     
     
     /**
+     * Removes fields with the given names.
+     * 
+     * Req for: UC028
+     */
+    public void removeFields(Set<String> toRemove) {
+        for (String n : toRemove) {
+            fields.remove(n);
+        }
+    }    
+    
+    /**
      * Resizes the environment and all scalar fields.
      * 
      * req for: UNUSED BUT TESTED
@@ -231,16 +242,6 @@ public class Environment {
             return 0;
     }    
    
-       /**
-     * removes field with the given String as name/key from the field map if it exists
-     * If the name is already present as a map key, nothing is added.
-     * @param name name of the field to be removed
-     */
-    void removeField(String name) {
-        if (fields.containsKey(name))
-            fields.remove(name);
-    }
-
     /**
      * fills the field with the given String as name/key with the given value
      * If the name is already present as a map key, nothing is added.

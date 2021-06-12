@@ -64,7 +64,7 @@ public class EvironmentTest {
             System.out.println("Failures on adding field: " + fails);        
         
         return fails;
-    }      
+    }       
     
     
     public static int testAddDeleteField(boolean v) {
@@ -89,7 +89,9 @@ public class EvironmentTest {
                     System.out.println("Failure on adding field Test1: " + testSet + " expected, actual result " + e.listFields()); 
             }
 
-            e.removeField("Test1");
+            Set <String> toRemove = new HashSet<>();
+            toRemove.add("Test1");
+            e.removeFields(toRemove);
             testSet.remove("Test1");
             
             if (!e.listFields().equals(testSet)) {
@@ -120,13 +122,30 @@ public class EvironmentTest {
                     System.out.println("Failure on adding existing fields: " + testSet + " expected, actual result " + e.listFields()); 
             }  
             
+            toRemove.clear();
+            toRemove.add("Test1");
+            e.removeFields(toRemove);
             testSet.remove("Test1");
             
             if (!e.listFields().equals(testSet)) {
                 fails++;
                 if (v)
                     System.out.println("Failure on removing nonexistent field: " + testSet + " expected, actual result " + e.listFields()); 
-            }            
+            } 
+            
+                        
+            toRemove.add("Test2");
+            toRemove.add("Test4");
+            e.removeFields(toRemove);
+            testSet.remove("Test2");
+            testSet.remove("Test4");
+            
+            if (!e.listFields().equals(testSet)) {
+                fails++;
+                if (v)
+                    System.out.println("Failure on removing multiple mixed existing and nonexisting fields: " + testSet + " expected, actual result " + e.listFields()); 
+            }    
+            
         }
         
         if (v)
@@ -149,6 +168,7 @@ public class EvironmentTest {
             e = new Environment(x,y);
             e.addField("Test1", d, 0, 100, Color.GREEN);
             //System.out.println(x + ", " + y + ", " + d);
+            e.setField("Test1", 0);
             fails += testGetFixedValues(e, "Test1", 0, true);
             int val = -1000 + random.nextInt(2000);
             e.setField("Test1", val);
@@ -246,8 +266,8 @@ public class EvironmentTest {
             }
         };
         
-        if (v)
-            System.out.println("Failures accessing set values: " + fails);
+        //if (v)
+        //    System.out.println("Failures accessing set values: " + fails);
 
         return fails;
     }  
@@ -267,8 +287,8 @@ public class EvironmentTest {
             }
         };
         
-        if (v)
-            System.out.println("Failures accessing randomised values: " + fails);
+        //if (v)
+        //    System.out.println("Failures accessing randomised values: " + fails);
 
         return fails;
     }    

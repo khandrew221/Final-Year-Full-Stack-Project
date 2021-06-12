@@ -91,7 +91,7 @@ public class FieldsSelect extends JPanel {
             this.add(entry);
         }        
         updateMain();        
-        this.setPreferredSize(new Dimension(200,30*fieldsReport.size() + 25));
+        this.setPreferredSize(new Dimension(200,35*fieldsReport.size() + 30));
     }
     
     /**

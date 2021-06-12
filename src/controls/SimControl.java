@@ -6,6 +6,7 @@
 package controls;
 
 import java.awt.Color;
+import java.util.Set;
 import simulation.Simulation;
 
 /**
@@ -104,6 +105,15 @@ public class SimControl {
             return false;
         }
     }
+    
+    /**
+     * Removes fields with the given names.
+     * 
+     * Req for: UC028
+     */
+    public void removeFields(Set<String> toRemove) {
+        simulation.removeFields(toRemove);
+    }    
     
     
     public void setMAX_LAYERS(int MAX_LAYERS) {

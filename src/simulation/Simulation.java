@@ -391,7 +391,16 @@ public class Simulation {
      */
     public SimState getState() {
         return runState;
-    }        
+    } 
+    
+    /**
+     * Removes fields with the given names.
+     * 
+     * Req for: UC028
+     */
+    public void removeFields(Set<String> toRemove) {
+        environment.removeFields(toRemove);
+    }      
     
     /**
      * 

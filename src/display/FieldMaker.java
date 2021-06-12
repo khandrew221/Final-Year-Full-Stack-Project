@@ -49,17 +49,19 @@ public class FieldMaker extends ComponentMaker {
         
         super(simControl, simFacade);
               
-        makerPanel = new JPanel(new GridLayout(4, 1));
+        makerPanel = new JPanel(new GridLayout(5, 1));
         this.add(makerPanel);
         makeNamePanel();
         makeDensityPanel();        
         makeColorPanel();
         makeAddComponentButton();
+        
        
         fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
         fieldsSelect= new FieldsSelect(this);
         this.add(fieldsSelect);
         fieldsSelect.setup(super.getFacade().fieldsReport(), true, true);
+        makeRemoveComponentButton();
         
         this.add(fieldsGraphics);
     }
@@ -125,6 +127,13 @@ public class FieldMaker extends ComponentMaker {
     }  
     
     @Override
+    void makeRemoveComponentButton() {
+        removeComponentButton = new JButton("Remove fields");
+        removeComponentButton.addActionListener(this);        
+        makerPanel.add(removeComponentButton);               
+    }    
+    
+    @Override
     public void actionPerformed(ActionEvent e){        
         if (e.getSource().equals(colorChooser)) {
             Color c=JColorChooser.showDialog(this,"Select colour",Color.GREEN);
@@ -139,17 +148,13 @@ public class FieldMaker extends ComponentMaker {
                 if (existingName)
                     JOptionPane.showMessageDialog(null, "A field with this name already exists.");
                 else {                 
-                    List<Map<String, Object>> fieldsReport = super.getFacade().fieldsReport();
-                    fieldsSelect.setup(fieldsReport, true, false);
-                    fieldsGraphics.updateData(fieldsReport);
-                    Set<String> newSelect = fieldsSelect.getSelected();
-                    newSelect.add(nameField.getText().strip());
-                    fieldsSelect.setSelected(newSelect);
-                    this.repaint();
-                    this.revalidate();
+                    update();
                 }
             }            
-        }            
+        } else if (e.getSource().equals(removeComponentButton)) {
+            super.getControl().removeFields(fieldsSelect.getSelected());
+            update();
+        }        
     }
    
     
@@ -160,5 +165,19 @@ public class FieldMaker extends ComponentMaker {
     public void setSelected(Set<String> newActiveFields) {
         fieldsGraphics.setActiveFields(newActiveFields);
     }
+    
+    /**
+     * Updates the whole panel.  Call after change to simulation environment.
+     */
+    public void update() {
+        List<Map<String, Object>> fieldsReport = super.getFacade().fieldsReport();
+        fieldsSelect.setup(fieldsReport, true, false);
+        fieldsGraphics.updateData(fieldsReport);
+        Set<String> newSelect = fieldsSelect.getSelected();
+        newSelect.add(nameField.getText().strip());
+        fieldsSelect.setSelected(newSelect);
+        this.repaint();
+        this.revalidate();    
+    }    
         
 }
