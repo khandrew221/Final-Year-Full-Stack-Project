@@ -55,4 +55,10 @@ public abstract class ComponentMaker extends JPanel implements ActionListener {
     @Override
     public abstract void actionPerformed(ActionEvent e);
     
+    
+    /**
+     * Updates the whole panel.  Call after change to relevant simulation factors.
+     */
+    public abstract void update();
+    
 }

@@ -5,18 +5,8 @@
  */
 package display;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -24,15 +14,15 @@ import javax.swing.border.EmptyBorder;
  *
  * @author Kathryn Andrew
  */
-public class SensesSelect extends SelectableList{
-    
+public class BehavioursSelect extends SelectableList {
     
     /**
-     * Creates a display of senses with optional tickboxes for each sense.
+     * Creates a display of behaviours with optional tickboxes for each 
+     * behaviours.
      * 
      * @param container
      */    
-    public SensesSelect(JPanel container) {
+    public BehavioursSelect(JPanel container) {
         super(container);
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         Font font = this.getFont().deriveFont(Font.PLAIN);
@@ -58,5 +48,4 @@ public class SensesSelect extends SelectableList{
             }
         }*/
     }
-    
 }

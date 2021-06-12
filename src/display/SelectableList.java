@@ -5,11 +5,16 @@
  */
 package display;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -67,9 +72,54 @@ public abstract class SelectableList extends JPanel {
         updateContainer();
     } 
     
+   /**
+     * 
+     * sets up the selection panel.Should be called after changes to relevant
+     * simulation parameters. 
+     * 
+     * @param title
+     * @param interactive
+     * @param autoSelectFirst 
+     */
+    public void setup(String title, Set<String> labels, boolean interactive, boolean autoSelectFirst) {
+        Set<String> oldSelected = getSelected();
+        this.removeAll();
+        checkBoxes.clear();
+        this.setBorder(BorderFactory.createTitledBorder(title));
+        boolean first = autoSelectFirst;
+        for(String label : labels) {
+            JPanel entry = new JPanel();
+            if (interactive) {               
+                JCheckBox checkBox = new JCheckBox(label);
+                if (first) {
+                    checkBox.setSelected(true);
+                    first = false;
+                } else {
+                    if (oldSelected.contains(label))
+                        checkBox.setSelected(true);
+                }
+                checkBox.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        updateContainer();
+                    }
+                }); 
+                entry.add(checkBox);
+                checkBoxes.put(label, checkBox);
+            } else {
+                JLabel fieldName = new JLabel(label);
+                entry.add(fieldName);            
+            }
+            this.add(entry);
+        }        
+        updateContainer();        
+        this.setPreferredSize(new Dimension(200,35*labels.size() + 30));
+    }    
+    
     /**
      * Allows the container panel to be updated with changes to the 
      * SelectableList.  
      */
     public abstract void updateContainer(); 
+      
 }

@@ -7,6 +7,7 @@ package display;
 
 import controls.SimControl;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class SimMainPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.sim = simFacade;
         this.dataPanel = new DataPanel(this);
+        dataPanel.setPreferredSize(new Dimension(500, 500));
         this.controlPanel = new ControlPanel(this, new SimControl(simulation));
         this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);

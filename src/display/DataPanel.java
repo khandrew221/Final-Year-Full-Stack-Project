@@ -6,8 +6,11 @@
 package display;
 
 import java.awt.Font;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -21,11 +24,11 @@ public class DataPanel extends JComponent {
     
     private SimMainPanel main;
     private FieldsSelect fieldsSelect;     
+    private SensesSelect sensesSelect;  
+    private BehavioursSelect behavioursSelect;
     
     private JLabel population = new JLabel("Population: ");
-    private JLabel cycles = new JLabel("Simulation Cycles: ");
-    private JLabel senses = new JLabel("Senses: ");
-    private JLabel behaviours = new JLabel("Behaviours: ");    
+    private JLabel cycles = new JLabel("Simulation Cycles: ");   
     
     public DataPanel(SimMainPanel main) {
         this.main = main;
@@ -35,10 +38,14 @@ public class DataPanel extends JComponent {
         population.setFont(font);
         this.add(cycles);
         cycles.setFont(font);
-        this.add(senses);
-        senses.setFont(font);
-        this.add(behaviours);
-        behaviours.setFont(font);
+        
+        sensesSelect = new SensesSelect(null);
+        this.add(sensesSelect);
+        sensesSelect.setFont(font);
+        
+        behavioursSelect = new BehavioursSelect(null);
+        this.add(behavioursSelect);
+        behavioursSelect.setFont(font);
         
         fieldsSelect = new FieldsSelect(this.main);
         this.add(fieldsSelect);
@@ -70,23 +77,16 @@ public class DataPanel extends JComponent {
         cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");
         
         String[] s = (String[]) simReport.get("senses");
-        String senseString = "<html><br/><b>Senses: </b>" + s.length;
-        for (int i = 0; i < s.length; i++) {
-            senseString += "<br/>Sense " + (i+1) + ": "; 
-            senseString += s[i];
-        }   
-        senseString += "</html>";
-        senses.setText(senseString);
+        sensesSelect.setup("Senses", new HashSet<String>(Arrays.asList(s)), false, false);       
         
         String[] b = (String[]) simReport.get("behaviours");
-        String behavString = "<html><br/><b>Behaviours: </b>" + b.length;
-        for (int i = 0; i < b.length; i++) {
-            behavString += "<br/>Behaviour " + (i+1) + ": ";
-            behavString += b[i];
-        }        
-        behaviours.setText(behavString);       
+        behavioursSelect.setup("Behaviours", new HashSet<String>(Arrays.asList(b)), false, false);          
         
-        fieldsSelect.setup(fieldsReport, true, true);
+        Set<String> fieldNames = new HashSet<>();
+        for (Map m : fieldsReport) {
+            fieldNames.add((String) m.get("name"));
+        }        
+        fieldsSelect.setup("Fields", fieldNames, true, true);
         
         repaint();
     }                    
