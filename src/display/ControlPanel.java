@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import simulation.Simulation;
 
 /**
  *
@@ -42,10 +41,14 @@ public class ControlPanel extends JPanel {
                 if (simControl.isRunning()) {
                     simControl.pause();
                     pausePlay.setText("Play");
+                } else if(simControl.hasCriticalChange()) {
+                    simControl.restart();
+                    simControl.play();
+                    pausePlay.setText("Pause");
                 } else if(simControl.isPaused() || simControl.isStopped()) {
                     simControl.play();
                     pausePlay.setText("Pause");
-                }
+                } 
             }
         }); 
     }
@@ -60,5 +63,14 @@ public class ControlPanel extends JPanel {
             }
         }); 
     }    
+    
+    
+    public void setPausePlayText() {
+        if (simControl.isRunning()) {
+            pausePlay.setText("Pause");
+        } else if(simControl.isPaused() || simControl.isStopped()) {
+            pausePlay.setText("Play");
+        }            
+    }
     
 }

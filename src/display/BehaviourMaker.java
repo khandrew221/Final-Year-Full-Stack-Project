@@ -178,6 +178,16 @@ public class BehaviourMaker extends ComponentMaker {
         behavioursSelect.setPreferredSize(new Dimension(500,500));
         this.repaint();
         this.revalidate();    
+    }
+    
+    /**
+     * Updates the behaviourMaker panel.  Call after switching to tab.
+     */
+    public void updateAll() {
+        
+        //apply updates
+        setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
+        update();
     }     
     
     @Override

@@ -80,12 +80,13 @@ public class SimControl {
     }   
     
     /**
-     * Returns if the simulation is paused 
+     * Returns if the simulation is stopped
      * 
-     * Req. for: UC024, UC025
+     * Req. for: 
      */
     public boolean isStopped() {
-        if (simulation.getState() == SimState.STOPPED)
+        if (simulation.getState() == SimState.STOPPED || 
+                simulation.getState() == SimState.STOPPED_WITH_CRITICAL_CHANGE)
             return true;
         else
             return false;
@@ -99,6 +100,19 @@ public class SimControl {
     public void restart() {
         simulation.restart();
     }    
+    
+    /**
+     * Returns if the simulation has had a critical change since it was last 
+     * in a play state.
+     * 
+     * Req. for: UC024, UC025
+     */
+    public boolean hasCriticalChange() {
+        if (simulation.getState() == SimState.STOPPED_WITH_CRITICAL_CHANGE)
+            return true;
+        else
+            return false;
+    }      
     
     /**
      * 

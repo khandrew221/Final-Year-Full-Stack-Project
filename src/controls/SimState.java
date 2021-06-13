@@ -15,6 +15,7 @@ public enum SimState {
      *
      */
     RUNNING,
+    PAUSED,
     STOPPED,
-    PAUSED
+    STOPPED_WITH_CRITICAL_CHANGE,
 }

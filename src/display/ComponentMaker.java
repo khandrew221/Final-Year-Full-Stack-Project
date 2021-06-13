@@ -57,8 +57,15 @@ public abstract class ComponentMaker extends JPanel implements ActionListener {
     
     
     /**
-     * Updates the whole panel.  Call after change to relevant simulation factors.
+     * Updates the panel based on internal changes (adding/removing a 
+     * component controlled by this maker).
      */
     public abstract void update();
+    
+    /**
+     * Updates for re-showing, including all changes to simulation parameters.
+     * Call on showing this panel.
+     */
+    public abstract void updateAll();    
     
 }

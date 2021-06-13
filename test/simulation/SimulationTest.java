@@ -230,6 +230,7 @@ public class SimulationTest {
     public static int testAddRemoveSense(Simulation s, boolean v) {
         int fails = 0;
         for (int i = 0; i < 4; i++) {
+            s.setState(SimState.STOPPED);
             int inp = s.getNnInputs();
             Sense sen = SenseFactory.MakeEnvironmentSense("Test1", s.getEnv(), true, 0, 0, 0);
             s.addSense(sen);            
@@ -247,9 +248,15 @@ public class SimulationTest {
                 fails++;
                 if (v)
                     System.out.println("Number of inputs is not the same as required number of inputs.");                
-            }              
+            }
+            if (s.getState() != SimState.STOPPED_WITH_CRITICAL_CHANGE) {
+                fails++;
+                if (v)
+                    System.out.println("State not set to STOPPED_WITH_CRITICAL_CHANGE after adding sense.");                
+            }            
         }
         
+        s.setState(SimState.PAUSED);
         Set<Integer> ids = new HashSet<>();
         s.removeSenses(ids);
         if (!(s.getSenses().size() == 4)) {
@@ -266,8 +273,14 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Error on removing empty ID set: Number of inputs is not the same as required number of inputs.");                
-        }       
+        }   
+        if (s.getState() != SimState.PAUSED) {
+            fails++;
+            if (v)
+                System.out.println("State change but no senses removed (empty set).");                
+        } 
         
+        s.setState(SimState.PAUSED);
         ids.add(0);
         ids.add(3);
         s.removeSenses(ids);
@@ -285,8 +298,14 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Error on removing ID set: Number of inputs is not the same as required number of inputs.");                
-        }       
+        }    
+        if (s.getState() != SimState.STOPPED_WITH_CRITICAL_CHANGE) {
+            fails++;
+            if (v)
+                System.out.println("State not set to STOPPED_WITH_CRITICAL_CHANGE after removing sense.");                
+        }         
         
+        s.setState(SimState.PAUSED);
         s.removeSenses(ids);
         if (!(s.getSenses().size() == 2)) {
             fails++;
@@ -302,8 +321,14 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Error on removing nonexistent ID set: Number of inputs is not the same as required number of inputs.");                
-        }       
+        }   
+        if (s.getState() != SimState.PAUSED) {
+            fails++;
+            if (v)
+                System.out.println("State change but no senses removed (nonexistent senses).");                
+        }        
         
+        s.setState(SimState.PAUSED);
        ids.add(2);
         s.removeSenses(ids);
         if (!(s.getSenses().size() == 1)) {
@@ -321,7 +346,11 @@ public class SimulationTest {
             if (v)
                 System.out.println("Error on removing mixed existing/nonexisting ID set: Number of inputs is not the same as required number of inputs.");                
         }        
-              
+        if (s.getState() != SimState.STOPPED_WITH_CRITICAL_CHANGE) {
+            fails++;
+            if (v)
+                System.out.println("State not set to STOPPED_WITH_CRITICAL_CHANGE after removing sense.");                
+        }               
 
         if (v)
             System.out.println("Add/remove sense failures: " + fails);        
@@ -352,6 +381,7 @@ public class SimulationTest {
             }              
         }
 
+        s.setState(SimState.PAUSED);
         Set<Integer> ids = new HashSet<>();
         s.removeBehaviours(ids);
         if (!(s.getBehaviours().size() == 4)) {
@@ -368,8 +398,14 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Error on removing empty ID set: Number of inputs is not the same as required number of inputs.");                
-        }       
+        }     
+        if (s.getState() != SimState.PAUSED) {
+            fails++;
+            if (v)
+                System.out.println("State change but no behaviours removed (empty set).");                
+        } 
         
+        s.setState(SimState.PAUSED);
         ids.add(0);
         ids.add(3);
         s.removeBehaviours(ids);
@@ -388,7 +424,13 @@ public class SimulationTest {
             if (v)
                 System.out.println("Error on removing ID set: Number of inputs is not the same as required number of inputs.");                
         }       
-        
+        if (s.getState() != SimState.STOPPED_WITH_CRITICAL_CHANGE) {
+            fails++;
+            if (v)
+                System.out.println("State not set to STOPPED_WITH_CRITICAL_CHANGE after removing behaviour.");                
+        }               
+
+        s.setState(SimState.PAUSED);
         s.removeBehaviours(ids);
         if (!(s.getBehaviours().size() == 2)) {
             fails++;
@@ -404,9 +446,15 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Error on removing nonexistent ID set: Number of inputs is not the same as required number of inputs.");                
-        }       
+        }  
+        if (s.getState() != SimState.PAUSED) {
+            fails++;
+            if (v)
+                System.out.println("State change but no behaviours removed (no valid ids).");                
+        } 
         
-       ids.add(2);
+        s.setState(SimState.PAUSED);
+        ids.add(2);
         s.removeBehaviours(ids);
         if (!(s.getBehaviours().size() == 1)) {
             fails++;
@@ -422,7 +470,13 @@ public class SimulationTest {
             fails++;
             if (v)
                 System.out.println("Error on removing mixed existing/nonexisting ID set: Number of inputs is not the same as required number of inputs.");                
-        }                
+        }   
+        if (s.getState() != SimState.STOPPED_WITH_CRITICAL_CHANGE) {
+            fails++;
+            if (v)
+                System.out.println("State not set to STOPPED_WITH_CRITICAL_CHANGE after removing behaviours.");                
+        }               
+
         
         if (v)
             System.out.println("Add/Remove behaviour failures: " + fails);        

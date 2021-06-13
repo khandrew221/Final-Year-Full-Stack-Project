@@ -62,7 +62,7 @@ public class SenseMaker extends ComponentMaker {
         
         makeTypeSelector();
         makeFieldSelector();
-        
+
         typeSpecificMakerPanel = new JPanel();
         typeSpecificMakerPanel.setPreferredSize(new Dimension(500,500));
         this.add(typeSpecificMakerPanel);
@@ -233,13 +233,25 @@ public class SenseMaker extends ComponentMaker {
     }
     
     /**
-     * Updates the senseSelect panel.  Call after change to simulation environment.
+     * Updates the senseSelect panel.  Call after change within panel.
      */
     public void update() {
         sensesSelect.setup("Senses", getIDsAndLabels(), true, false);
         sensesSelect.setPreferredSize(new Dimension(500,500));
         this.repaint();
         this.revalidate();    
+    }
+    
+    /**
+     * Updates the senseSelect panel.  Call after switching to tab.
+     */
+    public void updateAll() {
+        //update for potentially changed field list. 
+        makeFieldSelector();
+        
+        //apply updates
+        setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
+        update();
     }     
     
     @Override

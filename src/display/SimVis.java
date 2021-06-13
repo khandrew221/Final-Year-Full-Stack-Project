@@ -8,7 +8,6 @@ package display;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JComponent;

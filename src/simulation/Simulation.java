@@ -122,6 +122,7 @@ public class Simulation {
         s.renumberOutputs(nnInputs);
         senses.add(s);
         setNNInputs();
+        setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }
     
 
@@ -135,6 +136,7 @@ public class Simulation {
         b.renumberInputs(nnOutputs);
         behaviours.add(b);
         setNNOutputs();
+        setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }    
     
     
@@ -148,6 +150,7 @@ public class Simulation {
         for (Sense s : senses) {
             nnInputs += s.outputSlots().size();
         }     
+        setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }
     
     /**
@@ -160,6 +163,7 @@ public class Simulation {
         for (Behaviour b : behaviours) {
             nnOutputs += b.inputSlots().size();
         }
+        setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }
     
     /**
@@ -359,6 +363,7 @@ public class Simulation {
      */
     public void addField(String name, int density, Color color) {
         environment.addField(name, density, 0, 1, color);
+        setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }
     
     /**
@@ -377,6 +382,11 @@ public class Simulation {
                 addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
             }          
         }
+        
+        if (getState() == SimState.STOPPED_WITH_CRITICAL_CHANGE) {
+            setState(SimState.STOPPED);
+        }
+        
     }    
     
     /**
@@ -409,6 +419,7 @@ public class Simulation {
      */
     public void removeFields(Set<String> toRemove) {
         environment.removeFields(toRemove);
+        setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }      
     
     /**
@@ -561,13 +572,20 @@ public class Simulation {
      * @return 
      */
     public synchronized void removeSenses(Set<Integer> ids) {
-        senses.removeIf(sense -> ids.contains(sense.getID()));
-        int startSlot = 0;
-        for (Sense sense : senses) {
-            sense.renumberOutputs(startSlot);
-            startSlot += sense.outputSlots().size();
+        if (!ids.isEmpty()) {    
+            int oldSize = senses.size();
+            senses.removeIf(sense -> ids.contains(sense.getID()));
+            int newSize = senses.size();
+            if (oldSize != newSize) {
+                int startSlot = 0;
+                for (Sense sense : senses) {
+                    sense.renumberOutputs(startSlot);
+                    startSlot += sense.outputSlots().size();
+                }
+                nnInputs = startSlot;
+                setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
+            }
         }
-        nnInputs = startSlot;
     }    
     
     
@@ -578,13 +596,20 @@ public class Simulation {
      * @return 
      */
     public synchronized void removeBehaviours(Set<Integer> ids) {
-        behaviours.removeIf(behaviour -> ids.contains(behaviour.getID()));
-        int startSlot = 0;
-        for (Behaviour behaviour : behaviours) {
-            behaviour.renumberInputs(startSlot);
-            startSlot += behaviour.inputSlots().size();
+        if (!ids.isEmpty()) {
+            int oldSize = behaviours.size();
+            behaviours.removeIf(behaviour -> ids.contains(behaviour.getID()));
+            int newSize = behaviours.size();
+            if (oldSize != newSize) {
+                int startSlot = 0;
+                for (Behaviour behaviour : behaviours) {
+                    behaviour.renumberInputs(startSlot);
+                    startSlot += behaviour.inputSlots().size();
+                }
+                nnOutputs = startSlot;
+                setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
+            }
         }
-        nnOutputs = startSlot;
     }    
         
     

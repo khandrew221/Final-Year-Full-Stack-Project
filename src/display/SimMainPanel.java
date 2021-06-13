@@ -47,7 +47,8 @@ public class SimMainPanel extends JPanel {
      */
     public void setAll() {
         dataPanel.setAll(sim.simReport(),  sim.fieldsReport());
-        simVis.updateData();       
+        simVis.updateData();     
+        controlPanel.setPausePlayText();
         repaint();
     }
 

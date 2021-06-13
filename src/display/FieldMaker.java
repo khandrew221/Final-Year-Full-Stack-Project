@@ -173,6 +173,7 @@ public class FieldMaker extends ComponentMaker {
     /**
      * Updates the whole panel.  Call after change to simulation environment.
      */
+    @Override
     public void update() {
         List<Map<String, Object>> fieldsReport = super.getFacade().fieldsReport();
         fieldsSelect.setup("Fields", getIDsAndLabels(), true, false);
@@ -183,6 +184,14 @@ public class FieldMaker extends ComponentMaker {
         this.repaint();
         this.revalidate();    
     }    
+    
+    /**
+     * In this case only calls the standard update.
+     */
+    @Override
+    public void updateAll() {
+        update();
+    }
     
     
     public Map<String, String> getIDsAndLabels() {
