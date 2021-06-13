@@ -26,7 +26,7 @@ public class SimulationTest {
         Simulation s = new Simulation(1000,1000,50);
         
         testAddRemoveSense(s, true);
-        testAddBehaviour(s, true);        
+        testAddRemoveBehaviour(s, true);        
         testAddRandomBot(s, true);
         
         testClear(s, true);
@@ -329,7 +329,7 @@ public class SimulationTest {
         return fails;
     }
     
-    public static int testAddBehaviour(Simulation s, boolean v) {
+    public static int testAddRemoveBehaviour(Simulation s, boolean v) {
         int fails = 0;
         for (int i = 0; i < 4; i++) {
             int outp = s.getNnOutputs();
@@ -352,8 +352,80 @@ public class SimulationTest {
             }              
         }
 
+        Set<Integer> ids = new HashSet<>();
+        s.removeBehaviours(ids);
+        if (!(s.getBehaviours().size() == 4)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing empty ID set: wrong final behaviour set size.");                
+       }   
+       if (!setIsRange(s.getOutputSlots(), 0, s.getOutputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing empty ID set: Output set is not correct range.");
+        }  
+        if (!(s.getOutputSlots().size() == s.getNnOutputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing empty ID set: Number of inputs is not the same as required number of inputs.");                
+        }       
+        
+        ids.add(0);
+        ids.add(3);
+        s.removeBehaviours(ids);
+        if (!(s.getBehaviours().size() == 2)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing ID set: wrong final behaviour set size.");                
+       }  
+       if (!setIsRange(s.getOutputSlots(), 0, s.getOutputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing ID set: Output set is not correct range.");
+        }        
+        if (!(s.getOutputSlots().size() == s.getNnOutputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing ID set: Number of inputs is not the same as required number of inputs.");                
+        }       
+        
+        s.removeBehaviours(ids);
+        if (!(s.getBehaviours().size() == 2)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing nonexistent ID set: wrong final behaviour set size.");                
+       }   
+       if (!setIsRange(s.getOutputSlots(), 0, s.getOutputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing nonexistent ID set: Output set is not correct range.");
+        }         
+        if (!(s.getOutputSlots().size() == s.getNnOutputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing nonexistent ID set: Number of inputs is not the same as required number of inputs.");                
+        }       
+        
+       ids.add(2);
+        s.removeBehaviours(ids);
+        if (!(s.getBehaviours().size() == 1)) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing mixed existing/nonexisting ID set: wrong final behaviour set size.");                
+       }    
+       if (!setIsRange(s.getOutputSlots(), 0, s.getOutputSlots().size())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing mixed existing/nonexisting ID set: Output set is not correct range.");
+        }           
+        if (!(s.getOutputSlots().size() == s.getNnOutputs())) {
+            fails++;
+            if (v)
+                System.out.println("Error on removing mixed existing/nonexisting ID set: Number of inputs is not the same as required number of inputs.");                
+        }                
+        
         if (v)
-            System.out.println("Add behaviour failures: " + fails);        
+            System.out.println("Add/Remove behaviour failures: " + fails);        
         
         return fails;
     }    

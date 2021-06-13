@@ -554,6 +554,23 @@ public class Simulation {
         }
         nnInputs = startSlot;
     }    
+    
+    
+    /**
+     * 
+     * Req for: UC030
+     * @param s
+     * @return 
+     */
+    public synchronized void removeBehaviours(Set<Integer> ids) {
+        behaviours.removeIf(behaviour -> ids.contains(behaviour.getID()));
+        int startSlot = 0;
+        for (Behaviour behaviour : behaviours) {
+            behaviour.renumberInputs(startSlot);
+            startSlot += behaviour.inputSlots().size();
+        }
+        nnOutputs = startSlot;
+    }    
         
     
 }
