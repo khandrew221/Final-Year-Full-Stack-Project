@@ -16,7 +16,7 @@ public abstract class Sense {
     private static int nextID = 0;
     private final int ID;
     
-    Sense() {
+    public Sense() {
         ID = nextID;
         nextID++;
     }

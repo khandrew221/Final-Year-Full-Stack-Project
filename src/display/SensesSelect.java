@@ -38,19 +38,8 @@ public class SensesSelect extends SelectableList{
      * Updates the container when a checkbox is activated.
      */    
     public void updateContainer() {
-        /*
-        JPanel container = super.getContainer();
-        if (container != null) {
-            if (container instanceof SimMainPanel) {
-                SimMainPanel n = (SimMainPanel) container;
-                n.setSelected(getSelected());
-            } else if (container instanceof FieldMaker) {
-                FieldMaker n = (FieldMaker) container;
-                n.setSelected(getSelected());   
-                n.repaint();
-            }
-        }*/
     }
+    
     
     public Set<Integer> getSelectedIDs() {
         Set<Integer> out = new HashSet<>();

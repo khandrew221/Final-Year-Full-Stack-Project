@@ -518,9 +518,10 @@ public class SimulationTest {
                 System.out.println("Key behaviours not present."); 
         } else {
             try {
-                String[] test = (String[]) m.get("behaviours");
-                for (String str : test) {
-                    String a = str;
+                Map<String, String> test = (Map<String, String>) m.get("behaviours");
+                for (String str : test.keySet()) {
+                    String a = test.get(str);
+                    Integer in = Integer.parseInt(str); //unsafe warning; ignore
                 }
             } catch (Exception e) {
                 fails++;

@@ -12,6 +12,18 @@ import java.util.Set;
  * @author Kathryn Andrew
  */
 public abstract class Behaviour {
+
+    private static int nextID = 0;
+    private final int ID;
+    
+    public Behaviour() {
+        ID = nextID;
+        nextID++;
+    }
+    
+    public int getID() {
+        return ID;
+    }
     
     public abstract void execute(Bot bot);
     public abstract Set<Integer> inputSlots();

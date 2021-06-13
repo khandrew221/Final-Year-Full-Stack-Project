@@ -79,12 +79,8 @@ public class DataPanel extends JComponent {
         Map<String, String> s = (Map<String, String>) simReport.get("senses");
         sensesSelect.setup("Senses", s, false, false);       
         
-        String[] b = (String[]) simReport.get("behaviours");
-        Map<String, String> beh = new HashMap<>();
-        for (String str : b) {
-            beh.put(str, str);
-        } 
-        behavioursSelect.setup("Behaviours", beh, false, false);          
+        Map<String, String> b = (Map<String, String>) simReport.get("behaviours");
+        behavioursSelect.setup("Behaviours", b, false, false);          
         
         Map<String, String> fieldNames = new HashMap<>();
         for (Map m : fieldsReport) {

@@ -25,7 +25,6 @@ public class SenseEnviro extends Sense {
     
     
     public SenseEnviro(String targ, Environment e, List<Point> points) {
-        super();
         this.env = e;
         for (int i = 0; i < points.size(); i++) {
             samplePoints.put(i, points.get(i));

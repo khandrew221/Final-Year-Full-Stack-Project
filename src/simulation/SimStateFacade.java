@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,14 @@ public class SimStateFacade {
         return sim.senseReport();
     }     
 
+    /**
+     * 
+     * Req for: UC004, UC030
+     * @return 
+     */
+    public Map<String, String> behaviourReport() {       
+        return sim.behaviourReport();
+    }     
     /**
      * 
      * Req for: UC017

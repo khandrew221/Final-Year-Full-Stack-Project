@@ -63,10 +63,7 @@ public class BehaviourMove extends Behaviour {
         }
     }
     
-    
 
-    
-    
     
     /**
      * Returns the set of behaviour input slots.

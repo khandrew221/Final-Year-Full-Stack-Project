@@ -266,21 +266,8 @@ public class Simulation {
         out.put("time", simTime);
         out.put("population", population());
         
-        /*String[] sens = new String[senses.size()];
-        int i = 0;
-        for (Sense s : senses) {
-            sens[i] = s.toString();
-            i++;
-        }    */    
-        out.put("senses", senseReport());
-        
-        String[] beh = new String[behaviours.size()];
-        int i = 0;
-        for (Behaviour b : behaviours) {
-            beh[i] = b.toString();
-            i++;
-        }        
-        out.put("behaviours", beh);        
+        out.put("senses", senseReport());       
+        out.put("behaviours", behaviourReport());        
         
         return out;
     }   
@@ -297,6 +284,19 @@ public class Simulation {
         }        
         return out;
     }     
+    
+    /**
+     * 
+     * Req for: UC004, UC030
+     * @return 
+     */
+    public synchronized Map<String, String> behaviourReport() {
+        Map<String, String> out = new HashMap<>();
+        for (Behaviour b : behaviours) {
+            out.put(Integer.toString(b.getID()), b.toString());
+        }        
+        return out;
+    }        
     
     /**
      * returns the color of the named field, or white if no field with that name
