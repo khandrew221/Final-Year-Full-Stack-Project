@@ -6,7 +6,6 @@
 package simulation;
 
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,7 @@ public class SimStateFacade {
         Set<String> out = new HashSet<>();
         EnumSet.allOf(SenseType.class).forEach(sense -> out.add(sense.label));
         return out;
-    }
+    } 
     
     /**
      * req. for: UC003
@@ -46,6 +45,16 @@ public class SimStateFacade {
      */
     public Set<String> getFields() {
         return sim.listFields();
+    }    
+    
+    /**
+     * req. for: UC004
+     * @return 
+     */
+    public Set<String> getBehaviourTypes() {
+        Set<String> out = new HashSet<>();
+        EnumSet.allOf(BehaviourType.class).forEach(behaviour -> out.add(behaviour.label));
+        return out;
     }    
     
     /**

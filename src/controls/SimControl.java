@@ -7,9 +7,12 @@ package controls;
 
 import java.awt.Color;
 import java.util.Set;
+import simulation.Behaviour;
+import simulation.BehaviourFactory;
 import simulation.Sense;
 import simulation.SenseFactory;
 import simulation.Simulation;
+import utility.Point;
 
 /**
  *
@@ -150,6 +153,25 @@ public class SimControl {
     }
     
     /**
+     * 0 for no errors
+     * 1 for existing behaviour
+     * 3 for modification while running warning
+     * @param maxSpeed
+     * @return 
+     */
+    public int addBehaviourMove(double maxSpeed) {
+        if (simulation.getState() == SimState.STOPPED) {
+            Behaviour behaviour = BehaviourFactory.makeBehaviourMove(maxSpeed, new Point(0,0), new Point(simulation.envXSize(), simulation.envYSize()));
+            if (simulation.containsMoveBehaviour()) {
+                return 1;
+            }
+            simulation.addBehaviour(behaviour);
+            return 0;
+        } 
+        return 3;
+    }    
+    
+    /**
      * Removes fields with the given names.
      * 
      * Req for: UC028
@@ -166,6 +188,15 @@ public class SimControl {
     public void removeSenses(Set<Integer> toRemove) {
         simulation.removeSenses(toRemove);
     }      
+    
+    /**
+     * Removes behaviours with the given ID numbers.
+     * 
+     * Req for: UC030
+     */
+    public void removeBehaviours(Set<Integer> toRemove) {
+        simulation.removeBehaviours(toRemove);
+    }    
     
     
     public void setMAX_LAYERS(int MAX_LAYERS) {

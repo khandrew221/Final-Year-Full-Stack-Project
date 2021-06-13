@@ -538,6 +538,21 @@ public class Simulation {
         return false;
     }
     
+    /**
+     * 
+     * Req for: UC004
+     * @param s
+     * @return 
+     */
+    public synchronized boolean containsMoveBehaviour() {
+        for (Behaviour behaviour : behaviours) {
+            if(behaviour instanceof BehaviourMove) {
+                return true;
+            }                
+        }
+        return false;
+    }    
+    
     
     /**
      * 

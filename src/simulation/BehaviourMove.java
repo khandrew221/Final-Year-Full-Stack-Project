@@ -19,8 +19,8 @@ public class BehaviourMove extends Behaviour {
     private Point min;
     private Point max;
     
-    int moveDirSlot;
-    int moveSpeedSlot;
+    int xMoveSlot;
+    int yMoveSlot;
     
     
     /**
@@ -41,10 +41,10 @@ public class BehaviourMove extends Behaviour {
     @Override
     public void execute(Bot bot) {
         
-        double dir = bot.getOutput(moveDirSlot) * 2*Math.PI; 
-        double speed = bot.getOutput(moveSpeedSlot) * maxSpeed;
+        double xMove = (bot.getOutput(xMoveSlot)-0.5)*maxSpeed; 
+        double yMove = (bot.getOutput(yMoveSlot)-0.5)*maxSpeed; 
         
-        Point displace = new Point(speed * Math.cos(dir), speed * Math.sin(dir));
+        Point displace = new Point(xMove, yMove);
         Point newLoc = Point.displace(bot.getPosition(), displace);
         if (newLoc.inBounds(min, max))
             bot.setPosition(newLoc);
@@ -72,10 +72,11 @@ public class BehaviourMove extends Behaviour {
      * 
      * @return 
      */
+    @Override
     public Set<Integer> inputSlots() {
         Set<Integer> out = new HashSet<>();
-        out.add(moveDirSlot);
-        out.add(moveSpeedSlot);
+        out.add(xMoveSlot);
+        out.add(yMoveSlot);
         return out;
     }
     
@@ -88,9 +89,10 @@ public class BehaviourMove extends Behaviour {
      * 
      * @return 
      */    
+    @Override
     public void renumberInputs(int startSlot) {
-        moveDirSlot = startSlot;
-        moveSpeedSlot = startSlot+1;        
+        xMoveSlot = startSlot;
+        yMoveSlot = startSlot+1;        
     }   
 
     
@@ -101,4 +103,31 @@ public class BehaviourMove extends Behaviour {
                 ", Rectangle: " + min + max;
     }
     
+    
+    /* OLD RADIAL MOVE CODE
+        @Override
+    public void execute(Bot bot) {
+        
+        double dir = bot.getOutput(moveDirSlot) * 2*Math.PI; 
+        double speed = bot.getOutput(moveSpeedSlot) * maxSpeed;
+        
+        Point displace = new Point(speed * Math.cos(dir), speed * Math.sin(dir));
+        Point newLoc = Point.displace(bot.getPosition(), displace);
+        if (newLoc.inBounds(min, max))
+            bot.setPosition(newLoc);
+        else {
+            double newX = newLoc.getX();
+            double newY = newLoc.getY();            
+            if (newLoc.getX() > max.getX())
+                newX = max.getX();
+            if (newLoc.getX() < min.getX())
+                newX = min.getX();
+            if (newLoc.getY() > max.getY())
+                newY = max.getY();
+            if (newLoc.getY() < min.getY())
+                newY = min.getY();  
+            bot.setPosition(new Point(newX, newY));
+        }
+    }
+    */
 }

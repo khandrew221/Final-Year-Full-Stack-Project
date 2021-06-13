@@ -9,14 +9,12 @@ package simulation;
  *
  * @author Kathryn Andrew
  */
-public enum SenseType {
-    
-    ENVIRONMENT("environment");
+public enum BehaviourType {
+    MOVE("move");
     
     public final String label;
 
-    private SenseType(String label) {
+    private BehaviourType(String label) {
         this.label = label;
     }
-    
 }

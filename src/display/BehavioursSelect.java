@@ -6,6 +6,9 @@
 package display;
 
 import java.awt.Font;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -36,4 +39,17 @@ public class BehavioursSelect extends SelectableList {
      */    
     public void updateContainer() {
     }
+    
+    
+    public Set<Integer> getSelectedIDs() {
+        Set<Integer> out = new HashSet<>();
+        Set<String> stringIDs = super.getSelected();
+        try {
+            out = stringIDs.stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return out;
+        }
+        return out;
+    }    
 }
