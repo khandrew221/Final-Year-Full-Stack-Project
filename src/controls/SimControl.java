@@ -149,7 +149,7 @@ public class SimControl {
      * @return error code
      */
     public int addSenseEnviro(String target, boolean centred, int rings, int pointsPerRing, int radius) {
-        if (simulation.getState() == SimState.STOPPED) {
+        if (isStopped()) {
             Sense sense = SenseFactory.MakeEnvironmentSense(target, simulation.getEnvironment(), centred, rings, pointsPerRing, radius);
             if (!centred) {
                 if (rings == 0 || pointsPerRing == 0) {
@@ -174,7 +174,7 @@ public class SimControl {
      * @return 
      */
     public int addBehaviourMove(double maxSpeed) {
-        if (simulation.getState() == SimState.STOPPED) {
+        if (isStopped()) {
             Behaviour behaviour = BehaviourFactory.makeBehaviourMove(maxSpeed, new Point(0,0), new Point(simulation.envXSize(), simulation.envYSize()));
             if (simulation.containsMoveBehaviour()) {
                 return 1;

@@ -41,8 +41,8 @@ public class BehaviourMove extends Behaviour {
     @Override
     public void execute(Bot bot) {
         
-        double xMove = (bot.getOutput(xMoveSlot)-0.5)*maxSpeed; 
-        double yMove = (bot.getOutput(yMoveSlot)-0.5)*maxSpeed; 
+        double xMove = (bot.getOutput(xMoveSlot)-0.5)*2*maxSpeed; 
+        double yMove = (bot.getOutput(yMoveSlot)-0.5)*2*maxSpeed; 
         
         Point displace = new Point(xMove, yMove);
         Point newLoc = Point.displace(bot.getPosition(), displace);

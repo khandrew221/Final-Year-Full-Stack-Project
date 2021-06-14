@@ -21,18 +21,18 @@ import simulation.Simulation;
  */
 public class SimMainPanel extends JPanel {
     
-    private SimStateFacade sim;       
+    private SimStateFacade facade;       
     private DataPanel dataPanel;
     private SimVis simVis;
     private ControlPanel controlPanel;
     
     
-    SimMainPanel(Simulation simulation, SimStateFacade simFacade, int visX, int visY) {
+    SimMainPanel(SimControl control, SimStateFacade simFacade, int visX, int visY) {
         this.setLayout(new BorderLayout());
-        this.sim = simFacade;
+        this.facade = simFacade;
         this.dataPanel = new DataPanel(this);
         dataPanel.setPreferredSize(new Dimension(500, 500));
-        this.controlPanel = new ControlPanel(this, new SimControl(simulation));
+        this.controlPanel = new ControlPanel(this, control);
         this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);
         this.add(dataPanel, BorderLayout.LINE_END);
@@ -46,7 +46,7 @@ public class SimMainPanel extends JPanel {
      * have occurred.
      */
     public void setAll() {
-        dataPanel.setAll(sim.simReport(),  sim.fieldsReport());
+        dataPanel.setAll(facade.simReport(), facade.fieldsReport());
         simVis.updateData();     
         controlPanel.setPausePlayText();
         repaint();
@@ -62,8 +62,8 @@ public class SimMainPanel extends JPanel {
      * 
      */
     public void updateData() {        
-        Map<String, Object> simReport = sim.simReport(); 
-        List<Map<String, Object>> fieldsReport = sim.fieldsReport();         
+        Map<String, Object> simReport = facade.simReport(); 
+        List<Map<String, Object>> fieldsReport = facade.fieldsReport();         
         int population = 0;
         long time = 0;        
         try {

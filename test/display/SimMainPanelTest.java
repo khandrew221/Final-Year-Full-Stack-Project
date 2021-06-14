@@ -5,6 +5,7 @@
  */
 package display;
 
+import controls.SimControl;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.concurrent.Executors;
@@ -35,9 +36,9 @@ public class SimMainPanelTest {
         Simulation s = new Simulation(envXsize, envYsize, maxPop);
         s.initialise();
         SimStateFacade facade = new SimStateFacade(s);
+        SimControl control = new SimControl(s);
         
-        
-        SimMainPanel comp = new SimMainPanel(s, facade, 500, 500);
+        SimMainPanel comp = new SimMainPanel(control, facade, 500, 500);
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
  

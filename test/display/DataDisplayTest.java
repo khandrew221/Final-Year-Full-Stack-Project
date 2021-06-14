@@ -5,13 +5,13 @@
  */
 package display;
 
+import controls.SimControl;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import simulation.SimStateFacade;
 import simulation.Simulation;
 
@@ -36,8 +36,9 @@ public class DataDisplayTest {
         Simulation s = new Simulation(envXsize, envYsize, maxPop);
         s.initialise();
         SimStateFacade facade = new SimStateFacade(s);
+        SimControl control = new SimControl(s);
         
-        SimMainPanel sup = new SimMainPanel(s, facade, 500, 500);
+        SimMainPanel sup = new SimMainPanel(control, facade, 500, 500);
         DataPanel comp = new DataPanel(sup);
         comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         

@@ -6,7 +6,6 @@
 package display;
 
 import controls.SimControl;
-import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -19,8 +18,7 @@ import simulation.Simulation;
  * @author Kathryn Andrew
  */
 public class MainView extends JFrame {
-    
-    Simulation sim;
+
     SimStateFacade facade;
     SimControl control;
     
@@ -31,51 +29,39 @@ public class MainView extends JFrame {
 
     
     public MainView(Simulation s) {
-        sim = s;
-        facade = new SimStateFacade(sim);
-        control = new SimControl(sim);
+        facade = new SimStateFacade(s);
+        control = new SimControl(s);
         JTabbedPane tabbedPane = new JTabbedPane();
         
-        viewer = new SimMainPanel(sim, facade, 500, 500);
+        viewer = new SimMainPanel(control, facade, 500, 500);
         fieldMaker = new FieldMaker(control, facade);
         senseMaker = new SenseMaker(control, facade);
         behaviourMaker = new BehaviourMaker(control, facade);
                 
-        tabbedPane.addTab("Tab 1", null, viewer,
-                  "Does nothing");
-        tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-        
-        tabbedPane.addTab("Tab 2", null, fieldMaker,
-                  "Does nothing");
-        tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);      
-        
-        tabbedPane.addTab("Tab 3", null, senseMaker,
-                  "Does nothing");
-        tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);   
-
-        tabbedPane.addTab("Tab 4", null, behaviourMaker,
-                  "Does nothing");
-        tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);            
-        
-        this.add(tabbedPane);
-     
-
+        tabbedPane.addTab("Main", null, viewer, "");
+        tabbedPane.addTab("Environment", null, fieldMaker, "Add/Remove environment fields");           
+        tabbedPane.addTab("Senses", null, senseMaker, "Add/Remove senses");
+        tabbedPane.addTab("Behaviours", null, behaviourMaker, "Add/Remove behaviours");        
+    
         tabbedPane.addChangeListener( new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-                int index = sourceTabbedPane.getSelectedIndex();
-                if (index == 0) {
-                    viewer.setAll();
-                } else if (index == 1) {
-                    fieldMaker.update();
-                }
-                else if (index == 2) {
-                    System.out.println("2 selected");
-                    senseMaker = new SenseMaker(control, facade);
-                }
+                JTabbedPane source = (JTabbedPane) changeEvent.getSource();
+                int index = source.getSelectedIndex();
+                switch (index) {
+                    case 0:
+                        viewer.setAll();
+                    case 1:
+                        fieldMaker.updateAll();
+                    case 2:
+                        senseMaker.updateAll();
+                    case 3:
+                        behaviourMaker.updateAll();
+                }               
             }
         });
+        
+        this.add(tabbedPane);
         
     }
     
@@ -85,7 +71,6 @@ public class MainView extends JFrame {
      */
     public void update() {
         viewer.updateData();
-        senseMaker.updateAll();
     }
     
 }
