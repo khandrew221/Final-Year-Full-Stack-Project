@@ -13,30 +13,26 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.JPanel;
 import simulation.SimStateFacade;
-import simulation.Simulation;
 
 /**
  *
  * @author Kathryn Andrew
  */
-public class SimMainPanel extends JPanel {
+public class RunView extends JPanel {
     
     private SimStateFacade facade;       
     private DataPanel dataPanel;
     private SimVis simVis;
-    private ControlPanel controlPanel;
     
     
-    SimMainPanel(SimControl control, SimStateFacade simFacade, int visX, int visY) {
+    RunView(SimControl control, SimStateFacade simFacade, int visX, int visY) {
         this.setLayout(new BorderLayout());
         this.facade = simFacade;
         this.dataPanel = new DataPanel(this);
         dataPanel.setPreferredSize(new Dimension(500, 500));
-        this.controlPanel = new ControlPanel(this, control);
         this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);
         this.add(dataPanel, BorderLayout.LINE_END);
-        this.add(controlPanel, BorderLayout.NORTH);
         setAll();
     }
     
@@ -48,7 +44,6 @@ public class SimMainPanel extends JPanel {
     public void setAll() {
         dataPanel.setAll(facade.simReport(), facade.fieldsReport());
         simVis.updateData();     
-        controlPanel.setPausePlayText();
         repaint();
     }
 

@@ -6,6 +6,7 @@
 package display;
 
 import controls.SimControl;
+import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -19,21 +20,24 @@ import simulation.Simulation;
  */
 public class MainView extends JFrame {
 
-    SimStateFacade facade;
-    SimControl control;
+    private SimStateFacade facade;
+    private SimControl control;
     
-    SimMainPanel viewer;
-    FieldMaker fieldMaker;
-    SenseMaker senseMaker;
-    BehaviourMaker behaviourMaker;
+    private ControlPanel controlPanel;
+    
+    private RunView viewer;
+    private FieldMaker fieldMaker;
+    private SenseMaker senseMaker;
+    private BehaviourMaker behaviourMaker;
 
     
     public MainView(Simulation s) {
         facade = new SimStateFacade(s);
         control = new SimControl(s);
+        controlPanel = new ControlPanel(control);
         JTabbedPane tabbedPane = new JTabbedPane();
         
-        viewer = new SimMainPanel(control, facade, 500, 500);
+        viewer = new RunView(control, facade, 500, 500);
         fieldMaker = new FieldMaker(control, facade);
         senseMaker = new SenseMaker(control, facade);
         behaviourMaker = new BehaviourMaker(control, facade);
@@ -61,8 +65,9 @@ public class MainView extends JFrame {
             }
         });
         
+        this.add(controlPanel, BorderLayout.NORTH);
         this.add(tabbedPane);
-        
+                controlPanel.setPausePlayText();
     }
     
     /**
@@ -71,6 +76,7 @@ public class MainView extends JFrame {
      */
     public void update() {
         viewer.updateData();
+        controlPanel.setPausePlayText();
     }
     
 }

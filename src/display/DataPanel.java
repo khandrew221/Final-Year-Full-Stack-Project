@@ -22,7 +22,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class DataPanel extends JComponent {
     
-    private SimMainPanel main;
+    private RunView main;
     private FieldsSelect fieldsSelect;     
     private SensesSelect sensesSelect;  
     private BehavioursSelect behavioursSelect;
@@ -30,7 +30,7 @@ public class DataPanel extends JComponent {
     private JLabel population = new JLabel("Population: ");
     private JLabel cycles = new JLabel("Simulation Cycles: ");   
     
-    public DataPanel(SimMainPanel main) {
+    public DataPanel(RunView main) {
         this.main = main;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.add(population);

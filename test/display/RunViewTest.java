@@ -19,7 +19,7 @@ import simulation.Simulation;
  *
  * @author Kathryn Andrew
  */
-public class SimMainPanelTest {
+public class RunViewTest {
 
     /**
      * @param args the command line arguments
@@ -38,7 +38,7 @@ public class SimMainPanelTest {
         SimStateFacade facade = new SimStateFacade(s);
         SimControl control = new SimControl(s);
         
-        SimMainPanel comp = new SimMainPanel(control, facade, 500, 500);
+        RunView comp = new RunView(control, facade, 500, 500);
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
  

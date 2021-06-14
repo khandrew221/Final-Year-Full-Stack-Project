@@ -35,8 +35,8 @@ public class FieldsSelect extends SelectableList {
     public void updateContainer() {
         JPanel container = super.getContainer();
         if (container != null) {
-            if (container instanceof SimMainPanel) {
-                SimMainPanel n = (SimMainPanel) container;
+            if (container instanceof RunView) {
+                RunView n = (RunView) container;
                 n.setSelected(getSelected());
             } else if (container instanceof FieldMaker) {
                 FieldMaker n = (FieldMaker) container;

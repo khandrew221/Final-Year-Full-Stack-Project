@@ -42,7 +42,7 @@ public class EncogAdapter implements NNAdapter {
         int NUM_OUTPUTS = g.getNUM_OUTPUTS();
         
         //add input layer
-        //no activation function (direct value pass), no bias node, SimConsts.getNumInputs nodes
+        //no activation function (direct value pass), no bias node, NUM_INPUTS nodes
         nn.addLayer(new BasicLayer(null,false,NUM_INPUTS));
                 
         //read the node grid part of the genome to add inner layers and build 
@@ -72,7 +72,7 @@ public class EncogAdapter implements NNAdapter {
         }
 
         //add output layer
-        //sigmoid activation, no bias node, SimConsts.getNumOutputs() nodes
+        //sigmoid activation, no bias node, NumOutputs() nodes
         nn.addLayer(new BasicLayer(new ActivationSigmoid(), false, NUM_OUTPUTS));        
         
         //required for further work on network
@@ -153,12 +153,12 @@ public class EncogAdapter implements NNAdapter {
     
     
     /**
-     * Returns an array (double[SimConsts.numOutputs]) of outputs calculated from the given array of inputs.
+     * Returns an array (double[numOutputs]) of outputs calculated from the given array of inputs.
      * 
      * Req for: TESTING
      * 
-     * @param input double[] of length SimConsts.numInputs
-     * @return double[] of length SimConsts.numOutputs
+     * @param input double[] of length numInputs
+     * @return double[] of length numOutputs
      */
     @Override
     public double[] output(double[] input) {

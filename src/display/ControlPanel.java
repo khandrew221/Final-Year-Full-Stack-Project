@@ -18,14 +18,12 @@ import javax.swing.JPanel;
 public class ControlPanel extends JPanel {
     
     private SimControl simControl;
-    private SimMainPanel main;
     private JButton pausePlay;
     private JButton restart;
     
     
-    public ControlPanel(SimMainPanel main, SimControl control) {
-        this.simControl = control;
-        this.main = main;     
+    public ControlPanel(SimControl control) {
+        this.simControl = control;   
         makePausePlayButton();
         makeRestartButton();
     }

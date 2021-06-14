@@ -38,7 +38,7 @@ public class DataDisplayTest {
         SimStateFacade facade = new SimStateFacade(s);
         SimControl control = new SimControl(s);
         
-        SimMainPanel sup = new SimMainPanel(control, facade, 500, 500);
+        RunView sup = new RunView(control, facade, 500, 500);
         DataPanel comp = new DataPanel(sup);
         comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         
