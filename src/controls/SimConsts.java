@@ -6,7 +6,7 @@
 package controls;
 
 /**
- *
+ * test
  * @author Kathryn Andrew
  */
 public class SimConsts {
