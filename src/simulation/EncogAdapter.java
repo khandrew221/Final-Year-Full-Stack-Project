@@ -28,10 +28,6 @@ public class EncogAdapter implements NNAdapter {
      * Req for: UC009
      * 
      * @param g genetic representation
-     * @param MAX_LAYERS
-     * @param MAX_NODES_PER_LAYER
-     * @param NUM_INPUTS
-     * @param NUM_OUTPUTS
      */    
     @Override
     public void createFromGRep(GRep g) {    
@@ -209,7 +205,7 @@ public class EncogAdapter implements NNAdapter {
      * @param MAX_NODES_PER_LAYER
      * @param NUM_INPUTS
      * @param NUM_OUTPUTS
-     * @return List\<Double\> of all active weights from the GRep 
+     * @return List of all active weights from the GRep as doubles 
      */
     public static List<Double> testWeightsList(GRep r, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
         List<Double> out = new ArrayList<>();

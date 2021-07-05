@@ -6,13 +6,13 @@
 package controls;
 
 /**
- * test
+ * 
  * @author Kathryn Andrew
  */
 public class SimConsts {
     
-    private static int MAX_LAYERS = 2;
-    private static int MAX_NODES_PER_LAYER = 3;
+    private static int MAX_LAYERS = 10;
+    private static int MAX_NODES_PER_LAYER = 10;
     
     private static int ENV_MIN_SIZE = 100;
     private static int ENV_MAX_SIZE = 3000;

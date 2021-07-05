@@ -90,7 +90,6 @@ public class Simulation {
      * Runs a single simulation cycle.
      * 
      * Req for: UC010
-     * @param s 
      */    
     public synchronized void run() {        
         
@@ -406,7 +405,6 @@ public class Simulation {
      * 
      * Req for: UC024, UC025, UC026
      * 
-     * @param newState 
      */
     public SimState getState() {
         return runState;
@@ -552,7 +550,6 @@ public class Simulation {
     /**
      * 
      * Req for: UC004
-     * @param s
      * @return 
      */
     public synchronized boolean containsMoveBehaviour() {
@@ -568,8 +565,7 @@ public class Simulation {
     /**
      * 
      * Req for: UC029
-     * @param s
-     * @return 
+     * @param ids
      */
     public synchronized void removeSenses(Set<Integer> ids) {
         if (!ids.isEmpty()) {    
@@ -592,8 +588,7 @@ public class Simulation {
     /**
      * 
      * Req for: UC030
-     * @param s
-     * @return 
+     * @param ids
      */
     public synchronized void removeBehaviours(Set<Integer> ids) {
         if (!ids.isEmpty()) {

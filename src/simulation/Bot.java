@@ -60,8 +60,6 @@ public class Bot implements Comparable<Bot> {
      * Sets the bot's position
      * 
      * Req for: UC014
-     * 
-     * @return 
      */    
     public void setPosition(Point p) {
         position = new Point(p.getX(), p.getY());

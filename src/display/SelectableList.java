@@ -59,7 +59,6 @@ public abstract class SelectableList extends JPanel {
     /**
      * sets the checkboxes matching the names in the given set to be selected.
      * All others will be deselected.
-     * @return 
      */
     public void setSelected(Set<String> select) {
         for (String s : checkBoxes.keySet()) {

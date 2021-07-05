@@ -87,7 +87,6 @@ public class BehaviourMove extends Behaviour {
      * 
      * Req for: UC004
      * 
-     * @return 
      */    
     @Override
     public void renumberInputs(int startSlot) {

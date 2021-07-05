@@ -69,10 +69,13 @@ public class BehaviourTest {
                     
         
         //location to compare against.  run before b.execute() for correct values!
-        double dir = bot.getOutput(0) * 2*Math.PI; 
-        double speed = bot.getOutput(1) * maxSpeed;
-        Point displace = new Point(speed * Math.cos(dir), speed * Math.sin(dir));
+        
+        double xMove = (bot.getOutput(0)-0.5)*2*maxSpeed; 
+        double yMove = (bot.getOutput(1)-0.5)*2*maxSpeed; 
+        
+        Point displace = new Point(xMove, yMove);
         Point newLoc = Point.displace(bot.getPosition(), displace);
+       
         
         b.execute(bot);
         

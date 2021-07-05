@@ -5,8 +5,6 @@
  */
 package simulation;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import java.util.HashSet;
 import java.util.Set;
 import utility.Point;
@@ -50,7 +48,6 @@ public class BehaviourDEBUG extends Behaviour {
      * 
      * Req for: UC004
      * 
-     * @return 
      */    
     public void renumberInputs(int startSlot) {
        
