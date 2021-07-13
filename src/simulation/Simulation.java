@@ -26,15 +26,16 @@ import utility.Point;
 public class Simulation {
     
     private long simTime;
-    private SimState runState;
-    
+    private SimState runState;    
     private int maxPop;
     private int nnInputs = 0;
     private int nnOutputs = 0;
     private Environment environment;
+    private GeneticAlgorithmEngine GAEngine;
+    
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
-    private SortedSet<Bot> bots = Collections.synchronizedSortedSet(new TreeSet<Bot>());
+    private SortedSet<Bot> bots;
    
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
@@ -44,6 +45,7 @@ public class Simulation {
         this.senses = new HashSet<>();
         this.behaviours = new HashSet<>();
         this.runState = SimState.RUNNING;
+        this.GAEngine = new GeneticAlgorithmEngine(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER());
     }
       
     
@@ -64,7 +66,7 @@ public class Simulation {
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
         
         for (int i = 0; i < maxPop; i++) {
-            addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
+            addStarterBot(SimConsts.getSTART_ENERGY());
         }  
         
         this.runState = SimState.RUNNING;
@@ -104,7 +106,7 @@ public class Simulation {
             }
 
             if (population() < maxPop) {
-                addStarterBot(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER(), SimConsts.getSTART_ENERGY());
+                addStarterBot(SimConsts.getSTART_ENERGY());
             }  
 
             simTime++;
@@ -170,10 +172,9 @@ public class Simulation {
      * 
      * Req for: UC006
      */
-    public void addStarterBot(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int startEnergy) {
+    public void addStarterBot(int startEnergy) {
         if (population() < maxPop) {
-            GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, nnInputs, nnOutputs);
-            g.randomise();
+            GRep g = GAEngine.randomGRep(nnInputs, nnOutputs);
             Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
             bots.add(bot);                
         }
@@ -378,7 +379,7 @@ public class Simulation {
         synchronized(bots) {
             bots.clear();
             for (int i = 0; i < maxPop; i++) {
-                addStarterBot(10, 5, SimConsts.getSTART_ENERGY());
+                addStarterBot(SimConsts.getSTART_ENERGY());
             }          
         }
         

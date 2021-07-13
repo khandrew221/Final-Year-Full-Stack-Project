@@ -142,8 +142,8 @@ public class EncogAdapter implements NNAdapter {
         for (int i = 7; i >= 0; i--) {
             if (w.get(i)) total += Math.pow(2, i);
         }            
-        //normalise 1-255 range to +/- 1
-        total = (total-1)/127 - 1;
+        //normalise 1-255 range to +/- 6
+        total = ((total-1)/127-1)*6;
         return total;
     }  
     

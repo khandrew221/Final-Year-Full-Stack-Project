@@ -208,7 +208,7 @@ public class SimulationTest {
         int fails = 0;
         for (int i = 0; i < 50; i++) {
             int pop = s.population();
-            s.addStarterBot(10, 12, 23);            
+            s.addStarterBot(23);            
             if (s.population() != (pop+1)) {
                 fails++;
                 if (v)
@@ -216,7 +216,7 @@ public class SimulationTest {
             }               
         }
         int pop = s.population();
-        s.addStarterBot(10, 12, 23);            
+        s.addStarterBot(23);            
         if (s.population() != pop) {
             fails++;
             if (v)
