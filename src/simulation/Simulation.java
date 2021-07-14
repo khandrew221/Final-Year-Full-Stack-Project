@@ -30,8 +30,10 @@ public class Simulation {
     private int maxPop;
     private int nnInputs = 0;
     private int nnOutputs = 0;
+    
     private Environment environment;
     private GeneticAlgorithmEngine GAEngine;
+    private FitnessFunction fitnessFunction = new FitnessFunction();
     
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
@@ -65,7 +67,7 @@ public class Simulation {
         addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 0, 0, 0));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
         
-        for (int i = 0; i < maxPop; i++) {
+        for (int i = 0; i < maxPop*0.5; i++) {
             addStarterBot(SimConsts.getSTART_ENERGY());
         }  
         
@@ -96,20 +98,29 @@ public class Simulation {
     public synchronized void run() {        
         
         if (runState == SimState.RUNNING) {
-        
-            synchronized(bots) {
-                for (Bot bot : bots) {
-                    bot.run();
-                }
-                
-                bots.removeIf(bot -> bot.isDead());
+    
+            for (Bot bot : bots) {
+                bot.run();
+                fitnessFunction.calcFitness(bot);
             }
-
+                
+            bots.removeIf(bot -> bot.isDead());
+            
             if (population() < maxPop) {
-                addStarterBot(SimConsts.getSTART_ENERGY());
+                GRep g;
+                if (bots.size() > 1) {
+                    updateBotOrder(); //only need to update for GA methods
+                    g = GAEngine.breedGRep(bots);
+                }
+                else {                    
+                    g = GAEngine.randomGRep(nnInputs, nnOutputs); //avoids genetic bottleneck
+                }
+                Bot bot = new Bot(g, senses, behaviours, SimConsts.getMAX_ENERGY(), environment.randomPosition());
+                bots.add(bot);   
             }  
 
-            simTime++;
+            
+            simTime++;            
         }
     }
     
@@ -606,7 +617,31 @@ public class Simulation {
                 setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
             }
         }
-    }    
+    }   
+    
+    /**
+     * Updates the order of the bot list. 
+     * This is achieved by building a new SortedSet from the old one, then 
+     * assigning the new set to the bots variable.  Not an ideal solution but
+     * workable.
+     */
+    public void updateBotOrder() {
+        SortedSet newBots = new TreeSet<>();
+        for(Bot bot : bots) {
+            newBots.add(bot);
+        }
+        bots = newBots;
+    }
+
+    /**
+     * Req for: testing.
+     * @return 
+     */
+    public SortedSet<Bot> getBots() {
+        return bots;
+    }
         
+    
+    
     
 }

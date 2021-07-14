@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import utility.Point;
 
 /**
@@ -102,7 +103,7 @@ public class SimulationTest {
             if (v)
                 System.out.println("Simulation time incorrect. 0 expected, " + s.time() + " found.");
         }        
-        if (s.population() != startPop) {
+        if (s.population() != startPop*0.5) {
             fails++;
             if (v)
                 System.out.println("Population size incorrect."  + startPop + " expected, " + s.population() + " found.");
@@ -490,11 +491,9 @@ public class SimulationTest {
         //s.initialise();
         
         long oldTime = s.time();
-        
-        
+                
         s.run();
-        
-        
+                
         int energyFails = 0;
         for (boolean x : s.listIsDead()) {
             if (x) {
@@ -532,6 +531,18 @@ public class SimulationTest {
             if (v)
                 System.out.println("Error: Simulation time changing when simulation is paused.");
         }         
+       
+        SortedSet<Bot> bots = s.getBots();
+        double currFit = 999999999;
+        for (Bot bot : bots) {
+            if (bot.getFitness() > currFit) {
+                fails++;
+                if (v)
+                    System.out.println("Error: Bot set order incorrect.");  
+            }
+            currFit = bot.getFitness();
+        }
+                  
         
         s.setState(SimState.RUNNING);
         return fails;        

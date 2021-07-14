@@ -1,6 +1,7 @@
 package simulation;
 
 
+import java.util.BitSet;
 import java.util.Random;
 
 /*
@@ -123,6 +124,10 @@ public class GRepTest {
             System.out.println("Failures in 1000 randomised tests: " + fails);
         totalFails += fails;
         
+        
+        totalFails += setBitsTest(r);
+        
+        
         if (totalFails == 0)
             return true;
         
@@ -191,5 +196,21 @@ public class GRepTest {
         return fails;
     }    
     
+    public static int setBitsTest(GRep r) {
+        int fails = 0;
+        r.maximal();
+        BitSet b = new BitSet();
+        Random random  = new Random();
+        int start = random.nextInt(20);
+        int end = start + 1 + random.nextInt(20);
+        r.setBitsAt(start, end, b);
+        for (int i = start; i < end; i++) {
+            if (r.bitAt(i)) {
+                System.out.println("Set bits failure at index " + i + ", false expected, true found."); 
+                fails++;
+            }        
+        }
+        return fails;
+    }     
     
 }

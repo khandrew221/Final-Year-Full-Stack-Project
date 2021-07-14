@@ -20,6 +20,7 @@ public class SimConsts {
     private static int ENV_MAX_DENSITY = 10;
     
     private static int START_ENERGY = 600;
+    private static int MAX_ENERGY = 600;
 
     public static int getMAX_LAYERS() {
         return MAX_LAYERS;
@@ -75,6 +76,10 @@ public class SimConsts {
 
     static void setSTART_ENERGY(int START_ENERGY) {
         SimConsts.START_ENERGY = START_ENERGY;
+    }
+
+    public static int getMAX_ENERGY() {
+        return MAX_ENERGY;
     }
     
     

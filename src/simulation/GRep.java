@@ -187,7 +187,7 @@ public class GRep {
     
     
     /**
-     * Req for: TESTING
+     * Req for: UC034
      * @return the bit at the given index as a boolean value
      */
     public boolean bitAt(int i) {        
@@ -195,13 +195,27 @@ public class GRep {
     }   
     
     /**
-     * Req for: TESTING
+     * Req for: UC034
      * @return the sub bitset from the given index i (inclusive) to the given index i2 (exclusive) 
      */
     public BitSet bitSetAt(int i, int i2) {        
         return genome.get(i, i2);
     }     
     
+    /**
+     * Sets the given section of the genome to match the given bitset.  Matching
+     * will start from the beginning of the provided bitset.
+     * 
+     * Req for: UC034
+     * @param i     initial index position (inclusive)
+     * @param i2    final index position (exclusive)
+     * @param b     bitset to match
+     */
+    public void setBitsAt(int i, int i2, BitSet b) { 
+        for (int n = 0; n < i2-i; n++) {
+            genome.set(n+i, b.get(n));
+        }
+    }     
  
     
     /**

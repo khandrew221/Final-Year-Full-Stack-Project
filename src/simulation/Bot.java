@@ -28,6 +28,12 @@ public class Bot implements Comparable<Bot> {
     private double energy;
     private Point position;
     
+    private int age;
+    private double distanceTravelled;
+    private int collisions;    
+    
+    private double fitness;
+    
     
     /**
      * 
@@ -52,6 +58,10 @@ public class Bot implements Comparable<Bot> {
         energy = e;
         nn = new EncogAdapter();
         nn.createFromGRep(g);
+        age = 0;
+        distanceTravelled = 0;
+        collisions = 0;
+        fitness = 0;
     }
     
     
@@ -62,6 +72,8 @@ public class Bot implements Comparable<Bot> {
      * Req for: UC014
      */    
     public void setPosition(Point p) {
+        double dist = p.getDistanceFrom(position);
+        this.distanceTravelled += dist;
         position = new Point(p.getX(), p.getY());
     }         
     
@@ -116,6 +128,7 @@ public class Bot implements Comparable<Bot> {
      */
     public void run() {   
         metabolise();
+        incrementAge();
         if (energy > 0) {            
             for (Sense s : senses) {
                 s.sensoryInput(this);
@@ -199,12 +212,12 @@ public class Bot implements Comparable<Bot> {
     
     @Override
     /**
-     * Allows autosorting by bot energy via treeset in the simulation.  
+     * Allows autosorting by bot fitness via treeset in the simulation.  
      */
     public int compareTo(Bot bot) {
         if (this.equals(bot)) 
             return 0;
-        if (this.energy < bot.energy)
+        if (this.getFitness() < bot.getFitness())
             return 1;
         else
             return -1; 
@@ -240,6 +253,78 @@ public class Bot implements Comparable<Bot> {
     Set<Behaviour> getBehaviours() {
         return this.behaviours;
     }     
+
+    
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+    
+    /**
+     * Adds 1 to the bot age
+     */
+    public void incrementAge() {
+        this.age += 1;
+    }    
+
+    public double getDistanceTravelled() {
+        return distanceTravelled;
+    }
+
+    public void setDistanceTravelled(double distanceTravelled) {
+        this.distanceTravelled = distanceTravelled;
+    }
+   
+    
+    /**
+     * Adds 1 to number of bot collisions
+     */
+    public void incrementCollisions() {
+        this.collisions += 1;
+    }     
+
+    public int getCollisions() {
+        return collisions;
+    }
+
+    public double getFitness() {
+        return fitness;
+    }
+    
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
+    }    
+    
+    /**
+     * Returns this bot's number of collisions per cycle, or 0 for a bot at
+     * age 0
+     * Req for: fitness function
+     * @return 
+     */    
+    public double getCollisionsPerCycle() {
+        if (age > 0) {
+            return (double) collisions / age;
+        }
+        return 0;
+    }
+    
+    /**
+     * Returns the maximum move speed of the bot
+     * Req for: fitness function
+     * @return 
+     */
+    public double getMaxMoveSpeed() {
+        for (Behaviour behaviour : behaviours) {
+            if(behaviour instanceof BehaviourMove) {
+                return (((BehaviourMove) behaviour).getMaxSpeed()*Math.sqrt(2));
+            }                
+        }
+        return 0;
+    }
+    
 
     @Override
     public int hashCode() {

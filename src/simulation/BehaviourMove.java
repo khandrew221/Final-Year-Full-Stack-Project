@@ -36,6 +36,14 @@ public class BehaviourMove extends Behaviour {
         this.min = min;
     }
     
+    /**
+     * Returns the max x or y speed. Note that actual max speed is maxSpeed*root(2)
+     * @return 
+     */
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+    
     
     
     @Override
@@ -60,6 +68,7 @@ public class BehaviourMove extends Behaviour {
             if (newLoc.getY() < min.getY())
                 newY = min.getY();  
             bot.setPosition(new Point(newX, newY));
+            bot.incrementCollisions();
         }
     }
     
