@@ -17,6 +17,7 @@ public class GeneticAlgorithmEngine {
     
     int MAX_LAYERS;
     int MAX_NODES_PER_LAYER;
+    double mutationRate;
     
     /**
      * 
@@ -26,6 +27,7 @@ public class GeneticAlgorithmEngine {
     public GeneticAlgorithmEngine(int maxLayers, int maxNodesPerLayer) {
         MAX_LAYERS = maxLayers;
         MAX_NODES_PER_LAYER = maxNodesPerLayer;
+        mutationRate = 2;
     }
     
     
@@ -82,7 +84,7 @@ public class GeneticAlgorithmEngine {
      * @param bots
      * @return 
      */
-    public GRep breedGRep(SortedSet<Bot> bots) {
+    public GRep breedGRep(SortedSet<Bot> bots, boolean mutateOffspring) {
 
         //get the total population fitness
         //fitness must be modified into positive range
@@ -95,8 +97,12 @@ public class GeneticAlgorithmEngine {
         //get two parent GReps
         GRep parent1 = getParent(bots, populationFitness, minimumFitness);
         GRep parent2 = getParent(bots, populationFitness, minimumFitness);
-              
-        return breedGRep(parent1, parent2);
+        
+        if (mutateOffspring) {
+            return pointMutate(breedGRep(parent1, parent2));
+        } else {        
+            return breedGRep(parent1, parent2);
+        }
     };    
     
     /**
@@ -115,7 +121,7 @@ public class GeneticAlgorithmEngine {
                 out.set(i, parent1.get(i));
             } else {
                 out.set(i, parent2.get(i));
-            }
+            } 
         } 
         return out;
     }    
@@ -127,7 +133,7 @@ public class GeneticAlgorithmEngine {
      * @param populationFitness
      * @return 
      */
-    private GRep getParent(SortedSet<Bot> bots, double populationFitness, double minimumFitness) {
+    public GRep getParent(SortedSet<Bot> bots, double populationFitness, double minimumFitness) {
         double position = Math.random() * populationFitness;
         double spinWheel = 0;
         for (Bot bot : bots) {
@@ -139,5 +145,21 @@ public class GeneticAlgorithmEngine {
         return bots.first().getGRep();
     }  
 
+    /**
+     * Returns a mutation version of the GRep based on the mutation rate.
+     * @param g
+     * @return 
+     */
+    public GRep pointMutate(GRep g) {
+        //mutation rate = probability of single gene in genome changing
+        double rate = mutationRate*(1.0/g.requiredLength());
+        GRep out = g.clone();
+        for (int i = 0; i < g.requiredLength(); i++) {
+            if (Math.random() < rate) {
+                g.flipBitAt(i);
+            }
+        }
+        return out;
+    }
     
 }

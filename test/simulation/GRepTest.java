@@ -127,6 +127,7 @@ public class GRepTest {
         
         totalFails += setBitsTest(r);
         
+        totalFails += cloneTest(r, v);
         
         if (totalFails == 0)
             return true;
@@ -211,6 +212,18 @@ public class GRepTest {
             }        
         }
         return fails;
-    }     
+    } 
+
+    public static int cloneTest(GRep r, boolean v) {
+        int fails = 0;
+        r.randomise();
+        GRep b = r.clone();
+        if (!r.equals(b)) {
+            fails++;
+            if (v)
+                System.out.println("Clone failed, clone not equal to original."); 
+        }
+        return fails;
+    }         
     
 }

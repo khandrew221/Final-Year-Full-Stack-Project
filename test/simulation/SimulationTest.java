@@ -29,6 +29,7 @@ public class SimulationTest {
         testAddRemoveSense(s, true);
         testAddRemoveBehaviour(s, true);        
         testAddRandomBot(s, true);
+        testAddBredBot(s, true);
         
         testClear(s, true);
        
@@ -227,6 +228,30 @@ public class SimulationTest {
             System.out.println("Add random bot failures: " + fails);                
         return fails;
     }
+    
+    public static int testAddBredBot(Simulation s, boolean v) {
+        int fails = 0;
+        s.initialise();
+        for (int i = 0; i < 50; i++) {
+            int pop = s.population();
+            s.addBredBot(23);
+            if (s.population() != (pop+1)) {
+                fails++;
+                if (v)
+                    System.out.println("Bot collection not one larger.  Size: " + s.population());
+            }               
+        }
+        int pop = s.population();
+        s.addBredBot(23);            
+        if (s.population() != pop) {
+            fails++;
+            if (v)
+               System.out.println("Bot added over population limit.");
+        }        
+        if (v)
+            System.out.println("Add bred bot failures: " + fails);                
+        return fails;
+    }    
     
     public static int testAddRemoveSense(Simulation s, boolean v) {
         int fails = 0;

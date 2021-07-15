@@ -109,16 +109,12 @@ public class Simulation {
             if (population() < maxPop) {
                 GRep g;
                 if (bots.size() > 1) {
-                    updateBotOrder(); //only need to update for GA methods
-                    g = GAEngine.breedGRep(bots);
+                    addBredBot(SimConsts.getSTART_ENERGY());
                 }
                 else {                    
-                    g = GAEngine.randomGRep(nnInputs, nnOutputs); //avoids genetic bottleneck
-                }
-                Bot bot = new Bot(g, senses, behaviours, SimConsts.getMAX_ENERGY(), environment.randomPosition());
-                bots.add(bot);   
+                   addStarterBot(SimConsts.getSTART_ENERGY()); //avoids genetic bottleneck
+                }  
             }  
-
             
             simTime++;            
         }
@@ -188,6 +184,23 @@ public class Simulation {
             GRep g = GAEngine.randomGRep(nnInputs, nnOutputs);
             Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
             bots.add(bot);                
+        }
+    }     
+    
+    /**
+     * Adds a bot bred from two parents to the simulation.  Note that the two
+     * parents may be identical!
+     * 
+     * pre: bots is not empty
+     * 
+     * Req for: UC032
+     */
+    public void addBredBot(int startEnergy) {
+        if (population() < maxPop) {
+            updateBotOrder(); //only need to update for GA methods
+            GRep g = GAEngine.breedGRep(bots, true); //breed with mutation
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
+            bots.add(bot); 
         }
     }     
     

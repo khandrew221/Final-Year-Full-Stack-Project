@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.BitSet;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -216,6 +217,29 @@ public class GRep {
             genome.set(n+i, b.get(n));
         }
     }     
+    
+    /**
+     * Sets the given section of the genome to match the given bitset.  Matching
+     * will start from the beginning of the provided bitset.
+     * 
+     * Req for: mutation, UC034 
+     * @param i     index position
+     */
+    public void flipBitAt(int i) { 
+        genome.flip(i);
+    }    
+    
+    /**
+     * Returns an identical copy of this GRep
+     * 
+     * Req for: mutation, UC034 
+     * @param i     index position
+     */
+    public GRep clone() { 
+        GRep out = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+        out.setBitsAt(0, requiredLength(), genome);
+        return out;
+    }        
  
     
     /**
@@ -239,4 +263,31 @@ public class GRep {
         }
         return buffer.toString();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.genome);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GRep other = (GRep) obj;
+        if (!Objects.equals(this.genome, other.genome)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
