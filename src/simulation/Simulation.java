@@ -33,7 +33,6 @@ public class Simulation {
     
     private Environment environment;
     private GeneticAlgorithmEngine GAEngine;
-    private FitnessFunction fitnessFunction = new FitnessFunction();
     
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
@@ -101,7 +100,7 @@ public class Simulation {
     
             for (Bot bot : bots) {
                 bot.run();
-                fitnessFunction.calcFitness(bot);
+                GAEngine.calcFitness(bot);
             }
                 
             bots.removeIf(bot -> bot.isDead());

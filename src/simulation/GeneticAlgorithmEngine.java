@@ -15,6 +15,8 @@ import java.util.SortedSet;
  */
 public class GeneticAlgorithmEngine {
     
+    private FitnessFunction fitnessFunction = new FitnessFunction();
+    
     int MAX_LAYERS;
     int MAX_NODES_PER_LAYER;
     double mutationRate;
@@ -160,6 +162,14 @@ public class GeneticAlgorithmEngine {
             }
         }
         return out;
+    }
+    
+    /**
+     * Calculates and sets the fitness of the given bot.
+     * @param bot 
+     */
+    public void calcFitness(Bot bot) {
+         fitnessFunction.calcFitness(bot);
     }
     
 }
