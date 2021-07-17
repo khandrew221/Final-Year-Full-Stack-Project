@@ -39,6 +39,32 @@ public class FitnessFunction {
         }
         return 0;
     }
+
+    public void setWeightCollisionsPerCycle(int weightCollisionsPerCycle) {
+        this.weightCollisionsPerCycle = weightCollisionsPerCycle;
+    }
+
+    public void setWeightCurrentEnergy(int weightCurrentEnergy) {
+        this.weightCurrentEnergy = weightCurrentEnergy;
+    }
+
+    public void setWeightDistanceTravelled(int weightDistanceTravelled) {
+        this.weightDistanceTravelled = weightDistanceTravelled;
+    }
+
+    public int getWeightCollisionsPerCycle() {
+        return weightCollisionsPerCycle;
+    }
+
+    public int getWeightCurrentEnergy() {
+        return weightCurrentEnergy;
+    }
+
+    public int getWeightDistanceTravelled() {
+        return weightDistanceTravelled;
+    }
+    
+    
     
 
 }

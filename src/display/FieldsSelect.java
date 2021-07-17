@@ -32,6 +32,7 @@ public class FieldsSelect extends SelectableList {
     /**
      * Updates the container when a checkbox is activated.
      */    
+    @Override
     public void updateContainer() {
         JPanel container = super.getContainer();
         if (container != null) {

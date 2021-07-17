@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.BitSet;
+import java.util.List;
 import java.util.Random;
 import java.util.SortedSet;
 
@@ -133,6 +134,7 @@ public class GeneticAlgorithmEngine {
      * 
      * @param bots
      * @param populationFitness
+     * @param minimumFitness
      * @return 
      */
     public GRep getParent(SortedSet<Bot> bots, double populationFitness, double minimumFitness) {
@@ -166,10 +168,50 @@ public class GeneticAlgorithmEngine {
     
     /**
      * Calculates and sets the fitness of the given bot.
+     * 
+     * Req. for UC031
      * @param bot 
      */
     public void calcFitness(Bot bot) {
          fitnessFunction.calcFitness(bot);
+    }
+    
+    
+    /**
+     * Sets the weight of a parameter.
+     * 
+     * 
+     * Req. for: UC033
+     */
+    public void setFitnessWeight(int weight, FitnessParameter parameter) {
+        switch(parameter) {
+        case COLLISIONS_PER_CYCLE:
+          fitnessFunction.setWeightCollisionsPerCycle(weight);
+          break;
+        case CURRENT_ENERGY:
+          fitnessFunction.setWeightCurrentEnergy(weight);
+          break;
+        case DISTANCE_TRAVELLED:
+          fitnessFunction.setWeightDistanceTravelled(weight);
+          break;
+      }      
+    }    
+    
+    
+    /**
+     * Req. for: UC033
+     * 
+     */
+    public int getFitnessWeight(FitnessParameter parameter) {
+        switch(parameter) {
+        case COLLISIONS_PER_CYCLE:
+          return fitnessFunction.getWeightCollisionsPerCycle();
+        case CURRENT_ENERGY:
+          return fitnessFunction.getWeightCurrentEnergy();
+        case DISTANCE_TRAVELLED:
+          return fitnessFunction.getWeightDistanceTravelled();
+      }
+      return 0;
     }
     
 }

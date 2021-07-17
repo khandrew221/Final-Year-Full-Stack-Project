@@ -445,6 +445,17 @@ public class Simulation {
     }      
     
     /**
+     * Returns the Genetic Algorithm Engine
+     * 
+     * Req for: UC033
+     * 
+     * @return 
+     */
+    public GeneticAlgorithmEngine getGAEngine() {
+        return GAEngine;
+    }
+    
+    /**
      * 
      * 
      * Req for: TESTING
@@ -652,8 +663,5 @@ public class Simulation {
     public SortedSet<Bot> getBots() {
         return bots;
     }
-        
-    
-    
     
 }

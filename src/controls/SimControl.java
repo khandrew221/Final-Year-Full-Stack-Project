@@ -6,9 +6,11 @@
 package controls;
 
 import java.awt.Color;
+import java.util.Map;
 import java.util.Set;
 import simulation.Behaviour;
 import simulation.BehaviourFactory;
+import simulation.FitnessParameter;
 import simulation.Sense;
 import simulation.SenseFactory;
 import simulation.Simulation;
@@ -212,6 +214,48 @@ public class SimControl {
         simulation.removeBehaviours(toRemove);
     }    
     
+    /**
+     * Sets the weight of a fitness parameter. No action will be taken for a 
+     * parameter that cannot be identified by the given string. Weights over the 
+     * maximum will set the parameter to the maximum.  Weights over the 
+     * minimum will set the parameter to the minimum.  
+     * 
+     * Req. for: UC033
+     * @param weight
+     * @param parameter 
+     */
+    public void setFitnessWeight(int weight, String parameter) {    
+        try {
+            FitnessParameter param = FitnessParameter.valueOf(parameter);
+            if (weight > SimConsts.getFITNESS_WEIGHT_MAX()) {
+                simulation.getGAEngine().setFitnessWeight(SimConsts.getFITNESS_WEIGHT_MAX(), param);
+            } else if (weight <= SimConsts.getFITNESS_WEIGHT_MAX() &&
+                       weight >= SimConsts.getFITNESS_WEIGHT_MIN()) {
+                simulation.getGAEngine().setFitnessWeight(weight, param);
+            } else {
+               simulation.getGAEngine().setFitnessWeight(SimConsts.getFITNESS_WEIGHT_MIN(), param); 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }       
+    }
+    
+    /**
+     * Sets the weight of a set of fitness parameters. No action will be taken for a 
+     * parameter that cannot be identified by the given string. Weights over the 
+     * maximum will set the parameter to the maximum.  Weights over the 
+     * minimum will set the parameter to the minimum.  
+     * 
+     * Req. for: UC033
+     * @param weight
+     * @param parameter 
+     */
+    public void setFitnessWeights(Map<String, Integer> newWeights) {  
+        for (String parameter : newWeights.keySet()) {
+            setFitnessWeight(newWeights.get(parameter), parameter);
+        }   
+    }    
+     
     
     public void setMAX_LAYERS(int MAX_LAYERS) {
         SimConsts.setMAX_LAYERS(MAX_LAYERS);
@@ -221,4 +265,5 @@ public class SimControl {
         SimConsts.setMAX_NODES_PER_LAYER(MAX_NODES_PER_LAYER);
     }  
     
+
 }

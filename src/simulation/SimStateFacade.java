@@ -6,6 +6,7 @@
 package simulation;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,16 @@ public class SimStateFacade {
         EnumSet.allOf(BehaviourType.class).forEach(behaviour -> out.add(behaviour.label));
         return out;
     }    
+    
+    /**
+     * req. for: UC033
+     * @return 
+     */
+    public Map<String, Integer> getFitnessFunctionParameters() {
+        Map<String, Integer> out = new HashMap<>();
+        EnumSet.allOf(FitnessParameter.class).forEach(parameter -> out.put(parameter.toString(), sim.getGAEngine().getFitnessWeight(parameter)));
+        return out;
+    } 
     
     /**
      * 

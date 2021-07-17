@@ -29,23 +29,30 @@ public class MainView extends JFrame {
     private FieldMaker fieldMaker;
     private SenseMaker senseMaker;
     private BehaviourMaker behaviourMaker;
+    private FitnessPanel fitnessPanel;
+    
+    private JTabbedPane tabbedPane;
 
     
     public MainView(Simulation s) {
         facade = new SimStateFacade(s);
         control = new SimControl(s);
         controlPanel = new ControlPanel(control);
-        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         
         viewer = new RunView(control, facade, 500, 500);
         fieldMaker = new FieldMaker(control, facade);
         senseMaker = new SenseMaker(control, facade);
         behaviourMaker = new BehaviourMaker(control, facade);
+        fitnessPanel = new FitnessPanel (control, facade);
+        facade.getFitnessFunctionParameters();
+        fitnessPanel.setup("Fitness", facade.getFitnessFunctionParameters());
                 
         tabbedPane.addTab("Main", null, viewer, "");
         tabbedPane.addTab("Environment", null, fieldMaker, "Add/Remove environment fields");           
         tabbedPane.addTab("Senses", null, senseMaker, "Add/Remove senses");
-        tabbedPane.addTab("Behaviours", null, behaviourMaker, "Add/Remove behaviours");        
+        tabbedPane.addTab("Behaviours", null, behaviourMaker, "Add/Remove behaviours");  
+        tabbedPane.addTab("Fitness", null, fitnessPanel, "Adjust fitness function");   
     
         tabbedPane.addChangeListener( new ChangeListener() {
             @Override
@@ -67,7 +74,7 @@ public class MainView extends JFrame {
         
         this.add(controlPanel, BorderLayout.NORTH);
         this.add(tabbedPane);
-                controlPanel.setPausePlayText();
+        controlPanel.setPausePlayText();
     }
     
     /**
@@ -77,6 +84,8 @@ public class MainView extends JFrame {
     public void update() {
         viewer.updateData();
         controlPanel.setPausePlayText();
+        if (tabbedPane.getSelectedIndex() == 4)
+            fitnessPanel.updateFitnessWeights();
     }
     
 }

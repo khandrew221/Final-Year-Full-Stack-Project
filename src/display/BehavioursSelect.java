@@ -37,6 +37,7 @@ public class BehavioursSelect extends SelectableList {
     /**
      * Updates the container when a checkbox is activated.
      */    
+    @Override
     public void updateContainer() {
     }
     
@@ -47,7 +48,6 @@ public class BehavioursSelect extends SelectableList {
         try {
             out = stringIDs.stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet());
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             return out;
         }
         return out;

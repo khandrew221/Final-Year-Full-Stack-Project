@@ -21,6 +21,9 @@ public class SimConsts {
     
     private static int START_ENERGY = 600;
     private static int MAX_ENERGY = 600;
+    
+    private static int FITNESS_WEIGHT_MIN = -10;
+    private static int FITNESS_WEIGHT_MAX = 10;    
 
     public static int getMAX_LAYERS() {
         return MAX_LAYERS;
@@ -80,6 +83,14 @@ public class SimConsts {
 
     public static int getMAX_ENERGY() {
         return MAX_ENERGY;
+    }
+
+    public static int getFITNESS_WEIGHT_MIN() {
+        return FITNESS_WEIGHT_MIN;
+    }
+
+    public static int getFITNESS_WEIGHT_MAX() {
+        return FITNESS_WEIGHT_MAX;
     }
     
     
