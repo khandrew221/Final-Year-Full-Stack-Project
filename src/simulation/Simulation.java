@@ -64,6 +64,7 @@ public class Simulation {
         environment.randomiseField("Test1", 0, 100);    
         
         addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 0, 0, 0));
+        //addSense(SenseFactory.MakeBorderSense(environment,1));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
         
         for (int i = 0; i < maxPop*0.5; i++) {
@@ -102,19 +103,19 @@ public class Simulation {
                 bot.run();
                 GAEngine.calcFitness(bot);
             }
-                
+
             bots.removeIf(bot -> bot.isDead());
-            
+
             if (population() < maxPop) {
                 GRep g;
-                if (bots.size() > 1) {
+                if (bots.size() > SimConsts.getGENETIC_BOTTLENECK_POPULATION()) {  //avoids genetic bottleneck
                     addBredBot(SimConsts.getSTART_ENERGY());
                 }
                 else {                    
-                   addStarterBot(SimConsts.getSTART_ENERGY()); //avoids genetic bottleneck
+                   addStarterBot(SimConsts.getSTART_ENERGY()); 
                 }  
             }  
-            
+         
             simTime++;            
         }
     }
@@ -178,7 +179,7 @@ public class Simulation {
      * 
      * Req for: UC006
      */
-    public void addStarterBot(int startEnergy) {
+    public synchronized void addStarterBot(int startEnergy) {
         if (population() < maxPop) {
             GRep g = GAEngine.randomGRep(nnInputs, nnOutputs);
             Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
@@ -194,7 +195,7 @@ public class Simulation {
      * 
      * Req for: UC032
      */
-    public void addBredBot(int startEnergy) {
+    public synchronized void addBredBot(int startEnergy) {
         if (population() < maxPop) {
             updateBotOrder(); //only need to update for GA methods
             GRep g = GAEngine.breedGRep(bots, true); //breed with mutation
@@ -399,12 +400,12 @@ public class Simulation {
         
         simTime = 0;
         
-        synchronized(bots) {
-            bots.clear();
-            for (int i = 0; i < maxPop; i++) {
-                addStarterBot(SimConsts.getSTART_ENERGY());
-            }          
-        }
+        bots.clear();
+        for (int i = 0; i < maxPop*0.5; i++) {
+            addStarterBot(SimConsts.getSTART_ENERGY());
+        }          
+        
+        
         
         if (getState() == SimState.STOPPED_WITH_CRITICAL_CHANGE) {
             setState(SimState.STOPPED);
@@ -648,7 +649,7 @@ public class Simulation {
      * assigning the new set to the bots variable.  Not an ideal solution but
      * workable.
      */
-    public void updateBotOrder() {
+    public synchronized void updateBotOrder() {
         SortedSet newBots = new TreeSet<>();
         for(Bot bot : bots) {
             newBots.add(bot);

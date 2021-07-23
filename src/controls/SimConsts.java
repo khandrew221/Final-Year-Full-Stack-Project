@@ -24,6 +24,8 @@ public class SimConsts {
     
     private static int FITNESS_WEIGHT_MIN = -10;
     private static int FITNESS_WEIGHT_MAX = 10;    
+    
+    private static int GENETIC_BOTTLENECK_POPULATION = 10; 
 
     public static int getMAX_LAYERS() {
         return MAX_LAYERS;
@@ -91,6 +93,14 @@ public class SimConsts {
 
     public static int getFITNESS_WEIGHT_MAX() {
         return FITNESS_WEIGHT_MAX;
+    }
+
+    public static int getGENETIC_BOTTLENECK_POPULATION() {
+        return GENETIC_BOTTLENECK_POPULATION;
+    }
+
+    public static void setGENETIC_BOTTLENECK_POPULATION(int GENETIC_BOTTLENECK_POPULATION) {
+        SimConsts.GENETIC_BOTTLENECK_POPULATION = GENETIC_BOTTLENECK_POPULATION;
     }
     
     

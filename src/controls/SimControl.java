@@ -169,6 +169,27 @@ public class SimControl {
     }
     
     /**
+     * 
+     * 0 for no errors
+     * 1 for existing sense
+     * 3 for modification while running warning
+     * 
+     * @param radius
+     * @return error code
+     */
+    public int addSenseBorder(int radius) {
+        if (isStopped()) {
+            Sense sense = SenseFactory.MakeBorderSense(simulation.getEnvironment(), radius);
+            if (simulation.containsSense(sense)) {
+                return 1;
+            }
+            simulation.addSense(sense);
+            return 0;
+        } 
+        return 3;
+    }    
+    
+    /**
      * 0 for no errors
      * 1 for existing behaviour
      * 3 for modification while running warning

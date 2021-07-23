@@ -44,7 +44,7 @@ public class SenseMaker extends ComponentMaker {
     JSlider envRadiusSlider;
     JLabel envRadiusLabel = new JLabel();   
     JCheckBox envCentred = new JCheckBox("Include point at bot location?");
-    
+    LabelledSlider borderRadiusSlider;
     
 
     /**
@@ -116,6 +116,10 @@ public class SenseMaker extends ComponentMaker {
                 setForEnviromentSense();
                 this.revalidate();
                 break;
+            case "border":
+                setForBorderSense();
+                this.revalidate();
+                break;                
             default:
                 typeSpecificMakerPanel.removeAll();
         }        
@@ -153,6 +157,28 @@ public class SenseMaker extends ComponentMaker {
                         break;                          
                 }  
                 break;
+            case "border":
+                error = super.getControl().addSenseBorder(borderRadiusSlider.getValue());
+                switch(error) {
+                    case 0:
+                        this.update();
+                        this.revalidate();
+                        break;
+                    case 1:    
+                        JOptionPane.showMessageDialog(null, "An identical sense already exists.", "Warning", JOptionPane.WARNING_MESSAGE);
+                        break;  
+                    case 3:
+                        int response = JOptionPane.showConfirmDialog(null,
+                                            "Senses cannot be added or removed while the simulation is running. \n Stop simulation and add sense?",
+                                            "Warning",
+                                            JOptionPane.YES_NO_OPTION); 
+                        if(response == JOptionPane.YES_OPTION){
+                           super.getControl().stop();
+                           addSenseType(type);                           
+                        }
+                        break;                          
+                }
+            break;
         }        
     }     
     
@@ -207,7 +233,17 @@ public class SenseMaker extends ComponentMaker {
         });                        
         sliderSetup(radiusPanel, envRadiusSlider, envRadiusLabel, "Ring radius: ");         
         
-    }     
+    }    
+    
+    /**
+     * 
+     */    
+    private void setForBorderSense() {
+        typeSpecificMakerPanel.removeAll();                     
+        borderRadiusSlider = new LabelledSlider("radius", 1, 5, 3);
+        borderRadiusSlider.setPreferredSize(new Dimension(350, 50));    
+        typeSpecificMakerPanel.add(borderRadiusSlider);      
+    }    
 
     @Override
     public void actionPerformed(ActionEvent e){    

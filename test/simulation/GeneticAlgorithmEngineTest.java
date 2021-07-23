@@ -33,10 +33,9 @@ public class GeneticAlgorithmEngineTest {
         int fails = 0;        
         Simulation s = new Simulation(1000,1000,50);
         s.initialise();
-        s.run();
-        s.run();
-        s.run();
-        s.run();
+        for (int i = 0; i < 400; i++) {
+            s.run();
+        }
         SortedSet<Bot> bots = s.getBots();
         double populationFitness = 0;
         double minimumFitness = Math.abs(bots.last().getFitness());

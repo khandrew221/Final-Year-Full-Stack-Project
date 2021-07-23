@@ -44,6 +44,8 @@ public class SimulationTest {
         System.out.println("Simulation report failures: " + testSimulationReport(s, true));
 
         testReset(s, true);
+        
+        System.out.println("Update bot list order failures: " + testUpdateBotOrder(s, true));
     }
     
     public static int testClear(Simulation s, boolean v) {
@@ -164,10 +166,10 @@ public class SimulationTest {
             if (v)
                 System.out.println("Simulation time incorrect. 0 expected, " + s.time() + " found.");
         }        
-        if (s.population() != startPop) {
+        if (s.population() != startPop*0.5) {
             fails++;
             if (v)
-                System.out.println("Population size incorrect."  + startPop + " expected, " + s.population() + " found.");
+                System.out.println("Population size incorrect."  + startPop*0.5 + " expected, " + s.population() + " found.");
         } 
         if (!s.listFields().equals(fields)) {
             fails++;
@@ -693,6 +695,32 @@ public class SimulationTest {
  
         return fails;
     }     
+    
+    public static int testUpdateBotOrder(Simulation s, boolean v) {     
+        int fails = 0;
+        
+        s.initialise();
+        for (int i = 0; i < 700; i++) {
+            s.run();
+        }
+        
+        s.updateBotOrder();
+        
+        double startFit = s.getBots().first().getFitness();
+
+        for (Bot bot : s.getBots()) {
+            if (bot.getFitness() > startFit) {
+                fails++;
+                System.out.println("Bots out of order");
+                startFit = bot.getFitness();
+            }
+            startFit = bot.getFitness();
+        }
+
+        
+        return fails;
+    }      
+    
     
     public static boolean setIsRange(Set<Integer> s, int start, int end) {
         if (s.size() != end-start)

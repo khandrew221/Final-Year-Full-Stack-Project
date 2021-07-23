@@ -43,5 +43,22 @@ public class SenseFactory {
         
         return new SenseEnviro(target, e, samplePoints);
     }
-    
+
+    /**
+     * Creates an border sense.
+     * @param e
+     * @param radius
+     * @return 
+     */
+    public static SenseBorder MakeBorderSense(Environment e, int radius) {
+        
+        List<Point> samplePoints = new ArrayList<>();
+        
+        samplePoints.add(new Point(0,radius));
+        samplePoints.add(new Point(0,-radius));
+        samplePoints.add(new Point(radius,0));
+        samplePoints.add(new Point(-radius,0));
+
+        return new SenseBorder(e, samplePoints);
+    }    
 }

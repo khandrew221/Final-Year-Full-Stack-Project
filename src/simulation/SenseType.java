@@ -11,7 +11,8 @@ package simulation;
  */
 public enum SenseType {
     
-    ENVIRONMENT("environment");
+    ENVIRONMENT("environment"),
+    BORDER("border");
     
     public final String label;
 

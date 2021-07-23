@@ -82,17 +82,19 @@ public class GeneticAlgorithmEngine {
      * Breeds a new GRep from two parents selected by roulette wheel selection, 
      * using uniform crossover.
      * 
-     * Bots must not be empty!
+     * Pre: Bots must not be empty!
+     * Pre: Bots must be sorted in descending order of fitness
      * 
      * @param bots
      * @return 
      */
-    public GRep breedGRep(SortedSet<Bot> bots, boolean mutateOffspring) {
-
+    public synchronized GRep breedGRep(SortedSet<Bot> bots, boolean mutateOffspring) {
+        
         //get the total population fitness
         //fitness must be modified into positive range
         double populationFitness = 0;
         double minimumFitness = Math.abs(bots.last().getFitness());
+        
         for (Bot bot : bots) {
             populationFitness += bot.getFitness() + minimumFitness;          
         }
@@ -100,6 +102,7 @@ public class GeneticAlgorithmEngine {
         //get two parent GReps
         GRep parent1 = getParent(bots, populationFitness, minimumFitness);
         GRep parent2 = getParent(bots, populationFitness, minimumFitness);
+
         
         if (mutateOffspring) {
             return pointMutate(breedGRep(parent1, parent2));
@@ -138,15 +141,29 @@ public class GeneticAlgorithmEngine {
      * @return 
      */
     public GRep getParent(SortedSet<Bot> bots, double populationFitness, double minimumFitness) {
-        double position = Math.random() * populationFitness;
-        double spinWheel = 0;
-        for (Bot bot : bots) {
-            spinWheel += bot.getFitness() + minimumFitness;
-            if (spinWheel >= position) {
-                return bot.getGRep();
-            }        
+        if (populationFitness > 0) {
+            //use roulette wheel selection.  Will not work with population fitness <=0
+            double position = Math.random() * populationFitness;
+            double spinWheel = 0;
+            for (Bot bot : bots) {
+                spinWheel += bot.getFitness() + minimumFitness;
+                if (spinWheel >= position) {
+                    return bot.getGRep();
+                }        
+            }
+            return bots.first().getGRep();
+        } else {
+            //pick a random bot. 
+            int position = (int)Math.round(Math.random() * bots.size());
+            double spinWheel = 0;
+            for (Bot bot : bots) {
+                if (spinWheel == position) {
+                    return bot.getGRep();
+                }  
+                spinWheel++;
+            }
+            return bots.first().getGRep();
         }
-        return bots.first().getGRep();
     }  
 
     /**

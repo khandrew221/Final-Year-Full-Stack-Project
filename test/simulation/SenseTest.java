@@ -25,6 +25,7 @@ public class SenseTest {
         testBasicExecution(true);
         testEnviro1point(true);
         testEnviroMultipoint(true);
+        testBorder(true);
     }
     
     public static int testBasicExecution(boolean v) {        
@@ -107,6 +108,7 @@ public class SenseTest {
         
         s.sensoryInput(b);
         
+        
         if (b.getInputs().length != s.outputSlots().size()) {
             fails++;
             if (v)
@@ -132,50 +134,107 @@ public class SenseTest {
         return fails;
     }        
     
-/*
 
-        Environment e = new Environment(500, 500);
-        e.addField("Test", 11, 5, 5);
-        e.randomiseField("Test", 5, 5);
-        Sense s = new SenseEnviro("Test", e);
-        Set<Sense> senses = new HashSet<>();
-        senses.add(s);
-        Set<Behaviour> behaviours = new HashSet<>();
-        Behaviour beh = new BehaviourMove(1, new Point(0,0), new Point(e.getXSize(), e.getYSize()));
-        behaviours.add(beh);
-        GRep g = new GRep(10, 5, 1, 2);
-        g.randomise();
+    public static int testBorder(boolean v) {        
+        int fails = 0;   
         
-        Bot b = new Bot(g, senses, behaviours, 1);
+        Environment e = new Environment(100,100);
+        Sense s = SenseFactory.MakeBorderSense(e, 5);
+        s.renumberOutputs(0);
+        
+        //no need to add the sense, we're testing it directly. 
+        //Only required for a bot to pass to the sense.  
+        Set<Sense> senses = new HashSet<>();
+        Set<Behaviour> behaviours = new HashSet<>();
+        GRep g = new GRep(10, 5, s.outputSlots().size(), 1);
+        Bot b = new Bot(g, senses, behaviours, 1, new Point (10,10));
         
         s.sensoryInput(b);
         
-        for (double i : b.getInputs()) {
-            System.out.println(i);
+        if (b.getInputs().length != s.outputSlots().size()) {
+            fails++;
+            if (v)
+                System.out.println("Failure: wrong number of bot input slots. " + s.outputSlots().size() + " expected, " + b.getInputs().length + " found.");            
         }
         
-        System.out.println(e.normValueAt("Test", b.getPosition()));
-        
-        b.runNN();
-        
-        for (double i : b.getOutputs()) {
-            System.out.println(i);
-        }        
-        
-        System.out.println("Old pos: " + b.getPosition().toString());
-        
-        beh.execute(b);
-        
-        System.out.println("New pos: " + b.getPosition().toString());
-        
-        
-        b.run();
-        for (double i : b.getInputs()) {
-            System.out.println(i);
+        for (int i = 0; i < 4; i++) {
+            if (b.getInputs()[i] != 0) {
+                fails++;
+                if (v)
+                    System.out.println("Failure: bot input not set correctly in slot " + i + ". 0 expected, " + b.getInputs()[i] + " found.");
+            }
+            if (b.getInputs()[i] > 1) {
+            fails++;
+            if (v)
+                 System.out.println("Failure: bot input over in slot " + i + ". " + b.getInputs()[i] + " found.");            
+            }
+            if (b.getInputs()[i] < 0) {
+               fails++;
+                if (v)
+                    System.out.println("Failure: bot input less than zero in slot " + i + ". " + b.getInputs()[i] + " found.");            
+            }     
         }
-        for (double i : b.getOutputs()) {
-            System.out.println(i);
-        }
-        System.out.println("New pos: " + b.getPosition().toString());    */    
+        
+        b.setPosition(new Point(0,0));
+        s.sensoryInput(b);
+   
+        for (int i = 0; i < 4; i++) {
+            if (i == 0 || i == 2) {
+                if (b.getInputs()[i] != 0) {
+                    fails++;
+                    if (v)
+                        System.out.println("Failure: bot input not set correctly in slot " + i + ". 0 expected, " + b.getInputs()[i] + " found.");
+                } 
+            } else {
+                if (b.getInputs()[i] != 1) {
+                    fails++;
+                    if (v)
+                        System.out.println("Failure: bot input not set correctly in slot " + i + ". 1 expected, " + b.getInputs()[i] + " found.");
+                }                 
+            }
+            if (b.getInputs()[i] > 1) {
+            fails++;
+            if (v)
+                 System.out.println("Failure: bot input over in slot " + i + ". " + b.getInputs()[i] + " found.");            
+            }
+            if (b.getInputs()[i] < 0) {
+               fails++;
+                if (v)
+                    System.out.println("Failure: bot input less than zero in slot " + i + ". " + b.getInputs()[i] + " found.");            
+            }     
+        }     
+
+        b.setPosition(new Point(100,100));
+        s.sensoryInput(b);
+        
+        for (int i = 0; i < 4; i++) {
+            if (i == 1 || i == 3) {
+                if (b.getInputs()[i] != 0) {
+                    fails++;
+                    if (v)
+                        System.out.println("Failure: bot input not set correctly in slot " + i + ". 0 expected, " + b.getInputs()[i] + " found.");
+                } 
+            } else {
+                if (b.getInputs()[i] != 1) {
+                    fails++;
+                    if (v)
+                        System.out.println("Failure: bot input not set correctly in slot " + i + ". 1 expected, " + b.getInputs()[i] + " found.");
+                }                 
+            }
+            if (b.getInputs()[i] > 1) {
+            fails++;
+            if (v)
+                 System.out.println("Failure: bot input over in slot " + i + ". " + b.getInputs()[i] + " found.");            
+            }
+            if (b.getInputs()[i] < 0) {
+               fails++;
+                if (v)
+                    System.out.println("Failure: bot input less than zero in slot " + i + ". " + b.getInputs()[i] + " found.");            
+            }     
+        }         
+        
+                   
+        return fails;
+    }    
     
 }
