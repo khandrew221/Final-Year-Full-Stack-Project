@@ -26,6 +26,7 @@ public class GeneticAlgorithmEngineTest {
         
         testBreedGRep(true, GAEng);
         
+        System.out.println("Generation numbering failures: " + testGeneration(true, GAEng));
     }
     
 
@@ -89,5 +90,46 @@ public class GeneticAlgorithmEngineTest {
                 System.out.println("No mutation, possible muation error.");            
         }
         return fails;
-    }    
+    }  
+    
+    public static int testGeneration(boolean v, GeneticAlgorithmEngine GAEng) {
+        int fails = 0;       
+        GRep parent1 = GAEng.randomGRep(3, 3);
+        GRep parent2 = GAEng.randomGRep(3, 3);
+        GRep child = GAEng.breedGRep(parent1, parent2);
+        if (child.getGeneration() != 1) {
+            fails++;
+            if (v)
+                System.out.println("Child of two 0 gen perents not generation 1.  Generation found: " + child.getGeneration());            
+        }
+        GRep child2 = GAEng.breedGRep(child, parent2);
+        if (child2.getGeneration() != 2) {
+            fails++;
+            if (v)
+                System.out.println("Child of gen 1&0 not generation 2.  Generation found: " + child2.getGeneration());            
+        }  
+        child2 = GAEng.breedGRep(parent2, child);
+        if (child2.getGeneration() != 2) {
+            fails++;
+            if (v)
+                System.out.println("Child of gen 0&1 not generation 2.  Generation found: " + child2.getGeneration());            
+        }           
+
+        parent1.setGeneration(20);
+        parent2.setGeneration(1);
+        child = GAEng.breedGRep(parent1, parent2);   
+        if (child.getGeneration() != 21) {
+            fails++;
+            if (v)
+                System.out.println("Child of gen 20&1 not generation 21.  Generation found: " + child.getGeneration());            
+        }        
+        child = GAEng.breedGRep(parent2, parent1);   
+        if (child.getGeneration() != 21) {
+            fails++;
+            if (v)
+                System.out.println("Child of gen 1&20 not generation 21.  Generation found: " + child.getGeneration());            
+        }             
+        
+        return fails;
+    }     
 }

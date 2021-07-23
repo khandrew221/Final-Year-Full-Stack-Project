@@ -22,12 +22,14 @@ public class GRep {
     private final int NUM_INPUTS;
     private final int NUM_OUTPUTS;
     private BitSet genome;
+    private int generation;
     
-    public GRep(int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
+    public GRep(int generation, int MAX_LAYERS, int MAX_NODES_PER_LAYER, int NUM_INPUTS, int NUM_OUTPUTS) {
         this.MAX_LAYERS = MAX_LAYERS;
         this.MAX_NODES_PER_LAYER = MAX_NODES_PER_LAYER;
         this.NUM_INPUTS = NUM_INPUTS;
         this.NUM_OUTPUTS = NUM_OUTPUTS;
+        this.generation = generation;
         genome = new BitSet(requiredLength());
     }
     
@@ -236,7 +238,7 @@ public class GRep {
      * @param i     index position
      */
     public GRep clone() { 
-        GRep out = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+        GRep out = new GRep(generation, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
         out.setBitsAt(0, requiredLength(), genome);
         return out;
     }        
@@ -264,6 +266,20 @@ public class GRep {
         return buffer.toString();
     }
 
+    /**
+     * Returns the generation
+     * @return 
+     */
+    public int getGeneration() {
+        return generation;
+    }
+
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 3;

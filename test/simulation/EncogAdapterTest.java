@@ -42,7 +42,7 @@ public class EncogAdapterTest {
         
         int totalFails = 0;
         EncogAdapter nn = new EncogAdapter();
-        GRep r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+        GRep r = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
         //r.randomise();
         r.maximal();
         nn.createFromGRep(r);
@@ -70,7 +70,7 @@ public class EncogAdapterTest {
             MAX_NODES_PER_LAYER = random.nextInt(30)+1;
             NUM_INPUTS = random.nextInt(100)+1;
             NUM_OUTPUTS = random.nextInt(MAX_NODES_PER_LAYER+1);
-            r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+            r = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
             r.randomise();
             nn.createFromGRep(r);
             fails += basicStrucTest(nn, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS, v); 

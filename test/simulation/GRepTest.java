@@ -31,7 +31,7 @@ public class GRepTest {
         int MAX_NODES_PER_LAYER = 3;
         int NUM_INPUTS = 1;
         int NUM_OUTPUTS = 1;
-        GRep r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+        GRep r = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
         r.randomise();
         
         if (v) {
@@ -82,7 +82,7 @@ public class GRepTest {
             System.out.println("Maximal Input connections test: " + fails + " failures."); 
         
         
-        r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+        r = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
         itr = 0;       
         fails = gridTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr);
         totalFails += fails;
@@ -110,7 +110,7 @@ public class GRepTest {
             MAX_NODES_PER_LAYER = random.nextInt(30)+1;
             NUM_INPUTS = random.nextInt(100)+1;
             NUM_OUTPUTS = MAX_NODES_PER_LAYER-random.nextInt(MAX_NODES_PER_LAYER);
-            r = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+            r = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
             r.randomise();
             itr = 0;
             fails += gridTest(r, MAX_LAYERS, MAX_NODES_PER_LAYER, itr); 

@@ -38,7 +38,7 @@ public class SenseTest {
         //Only required for a bot to pass to the sense.  
         Set<Sense> senses = new HashSet<>();
         Set<Behaviour> behaviours = new HashSet<>();
-        GRep g = new GRep(10, 5, 1, 1);
+        GRep g = new GRep(0, 10, 5, 1, 1);
         Bot b = new Bot(g, senses, behaviours, 1, new Point (10,10));
         
         s.sensoryInput(b);
@@ -65,7 +65,7 @@ public class SenseTest {
         //Only required for a bot to pass to the sense.  
         Set<Sense> senses = new HashSet<>();
         Set<Behaviour> behaviours = new HashSet<>();
-        GRep g = new GRep(10, 5, 1, 1);
+        GRep g = new GRep(0, 10, 5, 1, 1);
         Bot b = new Bot(g, senses, behaviours, 1, new Point (10,10));
         
         s.sensoryInput(b);
@@ -103,7 +103,7 @@ public class SenseTest {
         //Only required for a bot to pass to the sense.  
         Set<Sense> senses = new HashSet<>();
         Set<Behaviour> behaviours = new HashSet<>();
-        GRep g = new GRep(10, 5, s.outputSlots().size(), 1);
+        GRep g = new GRep(0, 10, 5, s.outputSlots().size(), 1);
         Bot b = new Bot(g, senses, behaviours, 1, new Point (10,10));
         
         s.sensoryInput(b);
@@ -146,7 +146,7 @@ public class SenseTest {
         //Only required for a bot to pass to the sense.  
         Set<Sense> senses = new HashSet<>();
         Set<Behaviour> behaviours = new HashSet<>();
-        GRep g = new GRep(10, 5, s.outputSlots().size(), 1);
+        GRep g = new GRep(0, 10, 5, s.outputSlots().size(), 1);
         Bot b = new Bot(g, senses, behaviours, 1, new Point (10,10));
         
         s.sensoryInput(b);

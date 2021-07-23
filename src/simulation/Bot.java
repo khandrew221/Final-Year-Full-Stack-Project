@@ -326,6 +326,16 @@ public class Bot implements Comparable<Bot> {
     }
     
 
+    /**
+     * Returns the generation of the bot
+     * @return 
+     */
+    public int getGeneration() {
+        return genetics.getGeneration();
+    }
+        
+    
+
     @Override
     public int hashCode() {
         int hash = 7;

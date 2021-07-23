@@ -35,7 +35,7 @@ public class FitnessFunctionTest {
         int testOutputs = 1;
         int testInputs = 1;
         double testEnergy = 0;
-        GRep g = new GRep(10, 5, 1, 1);
+        GRep g = new GRep(0, 10, 5, 1, 1);
         Bot b = new Bot(g, senses, behaviours, testEnergy, testPos);
         FitnessFunction f = new FitnessFunction();
         

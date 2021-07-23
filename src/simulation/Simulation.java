@@ -103,7 +103,7 @@ public class Simulation {
                 bot.run();
                 GAEngine.calcFitness(bot);
             }
-
+            
             bots.removeIf(bot -> bot.isDead());
 
             if (population() < maxPop) {
@@ -116,7 +116,8 @@ public class Simulation {
                 }  
             }  
          
-            simTime++;            
+            simTime++;         
+           
         }
     }
     

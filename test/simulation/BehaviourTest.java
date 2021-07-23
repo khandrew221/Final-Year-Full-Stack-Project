@@ -34,7 +34,7 @@ public class BehaviourTest {
         //Only required for a bot to pass to the sense.  
         Set<Sense> senses = new HashSet<>();
         Set<Behaviour> behaviours = new HashSet<>();
-        GRep g = new GRep(10, 5, 1, 1);
+        GRep g = new GRep(0, 10, 5, 1, 1);
         Bot bot = new Bot(g, senses, behaviours, 1, new Point(10,10));
         
         b.execute(bot);
@@ -59,7 +59,7 @@ public class BehaviourTest {
         //Only required for a bot to pass to the sense.  
         Set<Sense> senses = new HashSet<>();
         Set<Behaviour> behaviours = new HashSet<>();
-        GRep g = new GRep(10, 5, 1, 2);
+        GRep g = new GRep(0, 10, 5, 1, 2);
         g.randomise();
         Point botPos = new Point(10,10);
         Bot bot = new Bot(g, senses, behaviours, 20, botPos);

@@ -44,7 +44,7 @@ public class GeneticAlgorithmEngine {
      * @return 
      */
     public GRep randomGRep(int numInputs, int numOutputs) {
-        GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, numInputs, numOutputs);
+        GRep g = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, numInputs, numOutputs);
         g.randomise();
         return g;
     };
@@ -57,7 +57,7 @@ public class GeneticAlgorithmEngine {
      */
     public GRep breedGRep(GRep parent1, GRep parent2) {        
         //both parents should have same number of inputs and outputs
-        GRep g = new GRep(MAX_LAYERS, MAX_NODES_PER_LAYER, parent1.getNUM_INPUTS(), parent1.getNUM_OUTPUTS());
+        GRep g = new GRep(getGeneration(parent1, parent2), MAX_LAYERS, MAX_NODES_PER_LAYER, parent1.getNUM_INPUTS(), parent1.getNUM_OUTPUTS());
         
        /* BitSet gridChromosome1 = parent1.bitSetAt(0, parent1.gridLength());
         BitSet gridChromosome2 = parent2.bitSetAt(0, parent2.gridLength());
@@ -229,6 +229,17 @@ public class GeneticAlgorithmEngine {
           return fitnessFunction.getWeightDistanceTravelled();
       }
       return 0;
+    }
+    
+    /**
+     * 
+     */
+    public int getGeneration(GRep parent1, GRep parent2) {
+        if (parent1.getGeneration() > parent2.getGeneration()) {
+            return parent1.getGeneration()+1;
+        } else {
+            return parent2.getGeneration()+1;
+        }
     }
     
 }
