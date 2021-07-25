@@ -84,21 +84,11 @@ public class ScalarField {
         int y1 = getLowerY(p.getY());
         int y2 = getUpperY(p.getY()); 
         
-        /*System.out.println("x1: " + x1);
-        System.out.println("x2: " + x2);
-        System.out.println("y1: " + y1);
-        System.out.println("y2: " + y2);*/
-        
         //closest sample values
         double Q11 = values[x1][y1];
         double Q12 = values[x1][y2];
         double Q21 = values[x2][y1];
-        double Q22 = values[x2][y2];
-        
-        /*System.out.println("Q11: " + Q11);
-        System.out.println("Q12: " + Q12);
-        System.out.println("Q21: " + Q21);
-        System.out.println("Q22: " + Q22);  */      
+        double Q22 = values[x2][y2];  
 
         double f = (p.getX() % xUnit) / xUnit;
         
@@ -122,8 +112,15 @@ public class ScalarField {
      * @param p point within the field
      * @return interpolated value at location between 0 and 1
      */    
-    public double trueValueAt(Point p) {   
-        return valMin + (normValueAt(p) * (valMax - valMin));
+    public double trueValueAt(Point p) {  
+        double value = valMin + (normValueAt(p) * (valMax - valMin));
+        //catch rounding errors
+        if (value < valMin)
+            return valMin;
+        else if (value > valMax)
+            return valMax;
+        else        
+            return value;
     } 
 
     /**
@@ -138,7 +135,10 @@ public class ScalarField {
      * @param y
      * @param amount 
      */
-    private void adjustSamplePointValue(int x, int y, double amount) {   
+    private void adjustSamplePointValue(int x, int y, double amount) {  
+        if (Double.isNaN(amount)) {
+            System.out.println("ERROR!!!!: " + amount);
+        }
         values[x][y] = values[x][y]+amount;
         if (values[x][y] > 1)
             values[x][y] = 1;
@@ -154,48 +154,74 @@ public class ScalarField {
      * @param p
      * @param amount 
      */
-    public void adjustValueAt(Point p, double amount) {   
-        
+    public void adjustValueAt(Point p, double amount) {  
         // amount as proportion of normalised range
         double normAmount = amount / (valMax - valMin);
         
         int x1 = getLeftX(p.getX());
         int x2 = getRightX(p.getX());
         int y1 = getLowerY(p.getY());
-        int y2 = getUpperY(p.getY());        
+        int y2 = getUpperY(p.getY());  
+        
+        double old11 = values[x1][y1];
+        double old12 = values[x1][y2];
+        double old21 = values[x2][y1];
+        double old22 = values[x2][y2];        
        
         //if point to adjust is exactly on a sample point
         if (x1 == x2 && y1 == y2) {
             adjustSamplePointValue(x1, y1, normAmount);
-            return;
+        } else if (x1 == x2) {
+            //same x, distribute between two
+
+            //closest sample values
+            double Q11 = values[x1][y1];
+            double Q12 = values[x1][y2];
+
+            //propotion along y axis 
+            double f = (p.getY() % yUnit) / yUnit;
+            
+            adjustSamplePointValue(x1, y1, normAmount*f);
+            adjustSamplePointValue(x1, y2, normAmount*(1-f));         
+            
+        } else if (y1 == y2) {
+            //same y, distribute between two
+            //propotion along x axis 
+            double f = (p.getX() % xUnit) / xUnit;
+            
+            //adjust closest sample values
+            adjustSamplePointValue(x1, y1, normAmount*f);
+            adjustSamplePointValue(x2, y1, normAmount*(1-f)); 
+            
+        } else {            
+            //get areas between sample values and given point            
+            double x1true = x1*xUnit;
+            double x2true = x2*xUnit;
+            double y1true = y1*yUnit;
+            double y2true = y2*yUnit;
+            
+            double Q11Area = Math.abs(p.getX()-x1true)*Math.abs(p.getY()-y1true);
+            double Q12Area = Math.abs(p.getX()-x1true)*Math.abs(p.getY()-y2true);
+            double Q21Area = Math.abs(p.getX()-x2true)*Math.abs(p.getY()-y1true);
+            double Q22Area = Math.abs(p.getX()-x2true)*Math.abs(p.getY()-y2true);  
+            
+            double areaTotal = Q11Area + Q12Area + Q21Area + Q22Area;
+
+            //change to proportion of total
+            Q11Area = Q11Area/areaTotal;
+            Q12Area = Q12Area/areaTotal;
+            Q21Area = Q21Area/areaTotal;
+            Q22Area = Q22Area/areaTotal;     
+
+            //adjust points.  Note diagonal swapping of areas: closer to point ->
+            // larger area atteched to diagonal opposite point -> larger proportion
+            // goes to closer point
+            adjustSamplePointValue(x1, y1, normAmount*Q22Area);
+            adjustSamplePointValue(x2, y2, normAmount*Q11Area);
+            adjustSamplePointValue(x1, y2, normAmount*Q21Area);
+            adjustSamplePointValue(x2, y1, normAmount*Q12Area);
+            
         }
-        
-        //closest sample values
-        double Q11 = values[x1][y1];
-        double Q12 = values[x1][y2];
-        double Q21 = values[x2][y1];
-        double Q22 = values[x2][y2];
-      
-        //get areas between sample values and given point
-        double Q11Area = Math.abs(p.getX()-x1)*Math.abs(p.getY()-y1);
-        double Q12Area = Math.abs(p.getX()-x1)*Math.abs(p.getY()-y2);
-        double Q21Area = Math.abs(p.getX()-x2)*Math.abs(p.getY()-y1);
-        double Q22Area = Math.abs(p.getX()-x2)*Math.abs(p.getY()-y2);  
-        double areaTotal = Q11Area + Q12Area + Q21Area + Q22Area;
-        
-        //change to proportion of total
-        Q11Area = Q11Area/areaTotal;
-        Q12Area = Q12Area/areaTotal;
-        Q21Area = Q21Area/areaTotal;
-        Q22Area = Q22Area/areaTotal;          
-        
-        //adjust points.  Note diagonal swapping of areas: closer to point ->
-        // larger area atteched to diagonal opposite point -> larger proportion
-        // goes to closer point
-        adjustSamplePointValue(x1, y1, normAmount*Q22Area);
-        adjustSamplePointValue(x2, y2, normAmount*Q11Area);
-        adjustSamplePointValue(x1, y2, normAmount*Q21Area);
-        adjustSamplePointValue(x2, y1, normAmount*Q12Area);
     }         
     
     /**
@@ -346,4 +372,50 @@ public class ScalarField {
     public double[][] getValues() {
         return values.clone();
     }   
+    
+    
+        /**
+     * Returns the normal interpolated value at the given x,y location
+     * @param p point within the field
+     * @return interpolated value between 0 and 1 at location 
+     */
+    public double normValueAtVerbose(Point p) {
+        
+        int x1 = getLeftX(p.getX());
+        int x2 = getRightX(p.getX());
+        int y1 = getLowerY(p.getY());
+        int y2 = getUpperY(p.getY()); 
+        
+        System.out.println("x1: " + x1);
+        System.out.println("x2: " + x2);
+        System.out.println("y1: " + y1);
+        System.out.println("y2: " + y2);
+        
+        //closest sample values
+        double Q11 = values[x1][y1];
+        double Q12 = values[x1][y2];
+        double Q21 = values[x2][y1];
+        double Q22 = values[x2][y2];
+        
+        System.out.println("Q11: " + Q11);
+        System.out.println("Q12: " + Q12);
+        System.out.println("Q21: " + Q21);
+        System.out.println("Q22: " + Q22);    
+
+        double f = (p.getX() % xUnit) / xUnit;
+        
+        //System.out.println("f: " + f);
+        
+        double R1 = lerp(Q11, Q21, f);
+        double R2 = lerp(Q12, Q22, f);
+        
+        //System.out.println("R1: " + R1);
+        //System.out.println("R2: " + R2); 
+        
+        f = (p.getY() % yUnit) / yUnit;
+        
+        //System.out.println("f: " + f);
+        
+        return lerp(R1, R2, f);
+    }
 }

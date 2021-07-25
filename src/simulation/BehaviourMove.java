@@ -49,14 +49,33 @@ public class BehaviourMove extends Behaviour {
     @Override
     public void execute(Bot bot) {
         
+       // System.out.println(bot.getOutputs().length);
+      //  System.out.println(xMoveSlot);
+      //  System.out.println(yMoveSlot);
+        
+     //   System.out.println("old: " + bot.getPosition());
+        
         double xMove = (bot.getOutput(xMoveSlot)-0.5)*2*maxSpeed; 
         double yMove = (bot.getOutput(yMoveSlot)-0.5)*2*maxSpeed; 
         
+        
+       
+       
+       /*if (Double.isNaN(bot.getOutput(xMoveSlot))) {
+           System.out.println("xmoveSlot " + xMoveSlot + ": "  + bot.getOutput(xMoveSlot));
+           System.out.println("ymoveSlot " + yMoveSlot + ": "  + bot.getOutput(yMoveSlot));
+           for (int i = 0; i < bot.getOutputs().length; i++) {
+               System.out.println("output " + i + ": "  + bot.getOutputs()[i]);
+           }
+       }*/
+        
         Point displace = new Point(xMove, yMove);
+      //  System.out.println("displace: " + displace);
         Point newLoc = Point.displace(bot.getPosition(), displace);
-        if (newLoc.inBounds(min, max))
+        if (newLoc.inBounds(min, max)) {
             bot.setPosition(newLoc);
-        else {
+        //    System.out.println("new no coll: " + bot.getPosition());
+        } else {
             double newX = newLoc.getX();
             double newY = newLoc.getY();            
             if (newLoc.getX() > max.getX())
@@ -69,7 +88,14 @@ public class BehaviourMove extends Behaviour {
                 newY = min.getY();  
             bot.setPosition(new Point(newX, newY));
             bot.incrementCollisions();
+           // System.out.println("col new x: " + newX);
+           // System.out.println("col new y: " + newY);
+          //  System.out.println("new with coll: " + bot.getPosition());
         }
+        
+        //System.out.println(newLoc);
+        
+        //System.out.println(bot.getPosition());
     }
     
 

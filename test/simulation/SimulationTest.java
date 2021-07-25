@@ -116,10 +116,10 @@ public class SimulationTest {
             if (v)
                 System.out.println("Environment fields list not correct." + fields + " expected, " + s.listFields() + " found.");
         }
-        if (s.getBehaviours().size() != 1) {
+        if (s.getBehaviours().size() != 2) {
             fails++;
             if (v)
-                System.out.println("Number of behaviours incorrect. 1 expected, " + s.getBehaviours().size() + " found.");
+                System.out.println("Number of behaviours incorrect. 2 expected, " + s.getBehaviours().size() + " found.");
         }    
          if (s.getSenses().size() != 1) {
             fails++;
@@ -131,10 +131,10 @@ public class SimulationTest {
             if (v)
                 System.out.println("Number of inputs incorrect. 1 expected, " + s.getNnInputs() + " found.");
         }  
-         if (s.getNnOutputs() != 2) {
+         if (s.getNnOutputs() != 3) {
             fails++;
             if (v)
-                System.out.println("Number of outputs incorrect. 2 expected, " + s.getNnOutputs() + " found.");
+                System.out.println("Number of outputs incorrect. 3 expected, " + s.getNnOutputs() + " found.");
         }
         if (s.getMaxPop() != 100) {
             fails++;
@@ -176,10 +176,10 @@ public class SimulationTest {
             if (v)
                 System.out.println("Environment fields list not correct." + fields + " expected, " + s.listFields() + " found.");
         }
-        if (s.getBehaviours().size() != 1) {
+        if (s.getBehaviours().size() != 2) {
             fails++;
             if (v)
-                System.out.println("Number of behaviours incorrect. 1 expected, " + s.getBehaviours().size() + " found.");
+                System.out.println("Number of behaviours incorrect. 2 expected, " + s.getBehaviours().size() + " found.");
         }    
          if (s.getSenses().size() != 1) {
             fails++;
@@ -191,10 +191,10 @@ public class SimulationTest {
             if (v)
                 System.out.println("Number of inputs incorrect. 1 expected, " + s.getNnInputs() + " found.");
         }  
-         if (s.getNnOutputs() != 2) {
+         if (s.getNnOutputs() != 3) {
             fails++;
             if (v)
-                System.out.println("Number of outputs incorrect. 2 expected, " + s.getNnOutputs() + " found.");
+                System.out.println("Number of outputs incorrect. 3 expected, " + s.getNnOutputs() + " found.");
         }
         if (s.getMaxPop() != 100) {
             fails++;

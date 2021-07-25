@@ -135,7 +135,10 @@ public class BehaviourTest {
         Sense s = SenseFactory.MakeEnvironmentSense("Test1", e, true, 3, 4, 7);
         s.renumberOutputs(0);
         
-        Behaviour b = new BehaviourEat("Test1", e);
+        double forageEffc = 0.1;
+        double energyEffc = 1;
+        
+        Behaviour b = new BehaviourEat(forageEffc, energyEffc, "Test1", e);
         b.renumberInputs(0);
         
         //no need to add a sense or the behaviour. 
@@ -150,19 +153,23 @@ public class BehaviourTest {
         //run to get outputs. maximal bot always eats
         bot.run();
                     
-        double envOldValue = e.trueValueAt("Test1", botPos);        
+        double envOldValue = e.trueValueAt("Test1", botPos);    
+        double prevEnergy = bot.getEnergy();
+        double envExpectValue = envOldValue - (envOldValue*forageEffc);
         b.execute(bot);
         double envNewValue = e.trueValueAt("Test1", botPos);
+        double newEnergy = bot.getEnergy();
+        double expectEnergy = prevEnergy + envOldValue*forageEffc*energyEffc;
 
         if (envOldValue == envNewValue) {
             fails++;
             if (v)
-               System.out.println("Error in eat behaviour: no change found.");
+               System.out.println("Error in eat behaviour: no environment change found.");
         }        
-        if (!approxEquals(envOldValue-10, envNewValue, 0.0000001) && (envOldValue-10) > 0) {
+        if (!approxEquals(envExpectValue, envNewValue, 0.0000001)) {
             fails++;
             if (v)
-               System.out.println("Error in eat behaviour: " + (envOldValue-10) + " expected, " + envNewValue + " found.");
+               System.out.println("Error in eat behaviour amount taken from environment: " + envExpectValue + " expected, " + envNewValue + " found.");
         }
         if (envNewValue < 0) {
             fails++;
@@ -174,7 +181,16 @@ public class BehaviourTest {
             if (v)
                System.out.println("Error in eat behaviour: value at location after eating more than maximum.");
         }        
- 
+        if (prevEnergy == newEnergy) {
+            fails++;
+            if (v)
+               System.out.println("Error in eat behaviour: no energy change found.");
+        }
+        if (!approxEquals(newEnergy, expectEnergy, 0.0000001)) {
+            fails++;
+            if (v)
+               System.out.println("Error in eat behaviour bot energy value: " + expectEnergy + " expected, " + newEnergy + " found.");
+        }        
         return fails;
     }        
     

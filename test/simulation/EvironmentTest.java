@@ -170,7 +170,7 @@ public class EvironmentTest {
             //System.out.println(x + ", " + y + ", " + d);
             e.setField("Test1", 0);
             fails += testGetFixedValues(e, "Test1", 0, true);
-            int val = -1000 + random.nextInt(2000);
+            int val = random.nextInt(100);
             e.setField("Test1", val);
             fails += testGetFixedValues(e, "Test1", val, true);
             int min = -1000 + random.nextInt(2000);

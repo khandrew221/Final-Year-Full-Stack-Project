@@ -143,6 +143,24 @@ public class Environment {
     }    
     
     /**
+     * Returns the normalised value of the field with name n at position x,y, or 0 if name not found or position out of bounds 
+     * 
+     * Req for: envirosense
+     * 
+     * @param n  
+     * @param p
+     * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
+     */
+    public double normValueAtVerbose(String n, Point p) {
+        if (fields.containsKey(n)) {
+            if (inField(p))
+                return fields.get(n).normValueAtVerbose(p);
+            return 0;
+        } else
+            return 0;
+    }    
+    
+    /**
      * Adjusts the field value at the given point.
      * 
      * Req for: eat, field growth
@@ -154,7 +172,7 @@ public class Environment {
      * @param p
      * @param amount
      */
-    public void adjustValueAt(String n, Point p, double amount) {
+    public void adjustValueAt(String n, Point p, double amount) {  
         if (fields.containsKey(n)) {
             if (inField(p))
                 fields.get(n).adjustValueAt(p, amount);

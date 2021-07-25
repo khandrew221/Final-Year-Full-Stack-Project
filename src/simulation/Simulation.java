@@ -67,6 +67,8 @@ public class Simulation {
         //addSense(SenseFactory.MakeBorderSense(environment,1));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
         
+        addBehaviour(new BehaviourEat(0.1, 1, "Test1", environment));
+        
         for (int i = 0; i < maxPop*0.5; i++) {
             addStarterBot(SimConsts.getSTART_ENERGY());
         }  

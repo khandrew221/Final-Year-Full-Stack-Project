@@ -50,6 +50,13 @@ public class SenseEnviro extends Sense {
         for (int slot : samplePoints.keySet()) {   
             Point samplePoint = Point.displace(bot.getPosition(), samplePoints.get(slot));
             double val = env.normValueAt(target, samplePoint);
+            /*if (Double.isNaN(val)) {
+                System.out.println("NAN as sense input.");
+                System.out.println(bot.getPosition());
+                System.out.println(samplePoints.get(slot));
+                System.out.println(samplePoint);
+                System.out.println(env.normValueAtVerbose(target, samplePoint));
+            }*/
             bot.setInput(slot, val);
         }        
     }    

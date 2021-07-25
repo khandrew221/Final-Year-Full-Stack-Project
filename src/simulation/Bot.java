@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import controls.SimConsts;
 import java.util.Set;
 import utility.Point;
 
@@ -105,6 +106,7 @@ public class Bot implements Comparable<Bot> {
      * 
      * Req for: UC012, UC020
      *
+     * @return 
      */
     public Point getPosition() {
         return new Point(position.getX(), position.getY());
@@ -118,6 +120,14 @@ public class Bot implements Comparable<Bot> {
      */
     private void runNN() {
         outputs = nn.output(inputs);
+        for (int i = 0; i < inputs.length; i++) {
+            if (Double.isNaN(inputs[i]))
+                System.out.println("NAN at run: input " + i + ": " + inputs[i]);
+        }
+        for (int i = 0; i < outputs.length; i++) {
+            if (Double.isNaN(outputs[i]))
+                System.out.println("NAN at run: output " + i + ": " + this.getOutput(i));
+        }; 
     }     
     
     /**
@@ -127,7 +137,7 @@ public class Bot implements Comparable<Bot> {
      *
      */
     public void run() {   
-        metabolise();
+        metabolise(-1);
         incrementAge();
         if (energy > 0) {            
             for (Sense s : senses) {
@@ -154,13 +164,14 @@ public class Bot implements Comparable<Bot> {
     
     /**
      * 
-     * Temporary hard coded
-     * 
-     * Req for: UC011
+     * Req for: UC011, UC
      * 
      */
-    private void metabolise() {
-        energy -= 1;
+    public void metabolise(double amount) {
+        energy += amount;
+        if (energy > SimConsts.getMAX_ENERGY()) {
+            energy = SimConsts.getMAX_ENERGY();
+        }
     }
     
     

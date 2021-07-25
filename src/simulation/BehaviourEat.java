@@ -7,10 +7,11 @@ package simulation;
 
 import java.util.HashSet;
 import java.util.Set;
-import utility.Point;
 
 /**
  *
+ * 
+ * 
  * @author Kathryn Andrew
  */
 public class BehaviourEat extends Behaviour {
@@ -18,8 +19,8 @@ public class BehaviourEat extends Behaviour {
     int slot;
     String target;
     Environment environment;
-
-
+    double forageEfficiency; 
+    double energyEfficiency; 
     
     /**
      * Creates an eat behaviour.
@@ -27,18 +28,21 @@ public class BehaviourEat extends Behaviour {
      * @param target
      * @param e
      */
-    public BehaviourEat(String target, Environment e) {
+    public BehaviourEat(double forageEfficiency, double energyEfficiency, String target, Environment e) {
         this.target = target;
         this.environment = e;
+        this.forageEfficiency = forageEfficiency;
+        this.energyEfficiency = energyEfficiency;
     }
 
     
     @Override
     public void execute(Bot bot) {
-        
-        if (bot.getOutput(slot) >= 0.5) {
-            environment.adjustValueAt(target, bot.getPosition(), -10);
-        }        
+         if (bot.getOutput(slot) >= 0.5) {
+            double eatAmount = environment.trueValueAt(target, bot.getPosition())*forageEfficiency;
+            environment.adjustValueAt(target, bot.getPosition(), -eatAmount);
+            bot.metabolise(eatAmount*energyEfficiency);
+        }   
     }
         
     
