@@ -42,21 +42,24 @@ public class FieldMaker extends ComponentMaker {
     JPanel colorSwatch;
     JPanel makerPanel;
     
-    JPanel fieldsPreview;
     
+    JPanel fieldsPreview;
+    LabelledSlider growthPanel;
+        
 
     
     public FieldMaker(SimControl simControl, SimStateFacade simFacade) {
         
         super(simControl, simFacade);
               
-        makerPanel = new JPanel(new GridLayout(5, 1));
+        makerPanel = new JPanel(new GridLayout(6, 1));
         this.add(makerPanel);
         makeNamePanel();
-        makeDensityPanel();        
+        makeDensityPanel();      
+        makeGrowthRatePanel();
         makeColorPanel();
         makeAddComponentButton();
-        
+
        
         fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
         fieldsSelect= new FieldsSelect(this);
@@ -107,6 +110,12 @@ public class FieldMaker extends ComponentMaker {
         makerPanel.add(densityPanel);        
     }
     
+    private void makeGrowthRatePanel() {
+        growthPanel = new LabelledSlider("Growth %", 0, 100, 0);       
+        growthPanel.setPreferredSize(new Dimension(300, 50));
+        makerPanel.add(growthPanel);        
+    }    
+    
     private void makeColorPanel() {
         JPanel colorPanel = new JPanel();  
         
@@ -148,7 +157,7 @@ public class FieldMaker extends ComponentMaker {
                 JOptionPane.showMessageDialog(null, "Invalid name.");
             } else {
                 Color c = colorSwatch.getBackground();
-                boolean existingName = super.getControl().addField(nameField.getText().strip(), densitySlider.getValue(), c.getRed(), c.getGreen(), c.getBlue());
+                boolean existingName = super.getControl().addField(nameField.getText().strip(), densitySlider.getValue(), growthPanel.getValue()/1000.0, c.getRed(), c.getGreen(), c.getBlue());
                 if (existingName)
                     JOptionPane.showMessageDialog(null, "A field with this name already exists.");
                 else {                 

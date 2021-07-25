@@ -50,9 +50,9 @@ public class Environment {
      * 
      * @param name name of the new field
      */
-    void addField(String name, int d, double min, double max, Color color) {
+    void addField(String name, int d, double min, double max, double growthRate, Color color) {
         if (!fields.containsKey(name)) {
-            fields.put(name, new ScalarField(xSize, ySize, d, min, max, color));
+            fields.put(name, new ScalarField(xSize, ySize, d, min, max, growthRate, color));
             fields.get(name).randomise(min, max);
         }
     }     
@@ -141,24 +141,7 @@ public class Environment {
         } else
             return 0;
     }    
-    
-    /**
-     * Returns the normalised value of the field with name n at position x,y, or 0 if name not found or position out of bounds 
-     * 
-     * Req for: envirosense
-     * 
-     * @param n  
-     * @param p
-     * @return value of field with name n at position x,y, or 0 if name not found or position out of bounds 
-     */
-    public double normValueAtVerbose(String n, Point p) {
-        if (fields.containsKey(n)) {
-            if (inField(p))
-                return fields.get(n).normValueAtVerbose(p);
-            return 0;
-        } else
-            return 0;
-    }    
+     
     
     /**
      * Adjusts the field value at the given point.
@@ -176,6 +159,15 @@ public class Environment {
         if (fields.containsKey(n)) {
             if (inField(p))
                 fields.get(n).adjustValueAt(p, amount);
+        }
+    } 
+    
+    /**
+     * Grows all fields
+     */
+    public void growAll() {  
+        for (String n : fields.keySet()) {
+            fields.get(n).grow();
         }
     }      
     

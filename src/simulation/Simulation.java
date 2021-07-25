@@ -60,14 +60,14 @@ public class Simulation {
         clearSimulation();
         maxPop = 100;
         
-        environment.addField("Test1", 11, 0, 100, Color.GREEN);
+        environment.addField("Test1", 11, 0, 100, 0.0001, Color.GREEN);
         environment.randomiseField("Test1", 0, 100);    
         
         addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 0, 0, 0));
         //addSense(SenseFactory.MakeBorderSense(environment,1));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
         
-        addBehaviour(new BehaviourEat(0.1, 1, "Test1", environment));
+        addBehaviour(new BehaviourEat(0.1, 0.01, "Test1", environment));
         
         for (int i = 0; i < maxPop*0.5; i++) {
             addStarterBot(SimConsts.getSTART_ENERGY());
@@ -100,6 +100,8 @@ public class Simulation {
     public synchronized void run() {        
         
         if (runState == SimState.RUNNING) {
+            
+            environment.growAll();
     
             for (Bot bot : bots) {
                 bot.run();
@@ -117,7 +119,7 @@ public class Simulation {
                    addStarterBot(SimConsts.getSTART_ENERGY()); 
                 }  
             }  
-         
+        
             simTime++;         
            
         }
@@ -388,8 +390,8 @@ public class Simulation {
      * 
      * Req for: UC007
      */
-    public void addField(String name, int density, Color color) {
-        environment.addField(name, density, 0, 1, color);
+    public void addField(String name, int density, double growthRate, Color color) {
+        environment.addField(name, density, 0, 1, growthRate, color);
         setState(SimState.STOPPED_WITH_CRITICAL_CHANGE);
     }
     

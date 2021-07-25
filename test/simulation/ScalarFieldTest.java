@@ -41,7 +41,7 @@ public class ScalarFieldTest {
         
         int fails = 0;
         
-        ScalarField s = new ScalarField(100, 100, 2, 0, 100, Color.GREEN);
+        ScalarField s = new ScalarField(100, 100, 2, 0, 100, 0, Color.GREEN);
         
         if (v)
             System.out.println("New field, 0 values expected at all points:");        
@@ -93,7 +93,7 @@ public class ScalarFieldTest {
     public static int testRandom(boolean v) {        
         int fails = 0;
         Random random = new Random();
-        ScalarField s = new ScalarField(100, 100, 2, 0, 100, Color.GREEN);
+        ScalarField s = new ScalarField(100, 100, 2, 0, 100, 0, Color.GREEN);
         
         for (int i = 0; i < 1000; i++) {           
             int x = SimConsts.getENV_MIN_SIZE() + random.nextInt(SimConsts.getENV_MAX_SIZE()-SimConsts.getENV_MIN_SIZE());
@@ -212,7 +212,7 @@ public class ScalarFieldTest {
     
     public static int testAdjust(boolean v) {
         int fails = 0;
-        ScalarField s = new ScalarField(100, 100, 2, 0, 100, Color.GREEN);
+        ScalarField s = new ScalarField(100, 100, 2, 0, 100, 0, Color.GREEN);
         
         s.setTest(3, 3, 3, 3);        
         Point p = new Point(0, 0);

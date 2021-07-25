@@ -56,7 +56,7 @@ public class SenseTest {
         int fails = 0;   
         
         Environment e = new Environment(100,100);
-        e.addField("Test1", 11, 0, 100, Color.GREEN);
+        e.addField("Test1", 11, 0, 100, 0, Color.GREEN);
         e.randomiseField("Test1", 0, 100);
         Sense s = SenseFactory.MakeEnvironmentSense("Test1", e, true, 0, 0, 0);
         s.renumberOutputs(0);
@@ -94,7 +94,7 @@ public class SenseTest {
         int fails = 0;   
         
         Environment e = new Environment(100,100);
-        e.addField("Test1", 11, 0, 100, Color.GREEN);
+        e.addField("Test1", 11, 0, 100, 0, Color.GREEN);
         e.randomiseField("Test1", 0, 100);
         Sense s = SenseFactory.MakeEnvironmentSense("Test1", e, true, 3, 4, 7);
         s.renumberOutputs(0);

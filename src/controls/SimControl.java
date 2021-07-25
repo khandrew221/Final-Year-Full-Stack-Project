@@ -127,11 +127,11 @@ public class SimControl {
      * @param b
      * @return 
      */
-    public boolean addField(String name, int density, int r, int g, int b) {
+    public boolean addField(String name, int density, double growthRate, int r, int g, int b) {
         if (simulation.listFields().contains(name)) {
             return true;
         } else {
-            simulation.addField(name, density, new Color(r, g, b));
+            simulation.addField(name, density, growthRate, new Color(r, g, b));
             return false;
         }
     }

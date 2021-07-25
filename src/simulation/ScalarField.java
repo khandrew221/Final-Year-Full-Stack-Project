@@ -26,9 +26,10 @@ public class ScalarField {
     private double valMax;    
     private double[][] values;
     private Color color;
+    private double growthRate;
     
     
-    public ScalarField(int x, int y, int d, double min, double max, Color color) {
+    public ScalarField(int x, int y, int d, double min, double max, double growthRate, Color color) {
         this.xSize = x;
         this.ySize = y;
         this.density = d;
@@ -41,6 +42,7 @@ public class ScalarField {
         this.xUnit = (double) xSize / (xSamples-1);
         this.yUnit = (double) ySize / (ySamples-1);
         this.color = color;
+        this.growthRate = growthRate;
     }
     
     /**
@@ -373,49 +375,13 @@ public class ScalarField {
         return values.clone();
     }   
     
-    
-        /**
-     * Returns the normal interpolated value at the given x,y location
-     * @param p point within the field
-     * @return interpolated value between 0 and 1 at location 
-     */
-    public double normValueAtVerbose(Point p) {
-        
-        int x1 = getLeftX(p.getX());
-        int x2 = getRightX(p.getX());
-        int y1 = getLowerY(p.getY());
-        int y2 = getUpperY(p.getY()); 
-        
-        System.out.println("x1: " + x1);
-        System.out.println("x2: " + x2);
-        System.out.println("y1: " + y1);
-        System.out.println("y2: " + y2);
-        
-        //closest sample values
-        double Q11 = values[x1][y1];
-        double Q12 = values[x1][y2];
-        double Q21 = values[x2][y1];
-        double Q22 = values[x2][y2];
-        
-        System.out.println("Q11: " + Q11);
-        System.out.println("Q12: " + Q12);
-        System.out.println("Q21: " + Q21);
-        System.out.println("Q22: " + Q22);    
-
-        double f = (p.getX() % xUnit) / xUnit;
-        
-        //System.out.println("f: " + f);
-        
-        double R1 = lerp(Q11, Q21, f);
-        double R2 = lerp(Q12, Q22, f);
-        
-        //System.out.println("R1: " + R1);
-        //System.out.println("R2: " + R2); 
-        
-        f = (p.getY() % yUnit) / yUnit;
-        
-        //System.out.println("f: " + f);
-        
-        return lerp(R1, R2, f);
+    public void grow() {
+        if (growthRate != 0) {
+            for (int x = 0; x < xSamples; x++) {
+                for (int y = 0; y < ySamples; y++) {
+                    adjustSamplePointValue(x, y, growthRate);
+                }
+            } 
+        }
     }
 }

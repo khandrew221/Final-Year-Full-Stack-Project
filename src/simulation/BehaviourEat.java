@@ -38,7 +38,7 @@ public class BehaviourEat extends Behaviour {
     
     @Override
     public void execute(Bot bot) {
-         if (bot.getOutput(slot) >= 0.5) {
+         if (bot.getOutput(slot) > 0.5) {
             double eatAmount = environment.trueValueAt(target, bot.getPosition())*forageEfficiency;
             environment.adjustValueAt(target, bot.getPosition(), -eatAmount);
             bot.metabolise(eatAmount*energyEfficiency);

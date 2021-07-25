@@ -52,7 +52,7 @@ public class EvironmentTest {
                 min = max;
                 max = hold;
         }
-        e.addField("Test1", d, min, max, Color.GREEN);
+        e.addField("Test1", d, min, max, 0, Color.GREEN);
         
         if (!e.listFields().contains("Test1")) {
                 fails++;
@@ -81,7 +81,7 @@ public class EvironmentTest {
             
             Set<String> testSet = new HashSet<>();
             testSet.add("Test1");
-            e.addField("Test1", 11, 0, 100, Color.GREEN);
+            e.addField("Test1", 11, 0, 100, 0, Color.GREEN);
             
             if (!e.listFields().equals(testSet)) {
                 fails++;
@@ -103,9 +103,9 @@ public class EvironmentTest {
             testSet.add("Test2");
             testSet.add("Test3");
             testSet.add("Test4");
-            e.addField("Test2", 11, 0, 100, Color.GREEN);
-            e.addField("Test3", 11, 0, 100, Color.GREEN);
-            e.addField("Test4", 11, 0, 100, Color.GREEN);
+            e.addField("Test2", 11, 0, 100, 0, Color.GREEN);
+            e.addField("Test3", 11, 0, 100, 0, Color.GREEN);
+            e.addField("Test4", 11, 0, 100, 0, Color.GREEN);
             
             if (!e.listFields().equals(testSet)) {
                 fails++;
@@ -166,7 +166,7 @@ public class EvironmentTest {
             int y = SimConsts.getENV_MIN_SIZE() + random.nextInt(SimConsts.getENV_MAX_SIZE()-SimConsts.getENV_MIN_SIZE());
             int d = random.nextInt(SimConsts.getENV_MAX_DENSITY()-SimConsts.getENV_MIN_DENSITY())+SimConsts.getENV_MIN_DENSITY();
             e = new Environment(x,y);
-            e.addField("Test1", d, 0, 100, Color.GREEN);
+            e.addField("Test1", d, 0, 100, 0, Color.GREEN);
             //System.out.println(x + ", " + y + ", " + d);
             e.setField("Test1", 0);
             fails += testGetFixedValues(e, "Test1", 0, true);
@@ -197,7 +197,7 @@ public class EvironmentTest {
         
         for (int i = 0; i < 1000; i++) {
             e = new Environment(100,100);
-            e.addField("Test1", 11, 0, 100, Color.GREEN);
+            e.addField("Test1", 11, 0, 100, 0, Color.GREEN);
             int min = -1000 + random.nextInt(2000);
             int max = -1000 + random.nextInt(2000);
             if (min > max) {
