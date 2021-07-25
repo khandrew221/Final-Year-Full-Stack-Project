@@ -143,6 +143,25 @@ public class Environment {
     }    
     
     /**
+     * Adjusts the field value at the given point.
+     * 
+     * Req for: eat, field growth
+     * 
+     * Post: no field point is over max amount
+     * Post: no field point is under min amount
+     * 
+     * @param n  
+     * @param p
+     * @param amount
+     */
+    public void adjustValueAt(String n, Point p, double amount) {
+        if (fields.containsKey(n)) {
+            if (inField(p))
+                fields.get(n).adjustValueAt(p, amount);
+        }
+    }      
+    
+    /**
      * 
      * Req for: utility
      * 

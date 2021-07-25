@@ -29,6 +29,7 @@ public class ScalarFieldTest {
         
         fails += testMinimal(v); 
         fails += testRandom(v);
+        fails += testAdjust(v);
         
         if (fails == 0)
             return true;
@@ -83,6 +84,8 @@ public class ScalarFieldTest {
         fails += cornerTest(s, 100, 100, 3, 3, 3, 3, v);
         fails += edgeTest(s, 100, 100, 3, 3, 3, 3, v);
         fails += centreTest(s, 100, 100, 3, v);        
+        
+
         
         return fails;
     }
@@ -206,6 +209,121 @@ public class ScalarFieldTest {
             System.out.println("Centre returns expected value.");
         return fails;
     }    
+    
+    public static int testAdjust(boolean v) {
+        int fails = 0;
+        ScalarField s = new ScalarField(100, 100, 2, 0, 100, Color.GREEN);
+        
+        s.setTest(3, 3, 3, 3);        
+        Point p = new Point(0, 0);
+        s.adjustValueAt(p, 1);
+        if(!approxEquals(s.trueValueAt(p), 4, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting 0,0 by +1: 4 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -1);
+        if(!approxEquals(s.trueValueAt(p), 3, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting 0,0 by -1: 3 expected, actual value " + s.trueValueAt(p));
+        }         
+        s.adjustValueAt(p, 1000);
+        if(!approxEquals(s.trueValueAt(p), 100, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting 0,0 to over max: 100 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -1000);
+        if(!approxEquals(s.trueValueAt(p), 0, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting 0,0 to under min: 0 expected, actual value " + s.trueValueAt(p));
+        }  
+        
+        s.setTest(3, 3, 3, 3);        
+        p = new Point(s.getXSize(), s.getYSize());
+        s.adjustValueAt(p, 1);
+        if(!approxEquals(s.trueValueAt(p), 4, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting max,max by +1: 4 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -1);
+        if(!approxEquals(s.trueValueAt(p), 3, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting max,max by -1: 3 expected, actual value " + s.trueValueAt(p));
+        }         
+        s.adjustValueAt(p, 1000);
+        if(!approxEquals(s.trueValueAt(p), 100, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting max,max to over max: 100 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -1000);
+        if(!approxEquals(s.trueValueAt(p), 0, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting max,max to under min: 0 expected, actual value " + s.trueValueAt(p));
+        }         
+
+        s.setTest(3, 3, 3, 3);        
+        p = new Point(s.getXSize()*0.5, s.getYSize()*0.5);
+        s.adjustValueAt(p, 1);
+        if(!approxEquals(s.trueValueAt(p), 3.25, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting centre by +1: 3.25 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -2);
+        if(!approxEquals(s.trueValueAt(p), 2.75, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting centre by -2: 2.75 expected, actual value " + s.trueValueAt(p));
+        }         
+        s.adjustValueAt(p, 1000);
+        if(!approxEquals(s.trueValueAt(p), 100, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting centre to over max: 100 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -1000);
+        if(!approxEquals(s.trueValueAt(p), 0, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting centre to under min: 0 expected, actual value " + s.trueValueAt(p));
+        }
+        
+        s.setTest(3, 3, 3, 3);        
+        p = new Point(s.getXSize()*0.5, s.getYSize());
+        s.adjustValueAt(p, 1);
+        if(!approxEquals(s.trueValueAt(p), 3.5, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting edge by +1 (/2 = 0.5): 3.5 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -2);
+        if(!approxEquals(s.trueValueAt(p), 2.5, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting edge by -2 (/2 = -1): 2.5 expected, actual value " + s.trueValueAt(p));
+        }         
+        s.adjustValueAt(p, 1000);
+        if(!approxEquals(s.trueValueAt(p), 100, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting edge to over max: 100 expected, actual value " + s.trueValueAt(p));
+        }        
+        s.adjustValueAt(p, -1000);
+        if(!approxEquals(s.trueValueAt(p), 0, 0.0000001)) {
+            fails++;
+            if (v)
+                System.out.println("Adjusting edge to under min: 0 expected, actual value " + s.trueValueAt(p));
+        }        
+              
+        return fails;
+    }       
 
     public static boolean approxEquals(double v1, double v2, double tol) {
         if (Math.abs(v1 - v2) > tol) {

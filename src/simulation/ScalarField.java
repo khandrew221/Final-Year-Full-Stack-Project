@@ -126,6 +126,77 @@ public class ScalarField {
         return valMin + (normValueAt(p) * (valMax - valMin));
     } 
 
+    /**
+     * Changes the value of the given sample point by the given amount. Amount
+     * should be in normalised form.
+     * 
+     * pre: x and y values must be valid.
+     * 
+     * Req for: eat behaviour
+     * 
+     * @param x
+     * @param y
+     * @param amount 
+     */
+    private void adjustSamplePointValue(int x, int y, double amount) {   
+        values[x][y] = values[x][y]+amount;
+        if (values[x][y] > 1)
+            values[x][y] = 1;
+        else if (values[x][y] < 0)
+            values[x][y] = 0;
+    }     
+    
+    /**
+     * Changes the value of the field at the given position by the given amount.
+     * Amount will be spread proportionally between closest sample points. 
+     * Req for: eat behaviour
+     * 
+     * @param p
+     * @param amount 
+     */
+    public void adjustValueAt(Point p, double amount) {   
+        
+        // amount as proportion of normalised range
+        double normAmount = amount / (valMax - valMin);
+        
+        int x1 = getLeftX(p.getX());
+        int x2 = getRightX(p.getX());
+        int y1 = getLowerY(p.getY());
+        int y2 = getUpperY(p.getY());        
+       
+        //if point to adjust is exactly on a sample point
+        if (x1 == x2 && y1 == y2) {
+            adjustSamplePointValue(x1, y1, normAmount);
+            return;
+        }
+        
+        //closest sample values
+        double Q11 = values[x1][y1];
+        double Q12 = values[x1][y2];
+        double Q21 = values[x2][y1];
+        double Q22 = values[x2][y2];
+      
+        //get areas between sample values and given point
+        double Q11Area = Math.abs(p.getX()-x1)*Math.abs(p.getY()-y1);
+        double Q12Area = Math.abs(p.getX()-x1)*Math.abs(p.getY()-y2);
+        double Q21Area = Math.abs(p.getX()-x2)*Math.abs(p.getY()-y1);
+        double Q22Area = Math.abs(p.getX()-x2)*Math.abs(p.getY()-y2);  
+        double areaTotal = Q11Area + Q12Area + Q21Area + Q22Area;
+        
+        //change to proportion of total
+        Q11Area = Q11Area/areaTotal;
+        Q12Area = Q12Area/areaTotal;
+        Q21Area = Q21Area/areaTotal;
+        Q22Area = Q22Area/areaTotal;          
+        
+        //adjust points.  Note diagonal swapping of areas: closer to point ->
+        // larger area atteched to diagonal opposite point -> larger proportion
+        // goes to closer point
+        adjustSamplePointValue(x1, y1, normAmount*Q22Area);
+        adjustSamplePointValue(x2, y2, normAmount*Q11Area);
+        adjustSamplePointValue(x1, y2, normAmount*Q21Area);
+        adjustSamplePointValue(x2, y1, normAmount*Q12Area);
+    }         
     
     /**
      * Returns the x sample number immediately to the right of the given x coordinate
@@ -274,6 +345,5 @@ public class ScalarField {
     
     public double[][] getValues() {
         return values.clone();
-    }    
-    
+    }   
 }

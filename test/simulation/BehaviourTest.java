@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
 import utility.Point;
@@ -21,6 +22,7 @@ public class BehaviourTest {
     public static void main(String[] args) {
         testBasicExecution(true);
         testMove(true);
+        testEat(true);
     }
     
     
@@ -122,6 +124,65 @@ public class BehaviourTest {
         }       
         return fails;
     }    
+
+
+    public static int testEat(boolean v) {        
+        int fails = 0;        
+        
+        Environment e = new Environment(100,100);
+        e.addField("Test1", 11, 0, 100, Color.GREEN);
+        e.randomiseField("Test1", 0, 100);
+        Sense s = SenseFactory.MakeEnvironmentSense("Test1", e, true, 3, 4, 7);
+        s.renumberOutputs(0);
+        
+        Behaviour b = new BehaviourEat("Test1", e);
+        b.renumberInputs(0);
+        
+        //no need to add a sense or the behaviour. 
+        //Only required for a bot to pass to the sense.  
+        Set<Sense> senses = new HashSet<>();
+        Set<Behaviour> behaviours = new HashSet<>();
+        GRep g = new GRep(0, 10, 5, 1, 2);
+        g.maximal();
+        Point botPos = new Point(10,10);
+        Bot bot = new Bot(g, senses, behaviours, 20, botPos);
+        
+        //run to get outputs. maximal bot always eats
+        bot.run();
+                    
+        double envOldValue = e.trueValueAt("Test1", botPos);        
+        b.execute(bot);
+        double envNewValue = e.trueValueAt("Test1", botPos);
+
+        if (envOldValue == envNewValue) {
+            fails++;
+            if (v)
+               System.out.println("Error in eat behaviour: no change found.");
+        }        
+        if (!approxEquals(envOldValue-10, envNewValue, 0.0000001) && (envOldValue-10) > 0) {
+            fails++;
+            if (v)
+               System.out.println("Error in eat behaviour: " + (envOldValue-10) + " expected, " + envNewValue + " found.");
+        }
+        if (envNewValue < 0) {
+            fails++;
+            if (v)
+               System.out.println("Error in eat behaviour: value at location after eating less than minimum.");
+        }  
+        if (envNewValue > 100) {
+            fails++;
+            if (v)
+               System.out.println("Error in eat behaviour: value at location after eating more than maximum.");
+        }        
+ 
+        return fails;
+    }        
     
     
+    public static boolean approxEquals(double v1, double v2, double tol) {
+        if (Math.abs(v1 - v2) > tol) {
+            return false;
+        }
+        return true;
+    }    
 }

@@ -1,0 +1,78 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package simulation;
+
+import java.util.HashSet;
+import java.util.Set;
+import utility.Point;
+
+/**
+ *
+ * @author Kathryn Andrew
+ */
+public class BehaviourEat extends Behaviour {
+    
+    int slot;
+    String target;
+    Environment environment;
+
+
+    
+    /**
+     * Creates an eat behaviour.
+     * 
+     * @param target
+     * @param e
+     */
+    public BehaviourEat(String target, Environment e) {
+        this.target = target;
+        this.environment = e;
+    }
+
+    
+    @Override
+    public void execute(Bot bot) {
+        
+        if (bot.getOutput(slot) >= 0.5) {
+            environment.adjustValueAt(target, bot.getPosition(), -10);
+        }        
+    }
+        
+    
+    /**
+     * Returns the set of behaviour input slots.
+     * 
+     * Req for: TESTING
+     * 
+     * @return 
+     */
+    @Override
+    public Set<Integer> inputSlots() {
+        Set<Integer> out = new HashSet<>();
+        out.add(slot);
+        return out;
+    }
+    
+    
+    /**
+     * Renumbers the input slots.  This must be called after adding the behaviour,
+     * and called for all behaviours when a behaviour is removed.
+     * 
+     * Req for: UC004
+     * 
+     */    
+    @Override
+    public void renumberInputs(int startSlot) {
+        slot = startSlot;     
+    }   
+
+    
+    @Override
+    public String toString() {
+        return "Type: eat, " + 
+                "target: " +  target;
+    }
+}
