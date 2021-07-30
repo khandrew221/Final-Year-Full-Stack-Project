@@ -13,16 +13,18 @@ import controls.SimConsts;
  */
 public class FitnessFunction {
     
-    int weightCollisionsPerCycle = -1;
-    int weightCurrentEnergy = 1;
-    int weightDistanceTravelled = 1;
+    int weightCollisionsPerCycle = 0;
+    int weightCurrentEnergy = 0;
+    int weightDistanceTravelled = 0;
+    int weightAmountEaten = 1;
     
     
     public void calcFitness(Bot bot) {        
         double total = 0;        
         total += bot.getCollisionsPerCycle() * weightCollisionsPerCycle;
         total += bot.getEnergy() / SimConsts.getMAX_ENERGY() * weightCurrentEnergy;
-        total += averageDistanceTravelledPerCycle(bot) * weightDistanceTravelled;        
+        total += averageDistanceTravelledPerCycle(bot) * weightDistanceTravelled;       
+        total += bot.getAmountEaten() * weightAmountEaten; 
         bot.setFitness(total);
     }   
     
@@ -62,6 +64,14 @@ public class FitnessFunction {
 
     public int getWeightDistanceTravelled() {
         return weightDistanceTravelled;
+    }
+
+    public int getWeightAmountEaten() {
+        return weightAmountEaten;
+    }
+
+    public void setWeightAmountEaten(int weightAmountEaten) {
+        this.weightAmountEaten = weightAmountEaten;
     }
     
     

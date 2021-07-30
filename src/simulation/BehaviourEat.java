@@ -42,9 +42,13 @@ public class BehaviourEat extends Behaviour {
             double eatAmount = environment.trueValueAt(target, bot.getPosition())*forageEfficiency;
             environment.adjustValueAt(target, bot.getPosition(), -eatAmount);
             bot.metabolise(eatAmount*energyEfficiency);
+            bot.incrementAmountEaten(eatAmount);
         }   
     }
         
+    public double getMaxEatAmountPerTurn() {
+        return environment.getMaxValue(target)*forageEfficiency;
+    }
     
     /**
      * Returns the set of behaviour input slots.

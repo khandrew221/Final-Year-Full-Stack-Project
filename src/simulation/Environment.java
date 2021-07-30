@@ -101,6 +101,21 @@ public class Environment {
     }    
    
     
+    /**
+     * returns the color of the named field, or white if no field with that name
+     * is found.
+     * 
+     * Req for: fitness
+     * 
+     * @param name 
+     */
+    Double getMaxValue(String name) {
+        if (fields.containsKey(name))
+            return fields.get(name).getValMax();
+        else
+            return 0.0;
+    }      
+    
 
 
     /**

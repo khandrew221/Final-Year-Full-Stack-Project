@@ -10,7 +10,9 @@ package simulation;
  * @author Kathryn Andrew
  */
 public enum BehaviourType {
-    MOVE("move");
+    MOVE("move"),
+    EAT("eat");
+    
     
     public final String label;
 

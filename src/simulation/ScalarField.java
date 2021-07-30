@@ -355,6 +355,10 @@ public class ScalarField {
         return density;
     }
     
+    public double getValMax() {
+        return valMax;
+    }    
+    
     private double normalise(double x) {
         return (x-valMin)/(valMax-valMin);        
     }

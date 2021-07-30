@@ -50,12 +50,12 @@ public class EncogAdapter implements NNAdapter {
             int trueN = 0;
             //loop nodes in layer
             for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
-                if (g.nodeAt(L, n)) {
+                //if (g.nodeAt(L, n)) {
                     //map node's actual to code position
                     nodeMap.put(new LNPair(trueL, trueN), new LNPair(L, n));
                     //increment number of nodes in layer
                     trueN++;
-                }
+                //}
             }
             //if the layer has nodes, increment true layer for next pass.
             //no nodes means the layer is empty, and will not exist in the true network
@@ -85,21 +85,21 @@ public class EncogAdapter implements NNAdapter {
                     //if the end node exists 
                     if (p2 != null) {                       
                         //and there is supposed to be a connection
-                        if (g.connectionAt(p1.getLayer(), p1.getNode(), p2.getNode())) {
+                        //if (g.connectionAt(p1.getLayer(), p1.getNode(), p2.getNode())) {
                             //add the connection weight
                             nn.addWeight(L, n, n2, parseWeight(g.weightAt(p1.getLayer(), p1.getNode(), p2.getNode())));
-                        } else {
+                        //} else {
                             //nodes exist, but connection does not.  Disable connection.
-                            nn.enableConnection(L, n, n2, false);
-                        }
+                            //nn.enableConnection(L, n, n2, false);
+                       // }
                     //connections to an output are a special case.  These will not have a destination
                     //in the node map. All outputs exist in code order, so n2 can be used. 
                     } else if (L == nn.getLayerCount()-2) {
-                        if (g.connectionAt(p1.getLayer(), p1.getNode(), n2)) {
+                        //if (g.connectionAt(p1.getLayer(), p1.getNode(), n2)) {
                             nn.addWeight(L, n, n2, parseWeight(g.weightAt(p1.getLayer(), p1.getNode(), n2)));
-                        } else {
-                            nn.enableConnection(L, n, n2, false);
-                        }                        
+                        //} else {
+                        //    nn.enableConnection(L, n, n2, false);
+                        //}                        
                     }
                 }
             }
@@ -113,13 +113,13 @@ public class EncogAdapter implements NNAdapter {
                 //if the end node exists 
                 if (p != null) {                       
                     //and there is supposed to be a connection
-                    if (g.connectionAt(0, n, p.getNode())) {
+                    //if (g.connectionAt(0, n, p.getNode())) {
                             //add the connection weight
                             nn.addWeight(0, n, n2, parseWeight(g.weightAt(0, n, p.getNode())));
-                    } else {
+                    //} else {
                             //nodes exist, but connection does not.  Disable connection.
-                            nn.enableConnection(0, n, n2, false);
-                    }
+                            //nn.enableConnection(0, n, n2, false);
+                    //}
                 }
             } 
         }
@@ -212,26 +212,26 @@ public class EncogAdapter implements NNAdapter {
         int itr = r.gridLength() + r.mainConnectionsLength();
         for (int I = 0; I < NUM_INPUTS; I++) {
             for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
-                if (r.connectionAt(0, I, n)) {
+                //if (r.connectionAt(0, I, n)) {
                     itr++;
                     out.add(parseWeight(r.weightAt(0, I, n)));
                     itr+=8;
-                } else {
-                    itr+=9;
-                }
+                //} else {
+                //    itr+=9;
+                //}
             }
         }
         itr = r.gridLength();
         for (int L = 1; L <= MAX_LAYERS; L++) {
             for (int n = 0; n < MAX_NODES_PER_LAYER; n++) {
                 for (int n2 = 0; n2 < MAX_NODES_PER_LAYER; n2++) {
-                    if (r.connectionAt(L, n, n2)) {
+                    //if (r.connectionAt(L, n, n2)) {
                         itr++;
                         out.add(parseWeight(r.weightAt(L, n, n2)));
                         itr+=8;
-                    } else {
-                        itr+=9;
-                    }
+                    //} else {
+                    //    itr+=9;
+                    //}
                 }
             }
         }        
@@ -286,13 +286,13 @@ public class EncogAdapter implements NNAdapter {
      * If the index is invalid, returns 0.
      * @return number of nodes in the neural network
      */
-    /*
+    
     public int getTotalNodeCount(){
         int total = 0;
         for (int i = 0; i < nn.getLayerCount(); i++) {
             total += nn.getLayerNeuronCount(i);
         }        
         return total;
-    }*/
+    }
 
 }

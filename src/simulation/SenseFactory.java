@@ -21,7 +21,7 @@ public class SenseFactory {
      * Creates an envirosense.
      * @return 
      */
-    public static SenseEnviro MakeEnvironmentSense(String target, Environment e, boolean centred, int rings, int pointsPerRing, int radius) {
+    public static SenseEnviro MakeEnvironmentSense(String target, Environment e, boolean centred, int rings, int pointsPerRing, double radius) {
         
         List<Point> samplePoints = new ArrayList<>();
         
@@ -50,7 +50,7 @@ public class SenseFactory {
      * @param radius
      * @return 
      */
-    public static SenseBorder MakeBorderSense(Environment e, int radius) {
+    public static SenseBorder MakeBorderSense(Environment e, double radius) {
         
         List<Point> samplePoints = new ArrayList<>();
         

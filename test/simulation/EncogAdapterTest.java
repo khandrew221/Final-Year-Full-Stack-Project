@@ -20,7 +20,13 @@ public class EncogAdapterTest {
      */
     public static void main(String[] args) {
         
-        NNAdaptorTest(true);        
+        NNAdaptorTest(true);   
+        
+        
+                  
+        //varianceTest(true);
+        
+
     }
     
     public static boolean NNAdaptorTest(boolean v) {
@@ -85,6 +91,8 @@ public class EncogAdapterTest {
         if (totalFails == 0)
             return true;
         
+
+        
         return false;
     }
     
@@ -129,6 +137,9 @@ public class EncogAdapterTest {
     public static int outputTest(EncogAdapter nn, int NUM_INPUTS, int NUM_OUTPUTS, boolean v) {
         int fails = 0;
         double[] in = new double[NUM_INPUTS];
+        for (int i = 0; i < in.length; i++) {
+            in[i] = Math.random();
+        } 
         double[] out = nn.output(in);
         if (out.length != NUM_OUTPUTS) {
             fails++;
@@ -141,8 +152,74 @@ public class EncogAdapterTest {
                 if (v)
                     System.out.println("Outputs range mismatch: value between 0 and 1 expected, " + x + " found.");             
             }
-        }
+        }    
         
         return fails;
     }
+    
+    public static int varianceTest( boolean v) {
+        
+        EncogAdapter nn = new EncogAdapter();
+        int MAX_LAYERS = 1;
+        int MAX_NODES_PER_LAYER = 2;
+        int NUM_INPUTS = 2;
+        int NUM_OUTPUTS = 1;
+        GRep r = new GRep(0, MAX_LAYERS, MAX_NODES_PER_LAYER, NUM_INPUTS, NUM_OUTPUTS);
+        r.randomise();
+        //r.maximal();
+        nn.createFromGRep(r);
+
+        System.out.println("Layers: " + nn.getLayerCount()); 
+        System.out.println("Nodes: " + nn.getTotalNodeCount()); 
+                System.out.println(nn.weights());             
+         
+        
+        int fails = 0;
+        double[] in = new double[NUM_INPUTS];
+        double[] totalOut = new double[NUM_OUTPUTS];
+        double[] minOut = new double[NUM_OUTPUTS];
+        double[] maxOut = new double[NUM_OUTPUTS];
+        
+        double[] out = nn.output(in);
+        
+        for (int i = 0; i < minOut.length; i++) {
+                minOut [i] = out[i];
+                maxOut [i] = out[i];                
+        }  
+        
+        for (int n = 0; n < 1000; n++) {
+        
+            for (int i = 0; i < in.length; i++) {
+                in[i] = n/1000.0;
+            } 
+            out = nn.output(in);
+
+            for (int i = 0; i < out.length; i++) {
+                totalOut[i] += out[i];
+            } 
+
+            for (int i = 0; i < out.length; i++) {
+                if (out[i] > maxOut[i])
+                    maxOut[i] = out[i];
+                if (out[i] < minOut[i])
+                    minOut[i] = out[i];                
+            }           
+            
+            /*for (int i = 0; i < in.length; i++) {
+                System.out.println("In: " + in[i]);             
+            }        
+            /*for (int i = 0; i < out.length; i++) {
+                System.out.println("Out: " + out[i]);             
+            }  */      
+            
+        }
+        
+        for (int i = 0; i < totalOut.length; i++) {
+                System.out.println("mean Out: " + totalOut[i] / 1000);   
+                System.out.println("max Out: " + maxOut[i]); 
+                System.out.println("min Out: " + minOut[i]); 
+        }  
+        
+        return fails;
+    }    
 }

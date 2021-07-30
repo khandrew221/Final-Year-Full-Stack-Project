@@ -111,7 +111,7 @@ public class FieldMaker extends ComponentMaker {
     }
     
     private void makeGrowthRatePanel() {
-        growthPanel = new LabelledSlider("Growth %", 0, 100, 0);       
+        growthPanel = new LabelledSlider("Growth %", 0, 10, 100, 0);       
         growthPanel.setPreferredSize(new Dimension(300, 50));
         makerPanel.add(growthPanel);        
     }    
@@ -157,7 +157,7 @@ public class FieldMaker extends ComponentMaker {
                 JOptionPane.showMessageDialog(null, "Invalid name.");
             } else {
                 Color c = colorSwatch.getBackground();
-                boolean existingName = super.getControl().addField(nameField.getText().strip(), densitySlider.getValue(), growthPanel.getValue()/1000.0, c.getRed(), c.getGreen(), c.getBlue());
+                boolean existingName = super.getControl().addField(nameField.getText().strip(), densitySlider.getValue(), growthPanel.getValue()/100.0, c.getRed(), c.getGreen(), c.getBlue());
                 if (existingName)
                     JOptionPane.showMessageDialog(null, "A field with this name already exists.");
                 else {                 

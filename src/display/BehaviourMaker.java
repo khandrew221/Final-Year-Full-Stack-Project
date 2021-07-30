@@ -36,6 +36,11 @@ public class BehaviourMaker extends ComponentMaker {
     
     JSlider maxSpeedSlider;
     JLabel maxSpeedLabel = new JLabel();    
+    
+    JComboBox fieldSelector;
+    
+    LabelledSlider selectForageEfficiency;
+    LabelledSlider selectEnergyEfficiency;
 
     /**
      * 
@@ -51,6 +56,7 @@ public class BehaviourMaker extends ComponentMaker {
         this.add(makerPanel);
         
         makeTypeSelector();
+              makeFieldSelector();
         
         typeSpecificMakerPanel = new JPanel();
         typeSpecificMakerPanel.setPreferredSize(new Dimension(500,500));
@@ -92,8 +98,14 @@ public class BehaviourMaker extends ComponentMaker {
                 setForBehaviourMove();
                 this.revalidate();
                 break;
+            case "eat":
+                setForBehaviourEat();
+                this.revalidate();
+                break;                
             default:
                 typeSpecificMakerPanel.removeAll();
+                this.revalidate();
+                break;
         }        
     }   
     
@@ -124,6 +136,25 @@ public class BehaviourMaker extends ComponentMaker {
                         }
                         break;                          
                 }  
+            case "eat":
+                String target = (String) fieldSelector.getSelectedItem();
+                error = super.getControl().addBehaviourEat(selectForageEfficiency.getValue()/100.0, selectForageEfficiency.getValue()/100.0, target);
+                switch(error) {
+                    case 0:
+                        this.update();
+                        this.revalidate();
+                        break;
+                    case 3:
+                        int response = JOptionPane.showConfirmDialog(null,
+                                            "Behaviours cannot be added or removed while the simulation is running. \n Stop simulation and add behaviour?",
+                                            "Warning",
+                                            JOptionPane.YES_NO_OPTION); 
+                        if(response == JOptionPane.YES_OPTION){
+                           super.getControl().stop();
+                           addBehaviourType(type);                           
+                        }
+                        break;                          
+                }                  
                 break;
         }        
     }     
@@ -144,6 +175,26 @@ public class BehaviourMaker extends ComponentMaker {
           }
         });       
         sliderSetup(maxSpeedPanel, maxSpeedSlider, maxSpeedLabel, "Maximum speed: "); 
+    }     
+    
+    /**
+     * 
+     */    
+    private void setForBehaviourEat() {
+        typeSpecificMakerPanel.removeAll();
+        
+        JPanel selectorPanel = new JPanel(new BorderLayout()); 
+        JLabel selectorLabel = new JLabel("Target field: ");
+        selectorPanel.setPreferredSize(new Dimension(350, 50));
+        selectorPanel.add(selectorLabel, BorderLayout.WEST);
+        selectorPanel.add(fieldSelector, BorderLayout.EAST);
+        typeSpecificMakerPanel.add(selectorPanel); 
+        
+        selectForageEfficiency = new LabelledSlider("Forage efficiency", -10, 10, 21, 11);
+        typeSpecificMakerPanel.add(selectForageEfficiency); 
+        selectEnergyEfficiency = new LabelledSlider("Energy efficiency", -10, 10, 21, 11);
+        typeSpecificMakerPanel.add(selectEnergyEfficiency); 
+        
     }     
 
     @Override
@@ -184,6 +235,8 @@ public class BehaviourMaker extends ComponentMaker {
      * Updates the behaviourMaker panel.  Call after switching to tab.
      */
     public void updateAll() {
+        //update for potentially changed field list. 
+        makeFieldSelector();
         
         //apply updates
         setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
@@ -219,4 +272,16 @@ public class BehaviourMaker extends ComponentMaker {
         container.add(slider, BorderLayout.EAST);
         typeSpecificMakerPanel.add(container);  
     }
+    
+    /**
+     * !!!Warning from line String[] t = types.toArray(new String[0]); suppressed.
+     * toArray is generally broken in Java and throws unnecessary warnings. 
+     */    
+    @SuppressWarnings("unchecked")      
+    private void makeFieldSelector() {
+        Set<String> fields = super.getFacade().getFields();        
+        String[] f = fields.toArray(new String[0]);
+        fieldSelector = new JComboBox(f);
+        fieldSelector.addActionListener(this);
+    }     
 }

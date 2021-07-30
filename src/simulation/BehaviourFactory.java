@@ -23,4 +23,16 @@ public class BehaviourFactory {
         return new BehaviourMove(maxSpd, min, max);
     }
     
+    /**
+     * Creates an eat behaviour
+     * @param forageEfficiency
+     * @param energyEfficiency
+     * @param target
+     * @param e
+     * @return 
+     */
+    public static BehaviourEat makeBehaviourEat(double forageEfficiency, double energyEfficiency, String target, Environment e) {
+        return new BehaviourEat(forageEfficiency, energyEfficiency, target, e);
+    }    
+    
 }

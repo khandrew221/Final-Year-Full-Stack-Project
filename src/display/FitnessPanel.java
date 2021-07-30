@@ -47,7 +47,7 @@ public class FitnessPanel extends JPanel {
         fitnessSliders = new ArrayList<>();
         this.setBorder(BorderFactory.createTitledBorder(title));
         for(String name : ParamsAndWeights.keySet()) {
-            LabelledSlider entry = new LabelledSlider(name, -10, 10, ParamsAndWeights.get(name));
+            LabelledSlider entry = new LabelledSlider(name, -10, 10, 20, ParamsAndWeights.get(name)+10);
             this.add(entry);
             fitnessSliders.add(entry);
         }             
@@ -61,7 +61,7 @@ public class FitnessPanel extends JPanel {
     public void updateFitnessWeights() {
         Map<String, Integer> newWeights = new HashMap<>();
         for (LabelledSlider slider : fitnessSliders) {
-            newWeights.put(slider.getName(), slider.getValue());
+            newWeights.put(slider.getName(), (int) slider.getValue());
         }
         simControl.setFitnessWeights(newWeights);
     }

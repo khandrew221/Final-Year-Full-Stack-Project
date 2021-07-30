@@ -187,7 +187,7 @@ public class Simulation {
     public synchronized void addStarterBot(int startEnergy) {
         if (population() < maxPop) {
             GRep g = GAEngine.randomGRep(nnInputs, nnOutputs);
-            Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(environment.getXSize()/2,environment.getYSize()/2));
             bots.add(bot);                
         }
     }     
@@ -204,7 +204,8 @@ public class Simulation {
         if (population() < maxPop) {
             updateBotOrder(); //only need to update for GA methods
             GRep g = GAEngine.breedGRep(bots, true); //breed with mutation
-            Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
+            //environment.randomPosition()
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(environment.getXSize()/2,environment.getYSize()/2));
             bots.add(bot); 
         }
     }     

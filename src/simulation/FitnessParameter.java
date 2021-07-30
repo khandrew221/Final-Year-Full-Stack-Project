@@ -13,7 +13,8 @@ public enum FitnessParameter {
     
     COLLISIONS_PER_CYCLE("Collisions"),
     DISTANCE_TRAVELLED("DistanceTravelled"),
-    CURRENT_ENERGY("CurrentEnergy");
+    CURRENT_ENERGY("CurrentEnergy"),
+    AMOUNT_EATEN("AmountEaten");
     
     public final String label;
 

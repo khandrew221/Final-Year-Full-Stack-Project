@@ -32,6 +32,7 @@ public class Bot implements Comparable<Bot> {
     private int age;
     private double distanceTravelled;
     private int collisions;    
+    private double amountEaten; 
     
     private double fitness;
     
@@ -63,6 +64,7 @@ public class Bot implements Comparable<Bot> {
         distanceTravelled = 0;
         collisions = 0;
         fitness = 0;
+        amountEaten = 0;
     }
     
     
@@ -321,6 +323,38 @@ public class Bot implements Comparable<Bot> {
         }
         return 0;
     }
+    
+    /**
+     * Returns this bot's amount eaten as a proportion of max possible per turn
+     * Req for: fitness function
+     * @return 
+     */    
+    public double getAmountEaten() {
+        if (age > 0) {
+            double maxEat = 0;
+            for (Behaviour behaviour : behaviours) {                
+                if (behaviour instanceof BehaviourEat) {
+                     maxEat += ((BehaviourEat) behaviour).getMaxEatAmountPerTurn()*age;
+                }
+            }
+            if (maxEat != 0) {
+                return (double) amountEaten / maxEat;
+                
+            }
+            else
+                return 0;
+        }
+        return 0;
+    }    
+    
+    /**
+     * Returns this bot's amount eaten as a proportion of max possible per turn
+     * Req for: fitness function
+     * @return 
+     */    
+    public void incrementAmountEaten(double amt) {
+        amountEaten += amt;
+    }      
     
     /**
      * Returns the maximum move speed of the bot

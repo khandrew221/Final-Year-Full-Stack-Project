@@ -240,7 +240,7 @@ public class SenseMaker extends ComponentMaker {
      */    
     private void setForBorderSense() {
         typeSpecificMakerPanel.removeAll();                     
-        borderRadiusSlider = new LabelledSlider("radius", 1, 5, 3);
+        borderRadiusSlider = new LabelledSlider("radius", 1, 5, 4, 0);
         borderRadiusSlider.setPreferredSize(new Dimension(350, 50));    
         typeSpecificMakerPanel.add(borderRadiusSlider);      
     }    

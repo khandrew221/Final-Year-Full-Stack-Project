@@ -6,7 +6,6 @@
 package simulation;
 
 import java.util.BitSet;
-import java.util.List;
 import java.util.Random;
 import java.util.SortedSet;
 
@@ -211,6 +210,9 @@ public class GeneticAlgorithmEngine {
         case DISTANCE_TRAVELLED:
           fitnessFunction.setWeightDistanceTravelled(weight);
           break;
+        case AMOUNT_EATEN:
+          fitnessFunction.setWeightAmountEaten(weight);
+          break;          
       }      
     }    
     
@@ -227,6 +229,8 @@ public class GeneticAlgorithmEngine {
           return fitnessFunction.getWeightCurrentEnergy();
         case DISTANCE_TRAVELLED:
           return fitnessFunction.getWeightDistanceTravelled();
+        case AMOUNT_EATEN:
+          return fitnessFunction.getWeightAmountEaten();  
       }
       return 0;
     }

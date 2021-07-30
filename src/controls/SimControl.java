@@ -177,7 +177,7 @@ public class SimControl {
      * @param radius
      * @return error code
      */
-    public int addSenseBorder(int radius) {
+    public int addSenseBorder(double radius) {
         if (isStopped()) {
             Sense sense = SenseFactory.MakeBorderSense(simulation.getEnvironment(), radius);
             if (simulation.containsSense(sense)) {
@@ -207,6 +207,21 @@ public class SimControl {
         } 
         return 3;
     }    
+    
+    /**
+     * 0 for no errors
+     * 3 for modification while running warning
+     * @return 
+     */
+    public int addBehaviourEat(double forageEfficiency, double energyEfficiency, String target) {
+        if (isStopped()) {
+            Behaviour behaviour = BehaviourFactory.makeBehaviourEat(forageEfficiency, energyEfficiency, target, simulation.getEnvironment());
+            simulation.addBehaviour(behaviour);
+            return 0;
+        } 
+        return 3;
+    }    
+        
     
     /**
      * Removes fields with the given names.
