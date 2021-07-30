@@ -6,7 +6,6 @@
 package display;
 
 import controls.SimControl;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -20,10 +19,7 @@ import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import simulation.SimStateFacade;
 
 /**
@@ -36,15 +32,14 @@ public class FieldMaker extends ComponentMaker {
     private FieldsGraphics fieldsGraphics;    
     
     JTextField nameField;
-    JSlider densitySlider;
-    JLabel densityLabel; 
     JButton colorChooser;
     JPanel colorSwatch;
     JPanel makerPanel;
     
     
     JPanel fieldsPreview;
-    LabelledSlider growthPanel;
+    LabelledSlider growthRateSlider;
+    LabelledSlider densitySlider;
         
 
     
@@ -56,7 +51,7 @@ public class FieldMaker extends ComponentMaker {
         this.add(makerPanel);
         makeNamePanel();
         makeDensityPanel();      
-        makeGrowthRatePanel();
+        makeGrowthRateSlider();
         makeColorPanel();
         makeAddComponentButton();
 
@@ -84,36 +79,14 @@ public class FieldMaker extends ComponentMaker {
         makerPanel.add(namePanel);                
     }
     
-    private void makeDensityPanel() {
-        JPanel densityPanel = new JPanel(new BorderLayout());            
-        densityPanel.setPreferredSize(new Dimension(300, 50));
-        
-        densitySlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 11);
-        densitySlider.setMajorTickSpacing(20);
-        densitySlider.setPaintTicks(true);
-        densitySlider.setPaintLabels(true);
-        
-        densitySlider.addChangeListener(new ChangeListener() {
-          @Override
-          public void stateChanged(ChangeEvent event) {
-            if (densitySlider.getValue() < 2) {
-                densitySlider.setValue(2);
-            }
-            densityLabel.setText("Density: " + densitySlider.getValue());
-          }
-        });
-                
-        densityLabel = new JLabel("Density: " + densitySlider.getValue());   
-        
-        densityPanel.add(densityLabel, BorderLayout.WEST);
-        densityPanel.add(densitySlider, BorderLayout.EAST);
-        makerPanel.add(densityPanel);        
+    private void makeDensityPanel() {    
+        densitySlider = new LabelledSlider("Density", 0, 100, 100, 11);
+        makerPanel.add(densitySlider);        
     }
     
-    private void makeGrowthRatePanel() {
-        growthPanel = new LabelledSlider("Growth %", 0, 10, 100, 0);       
-        growthPanel.setPreferredSize(new Dimension(300, 50));
-        makerPanel.add(growthPanel);        
+    private void makeGrowthRateSlider() {
+        growthRateSlider = new LabelledSlider("Growth %", 0, 10, 100, 0);       
+        makerPanel.add(growthRateSlider);        
     }    
     
     private void makeColorPanel() {
@@ -157,7 +130,7 @@ public class FieldMaker extends ComponentMaker {
                 JOptionPane.showMessageDialog(null, "Invalid name.");
             } else {
                 Color c = colorSwatch.getBackground();
-                boolean existingName = super.getControl().addField(nameField.getText().strip(), densitySlider.getValue(), growthPanel.getValue()/100.0, c.getRed(), c.getGreen(), c.getBlue());
+                boolean existingName = super.getControl().addField(nameField.getText().strip(), (int) densitySlider.getValue(), growthRateSlider.getValue()/100.0, c.getRed(), c.getGreen(), c.getBlue());
                 if (existingName)
                     JOptionPane.showMessageDialog(null, "A field with this name already exists.");
                 else {                 

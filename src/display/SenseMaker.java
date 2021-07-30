@@ -18,9 +18,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import simulation.SimStateFacade;
 
 /**
@@ -35,16 +32,13 @@ public class SenseMaker extends ComponentMaker {
     JPanel typeSpecificMakerPanel;
    
     JComboBox typeSelector;
-    
     JComboBox fieldSelector;
-    JSlider envRingsSlider;
-    JLabel envRingsLabel = new JLabel();    
-    JSlider envPointsSlider;
-    JLabel envPointsLabel = new JLabel();
-    JSlider envRadiusSlider;
-    JLabel envRadiusLabel = new JLabel();   
     JCheckBox envCentred = new JCheckBox("Include point at bot location?");
+    
     LabelledSlider borderRadiusSlider;
+    LabelledSlider envRadiusSlider;
+    LabelledSlider envRingsSlider;   
+    LabelledSlider envPointsSlider; 
     
 
     /**
@@ -133,7 +127,7 @@ public class SenseMaker extends ComponentMaker {
         {
             case "environment":
                 String target = (String) fieldSelector.getSelectedItem();
-                int error = super.getControl().addSenseEnviro(target, envCentred.isSelected(), envRingsSlider.getValue(), envPointsSlider.getValue(), envRadiusSlider.getValue());
+                int error = super.getControl().addSenseEnviro(target, envCentred.isSelected(), (int) envRingsSlider.getValue(), (int) envPointsSlider.getValue(), (int) envRadiusSlider.getValue());
                 switch(error) {
                     case 0:
                         this.update();
@@ -199,40 +193,15 @@ public class SenseMaker extends ComponentMaker {
         centredPanel.setPreferredSize(new Dimension(350, 50));
         centredPanel.add(envCentred);
         typeSpecificMakerPanel.add(centredPanel);       
-                
-        JPanel ringsPanel = new JPanel(new BorderLayout()); 
-        ringsPanel.setPreferredSize(new Dimension(350, 50));
-        envRingsSlider = new JSlider(JSlider.HORIZONTAL, 0, 3, 0);                 
-        envRingsSlider.addChangeListener(new ChangeListener() {
-          @Override
-          public void stateChanged(ChangeEvent event) {
-            envRingsLabel.setText("Rings: " + envRingsSlider.getValue());
-          }
-        });       
-        sliderSetup(ringsPanel, envRingsSlider, envRingsLabel, "Rings: "); 
+              
+        envRingsSlider = new LabelledSlider("Rings", 0, 3, 3, 0);
+        typeSpecificMakerPanel.add(envRingsSlider);     
+
+        envPointsSlider = new LabelledSlider("Points per ring", 1, 20, 19, 0);
+        typeSpecificMakerPanel.add(envPointsSlider); 
         
-        JPanel pointsPanel = new JPanel(new BorderLayout()); 
-        pointsPanel.setPreferredSize(new Dimension(350, 50));
-        envPointsSlider = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);                 
-        envPointsSlider.addChangeListener(new ChangeListener() {
-          @Override
-          public void stateChanged(ChangeEvent event) {
-            envPointsLabel.setText("Points per ring: " + envPointsSlider.getValue());
-          }
-        });                        
-        sliderSetup(pointsPanel, envPointsSlider, envPointsLabel, "Points per ring: ");    
-        
-        JPanel radiusPanel = new JPanel(new BorderLayout()); 
-        radiusPanel.setPreferredSize(new Dimension(350, 50));
-        envRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 20, 1);                 
-        envRadiusSlider.addChangeListener(new ChangeListener() {
-          @Override
-          public void stateChanged(ChangeEvent event) {
-            envRadiusLabel.setText("Ring radius: " + envRadiusSlider.getValue());
-          }
-        });                        
-        sliderSetup(radiusPanel, envRadiusSlider, envRadiusLabel, "Ring radius: ");         
-        
+        envRadiusSlider = new LabelledSlider("Ring radius", 1, 20, 19, 0);
+        typeSpecificMakerPanel.add(envRadiusSlider);         
     }    
     
     /**
@@ -309,15 +278,5 @@ public class SenseMaker extends ComponentMaker {
        Map<String, String> out = (Map<String, String>) super.getFacade().senseReport();  
        return out;    
     }    
-    
-
-    private void sliderSetup(JPanel container, JSlider slider, JLabel label, String labelText) {
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);       
-        label.setText(labelText + slider.getValue());
-        container.add(label, BorderLayout.WEST);
-        container.add(slider, BorderLayout.EAST);
-        typeSpecificMakerPanel.add(container);  
-    }
     
 }

@@ -17,9 +17,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import simulation.SimStateFacade;
 
 /**
@@ -32,13 +29,10 @@ public class BehaviourMaker extends ComponentMaker {
     JPanel makerPanel;
     JPanel typeSpecificMakerPanel;
    
-    JComboBox typeSelector;
-    
-    JSlider maxSpeedSlider;
-    JLabel maxSpeedLabel = new JLabel();    
-    
+    JComboBox typeSelector; 
     JComboBox fieldSelector;
     
+    LabelledSlider maxSpeedSlider;  
     LabelledSlider selectForageEfficiency;
     LabelledSlider selectEnergyEfficiency;
 
@@ -164,17 +158,8 @@ public class BehaviourMaker extends ComponentMaker {
      */    
     private void setForBehaviourMove() {
         typeSpecificMakerPanel.removeAll();
-        
-        JPanel maxSpeedPanel = new JPanel(new BorderLayout()); 
-        maxSpeedPanel.setPreferredSize(new Dimension(350, 50));
-        maxSpeedSlider = new JSlider(JSlider.HORIZONTAL, 1, 5, 1);                 
-        maxSpeedSlider.addChangeListener(new ChangeListener() {
-          @Override
-          public void stateChanged(ChangeEvent event) {
-            maxSpeedLabel.setText("Maximum speed: " + maxSpeedSlider.getValue());
-          }
-        });       
-        sliderSetup(maxSpeedPanel, maxSpeedSlider, maxSpeedLabel, "Maximum speed: "); 
+        maxSpeedSlider = new LabelledSlider("Maximum speed", 1, 5, 4, 0);
+        typeSpecificMakerPanel.add(maxSpeedSlider);
     }     
     
     /**
@@ -190,9 +175,9 @@ public class BehaviourMaker extends ComponentMaker {
         selectorPanel.add(fieldSelector, BorderLayout.EAST);
         typeSpecificMakerPanel.add(selectorPanel); 
         
-        selectForageEfficiency = new LabelledSlider("Forage efficiency", -10, 10, 21, 11);
+        selectForageEfficiency = new LabelledSlider("Forage efficiency (%)", -10, 10, 20, 11);
         typeSpecificMakerPanel.add(selectForageEfficiency); 
-        selectEnergyEfficiency = new LabelledSlider("Energy efficiency", -10, 10, 21, 11);
+        selectEnergyEfficiency = new LabelledSlider("Energy efficiency (%)", -10, 10, 20, 11);
         typeSpecificMakerPanel.add(selectEnergyEfficiency); 
         
     }     
@@ -262,16 +247,6 @@ public class BehaviourMaker extends ComponentMaker {
        Map<String, String> out = (Map<String, String>) super.getFacade().behaviourReport();  
        return out;    
     }    
-    
-
-    private void sliderSetup(JPanel container, JSlider slider, JLabel label, String labelText) {
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);       
-        label.setText(labelText + slider.getValue());
-        container.add(label, BorderLayout.WEST);
-        container.add(slider, BorderLayout.EAST);
-        typeSpecificMakerPanel.add(container);  
-    }
     
     /**
      * !!!Warning from line String[] t = types.toArray(new String[0]); suppressed.

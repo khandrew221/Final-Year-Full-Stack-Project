@@ -34,7 +34,7 @@ public class LabelledSlider extends JPanel {
 
         this.name = name;
         slider = new JSlider(JSlider.HORIZONTAL, 0, steps, start);
-        slider.setMajorTickSpacing(20);
+        slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
         
         label = new JLabel(name + ": " + String.format("%.2f",getValue())); 
