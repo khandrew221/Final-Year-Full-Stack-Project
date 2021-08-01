@@ -6,6 +6,7 @@
 package display;
 
 import controls.SimControl;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
@@ -45,27 +47,43 @@ public class FieldMaker extends ComponentMaker {
     
     public FieldMaker(SimControl simControl, SimStateFacade simFacade) {
         
-        super(simControl, simFacade);
-              
+        super(simControl, simFacade);             
+        this.setLayout(new BorderLayout());        
+        
+        JLabel info = new JLabel();
+        info.setText("<html>Fields can be used to represent any scalar valued factor within the environment, such as the amount of food or other resource available in a location." +
+                " The values of the field can be sensed at specific points by a bot using an Envirosense.  Resources can be taken from the field and converted into energy by an eat behaviour.");
+        this.add(info, BorderLayout.PAGE_END); 
+        info.setPreferredSize(new Dimension(600, 100));
+        info.setBorder(BorderFactory.createEtchedBorder());
+        
+        JPanel mainHolder = new JPanel();
+        mainHolder.setBorder(BorderFactory.createEtchedBorder());
+        this.add(mainHolder);
+        
         makerPanel = new JPanel(new GridLayout(6, 1));
-        this.add(makerPanel);
+        mainHolder.add(makerPanel);
+
+        
         makeNamePanel();
         makeDensityPanel();      
         makeGrowthRateSlider();
         makeColorPanel();
         makeAddComponentButton();
 
-       
-        fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
+      
+                fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
         fieldsSelect= new FieldsSelect(this);
-        this.add(fieldsSelect);
+        mainHolder.add(fieldsSelect);
         
         fieldsSelect.setup("Fields", getIDsAndLabels(), true, true);
 
         
         makeRemoveComponentButton();
         
-        this.add(fieldsGraphics);
+
+        mainHolder.add(fieldsGraphics);
+        
     }
     
     
@@ -80,13 +98,18 @@ public class FieldMaker extends ComponentMaker {
     }
     
     private void makeDensityPanel() {    
-        densitySlider = new LabelledSlider("Density", 0, 100, 100, 11);
-        makerPanel.add(densitySlider);        
+        densitySlider = new LabelledSlider("Density", 2, 20, 18, 11, null);
+        makerPanel.add(densitySlider);   
+        densitySlider.setToolTipText("<html>Controls how close sample points in the scalar field are.<br>"
+                + "Lower density leads to smoother gradients in larger patches,"
+                + "<br>but less overall material.</html>");
     }
     
     private void makeGrowthRateSlider() {
-        growthRateSlider = new LabelledSlider("Growth %", 0, 10, 100, 0);       
-        makerPanel.add(growthRateSlider);        
+        growthRateSlider = new LabelledSlider("Growth %", 0, 0.1, 100, 0, null);       
+        makerPanel.add(growthRateSlider); 
+        growthRateSlider.setToolTipText("<html>Controls how quickly the resource represented by the field will increase over time,<br>"
+                + "up to its maximum value.</html>");        
     }    
     
     private void makeColorPanel() {
@@ -103,7 +126,7 @@ public class FieldMaker extends ComponentMaker {
         colorPanel.add(colorChooser);
         
         makerPanel.add(colorPanel);               
-    }    
+    }       
 
     @Override
     void makeAddComponentButton() {

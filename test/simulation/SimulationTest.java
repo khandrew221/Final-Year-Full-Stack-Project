@@ -121,15 +121,15 @@ public class SimulationTest {
             if (v)
                 System.out.println("Number of behaviours incorrect. 2 expected, " + s.getBehaviours().size() + " found.");
         }    
-         if (s.getSenses().size() != 1) {
+         if (s.getSenses().size() != 2) {
             fails++;
             if (v)
-                System.out.println("Number of senses incorrect. 1 expected, " + s.getSenses().size() + " found.");
+                System.out.println("Number of senses incorrect. 2 expected, " + s.getSenses().size() + " found.");
         }  
-         if (s.getNnInputs() != 1) {
+         if (s.getNnInputs() != 41) {
             fails++;
             if (v)
-                System.out.println("Number of inputs incorrect. 1 expected, " + s.getNnInputs() + " found.");
+                System.out.println("Number of inputs incorrect. 41 expected, " + s.getNnInputs() + " found.");
         }  
          if (s.getNnOutputs() != 3) {
             fails++;
@@ -181,15 +181,15 @@ public class SimulationTest {
             if (v)
                 System.out.println("Number of behaviours incorrect. 2 expected, " + s.getBehaviours().size() + " found.");
         }    
-         if (s.getSenses().size() != 1) {
+         if (s.getSenses().size() != 2) {
             fails++;
             if (v)
-                System.out.println("Number of senses incorrect. 1 expected, " + s.getSenses().size() + " found.");
+                System.out.println("Number of senses incorrect. 2 expected, " + s.getSenses().size() + " found.");
         }  
-         if (s.getNnInputs() != 1) {
+         if (s.getNnInputs() != 41) {
             fails++;
             if (v)
-                System.out.println("Number of inputs incorrect. 1 expected, " + s.getNnInputs() + " found.");
+                System.out.println("Number of inputs incorrect. 41 expected, " + s.getNnInputs() + " found.");
         }  
          if (s.getNnOutputs() != 3) {
             fails++;

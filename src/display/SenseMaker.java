@@ -10,8 +10,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -40,6 +43,10 @@ public class SenseMaker extends ComponentMaker {
     LabelledSlider envRingsSlider;   
     LabelledSlider envPointsSlider; 
     
+    SamplePointsPreview preview;
+    
+    JLabel info;
+    
 
     /**
      * 
@@ -50,23 +57,34 @@ public class SenseMaker extends ComponentMaker {
     public SenseMaker(SimControl simControl, SimStateFacade simFacade) {
         
         super(simControl, simFacade);
-              
+        this.setLayout(new BorderLayout());        
+        
+        info = new JLabel();
+        info.setText("<html>Senses provide inputs to a bot's neural network, and allow it to percieve its environment.</html>");
+        this.add(info, BorderLayout.PAGE_END); 
+        info.setPreferredSize(new Dimension(600, 100));
+        info.setBorder(BorderFactory.createEtchedBorder());
+        
+        JPanel mainHolder = new JPanel();
+        mainHolder.setBorder(BorderFactory.createEtchedBorder());
+        this.add(mainHolder);
+        
         makerPanel = new JPanel(new GridLayout(5, 1));
-        this.add(makerPanel);
+        mainHolder.add(makerPanel);
         
         makeTypeSelector();
         makeFieldSelector();
 
         typeSpecificMakerPanel = new JPanel();
         typeSpecificMakerPanel.setPreferredSize(new Dimension(500,500));
-        this.add(typeSpecificMakerPanel);
+        mainHolder.add(typeSpecificMakerPanel);
         
         
         makeAddComponentButton();
         makeRemoveComponentButton();
        
         sensesSelect= new SensesSelect(this);
-        this.add(sensesSelect);        
+        mainHolder.add(sensesSelect);        
         sensesSelect.setup("Senses", getIDsAndLabels(), true, true);  
         sensesSelect.setPreferredSize(new Dimension(500,500));
         
@@ -194,14 +212,28 @@ public class SenseMaker extends ComponentMaker {
         centredPanel.add(envCentred);
         typeSpecificMakerPanel.add(centredPanel);       
               
-        envRingsSlider = new LabelledSlider("Rings", 0, 3, 3, 0);
+        envRingsSlider = new LabelledSlider("Rings", 0, 3, 3, 0, this);
+        envRingsSlider.setToolTipText("<html>Sets the number of rings of sample points.</html>");
         typeSpecificMakerPanel.add(envRingsSlider);     
 
-        envPointsSlider = new LabelledSlider("Points per ring", 1, 20, 19, 0);
+        envPointsSlider = new LabelledSlider("Points per ring", 1, 20, 19, 0, this);
+        envPointsSlider.setToolTipText("<html>Sets the number of sample points per ring.</html>");
         typeSpecificMakerPanel.add(envPointsSlider); 
         
-        envRadiusSlider = new LabelledSlider("Ring radius", 1, 20, 19, 0);
-        typeSpecificMakerPanel.add(envRadiusSlider);         
+        envRadiusSlider = new LabelledSlider("Ring radius", 1, 20, 19, 0, this);
+        envRadiusSlider.setToolTipText("<html>Sets the distance between sample point rings.</html>");
+        typeSpecificMakerPanel.add(envRadiusSlider);    
+        
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+        super.getControl().getEnviroSamplePoints(x, y,  envCentred.isSelected(), (int) envRingsSlider.getValue(), (int) envPointsSlider.getValue(), (int) envRadiusSlider.getValue());
+        preview = new SamplePointsPreview(200, 200, x, y);
+        typeSpecificMakerPanel.add(preview);  
+        
+        info.setText("<html>An environment sense allows bots to percieve their surroundings by sampling the values of a target "
+                + "environment field at fixed points relative to themselves. Each sample point represents a single input to the "
+                + "bot's neural network.</html>");
+        this.repaint();
     }    
     
     /**
@@ -209,9 +241,18 @@ public class SenseMaker extends ComponentMaker {
      */    
     private void setForBorderSense() {
         typeSpecificMakerPanel.removeAll();                     
-        borderRadiusSlider = new LabelledSlider("radius", 1, 5, 4, 0);
+        borderRadiusSlider = new LabelledSlider("radius", 1, 5, 4, 0, this);
         borderRadiusSlider.setPreferredSize(new Dimension(350, 50));    
+        borderRadiusSlider.setToolTipText("<html>Sets the distance at which the bot will detect the border.</html>");
         typeSpecificMakerPanel.add(borderRadiusSlider);      
+        info.setText("<html>A border sense alerts the bot that it is within a given distance of the environment border. It produces "
+                + "a strong input if any of its sample points fall outside the environment bounds, and a zero input otherwise.</html>");
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+        super.getControl().getBorderSamplePoints(x, y, borderRadiusSlider.getValue());
+        preview = new SamplePointsPreview(100, 100, x, y);
+        typeSpecificMakerPanel.add(preview);  
+        this.repaint();
     }    
 
     @Override
@@ -243,6 +284,7 @@ public class SenseMaker extends ComponentMaker {
     public void update() {
         sensesSelect.setup("Senses", getIDsAndLabels(), true, false);
         sensesSelect.setPreferredSize(new Dimension(500,500));
+        updatePreview();
         this.repaint();
         this.revalidate();    
     }
@@ -278,5 +320,24 @@ public class SenseMaker extends ComponentMaker {
        Map<String, String> out = (Map<String, String>) super.getFacade().senseReport();  
        return out;    
     }    
+    
+    private void updatePreview() {
+        String type = (String) typeSelector.getSelectedItem();
+        List<Double> x = new ArrayList<>();
+        List<Double> y = new ArrayList<>();
+        switch(type)
+        {
+            case "environment": {
+                super.getControl().getEnviroSamplePoints(x, y,  envCentred.isSelected(), (int) envRingsSlider.getValue(), (int) envPointsSlider.getValue(), (int) envRadiusSlider.getValue());
+                preview.setPoints(x, y);                  
+                break;
+            }
+            case "border": {
+                super.getControl().getBorderSamplePoints(x, y, borderRadiusSlider.getValue());
+                preview.setPoints(x, y);
+                break;                          
+            }
+        }                
+    }
     
 }

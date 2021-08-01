@@ -12,6 +12,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -35,6 +36,8 @@ public class BehaviourMaker extends ComponentMaker {
     LabelledSlider maxSpeedSlider;  
     LabelledSlider selectForageEfficiency;
     LabelledSlider selectEnergyEfficiency;
+    
+    JLabel info;
 
     /**
      * 
@@ -45,23 +48,35 @@ public class BehaviourMaker extends ComponentMaker {
     public BehaviourMaker(SimControl simControl, SimStateFacade simFacade) {
         
         super(simControl, simFacade);
-              
+        this.setLayout(new BorderLayout());        
+        
+        info = new JLabel();
+        info.setText("<html>Behaviours are controlled by the output of a bot's neural network, and allow it to respond to sensory inputs e.g. by moving or eating.</html>");
+        this.add(info, BorderLayout.PAGE_END); 
+        info.setPreferredSize(new Dimension(600, 100));
+        info.setBorder(BorderFactory.createEtchedBorder());
+        
+        JPanel mainHolder = new JPanel();
+        mainHolder.setBorder(BorderFactory.createEtchedBorder());
+        this.add(mainHolder);
+        
         makerPanel = new JPanel(new GridLayout(5, 1));
-        this.add(makerPanel);
+        mainHolder.add(makerPanel);        
+              
         
         makeTypeSelector();
               makeFieldSelector();
         
         typeSpecificMakerPanel = new JPanel();
         typeSpecificMakerPanel.setPreferredSize(new Dimension(500,500));
-        this.add(typeSpecificMakerPanel);
+        mainHolder.add(typeSpecificMakerPanel);
         
         
         makeAddComponentButton();
         makeRemoveComponentButton();
        
         behavioursSelect = new BehavioursSelect(this);
-        this.add(behavioursSelect);        
+        mainHolder.add(behavioursSelect);        
         behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true);  
         behavioursSelect.setPreferredSize(new Dimension(500,500));
         
@@ -158,8 +173,10 @@ public class BehaviourMaker extends ComponentMaker {
      */    
     private void setForBehaviourMove() {
         typeSpecificMakerPanel.removeAll();
-        maxSpeedSlider = new LabelledSlider("Maximum speed", 1, 5, 4, 0);
+        maxSpeedSlider = new LabelledSlider("Maximum speed", 1, 5, 4, 0, this);
         typeSpecificMakerPanel.add(maxSpeedSlider);
+        info.setText("<html>A move behaviour allows the bot to move in response to its sensory inputs. Bots cannot move outside of the bounds of the environment.</html>");
+        this.repaint();    
     }     
     
     /**
@@ -175,11 +192,19 @@ public class BehaviourMaker extends ComponentMaker {
         selectorPanel.add(fieldSelector, BorderLayout.EAST);
         typeSpecificMakerPanel.add(selectorPanel); 
         
-        selectForageEfficiency = new LabelledSlider("Forage efficiency (%)", -10, 10, 20, 11);
+        selectForageEfficiency = new LabelledSlider("Forage efficiency (%)", -10, 10, 20, 11, null);
+        selectForageEfficiency .setToolTipText("<html>Controls how much of the resource the bot will consume in a single round.<br>"
+                + "Negative values will instead cause the bot to desposit the resource in the environment.</html>");      
         typeSpecificMakerPanel.add(selectForageEfficiency); 
-        selectEnergyEfficiency = new LabelledSlider("Energy efficiency (%)", -10, 10, 20, 11);
+        selectEnergyEfficiency = new LabelledSlider("Energy efficiency (%)", -10, 10, 20, 11, null);
+        selectEnergyEfficiency .setToolTipText("<html>Controls what proportion of the resource consumed will be converted to energy.</html>");            
         typeSpecificMakerPanel.add(selectEnergyEfficiency); 
-        
+        info.setText("<html>An eat behaviour allows the bot to interact with an environment field by consuming or excreting resources.<br> "
+                + "Two positive values for forage and energy efficiency will cause the bot to gain energy from consuming the resource.<br>"
+                + "A negative forage and a positive energy efficiency will cause the bot to lose energy from depositing the resource.<br>"
+                + "A positive forage and a negative energy efficiency will cause the bot to lose energy from consuming the resource.<br>"
+                + "Two negative values for forage and energy efficiency will cause the bot to gain energy from depositing the resource.</html>");
+        this.repaint();         
     }     
 
     @Override
@@ -219,6 +244,7 @@ public class BehaviourMaker extends ComponentMaker {
     /**
      * Updates the behaviourMaker panel.  Call after switching to tab.
      */
+    @Override
     public void updateAll() {
         //update for potentially changed field list. 
         makeFieldSelector();

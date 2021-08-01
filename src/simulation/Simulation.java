@@ -63,11 +63,10 @@ public class Simulation {
         environment.addField("Test1", 11, 0, 100, 0.0001, Color.GREEN);
         environment.randomiseField("Test1", 0, 100);    
         
-        addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 0, 0, 0));
-        //addSense(SenseFactory.MakeBorderSense(environment,1));
+        addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 3, 12, 7));
+        addSense(SenseFactory.MakeBorderSense(environment,5));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
-        
-        addBehaviour(new BehaviourEat(0.1, 0.01, "Test1", environment));
+        addBehaviour(new BehaviourEat(0.1, 0.1, "Test1", environment));
         
         for (int i = 0; i < maxPop*0.5; i++) {
             addStarterBot(SimConsts.getSTART_ENERGY());
@@ -187,7 +186,7 @@ public class Simulation {
     public synchronized void addStarterBot(int startEnergy) {
         if (population() < maxPop) {
             GRep g = GAEngine.randomGRep(nnInputs, nnOutputs);
-            Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(environment.getXSize()/2,environment.getYSize()/2));
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
             bots.add(bot);                
         }
     }     
@@ -204,8 +203,7 @@ public class Simulation {
         if (population() < maxPop) {
             updateBotOrder(); //only need to update for GA methods
             GRep g = GAEngine.breedGRep(bots, true); //breed with mutation
-            //environment.randomPosition()
-            Bot bot = new Bot(g, senses, behaviours, startEnergy, new Point(environment.getXSize()/2,environment.getYSize()/2));
+            Bot bot = new Bot(g, senses, behaviours, startEnergy, environment.randomPosition());
             bots.add(bot); 
         }
     }     

@@ -19,8 +19,8 @@ public class SimConsts {
     private static int ENV_MIN_DENSITY = 2;
     private static int ENV_MAX_DENSITY = 10;
     
-    private static int START_ENERGY = 500;
-    private static int MAX_ENERGY = 600;
+    private static int START_ENERGY = 600;
+    private static int MAX_ENERGY = 6000;
     
     private static int FITNESS_WEIGHT_MIN = -10;
     private static int FITNESS_WEIGHT_MAX = 10;    

@@ -6,6 +6,7 @@
 package controls;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import simulation.Behaviour;
@@ -222,6 +223,25 @@ public class SimControl {
         return 3;
     }    
         
+    /**
+     * 
+     * @return 
+     */
+    public void getBorderSamplePoints(List<Double> x, List<Double> y, double radius) {
+        x.clear();
+        y.clear();
+        SenseFactory.getBorderSamplePoints(x, y, radius);
+    }       
+    
+    /**
+     * 
+     * @return 
+     */
+    public void getEnviroSamplePoints(List<Double> x, List<Double> y, boolean centred, int rings, int pointsPerRing, double radius) {
+        x.clear();
+        y.clear();
+        SenseFactory.getEnviroSamplePoints(x, y, centred, rings, pointsPerRing, radius);
+    }       
     
     /**
      * Removes fields with the given names.

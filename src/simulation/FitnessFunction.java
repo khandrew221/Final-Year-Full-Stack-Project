@@ -13,7 +13,7 @@ import controls.SimConsts;
  */
 public class FitnessFunction {
     
-    int weightCollisionsPerCycle = 0;
+    int weightCollisionsPerCycle = -1;
     int weightCurrentEnergy = 0;
     int weightDistanceTravelled = 0;
     int weightAmountEaten = 1;

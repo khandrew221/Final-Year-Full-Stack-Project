@@ -61,4 +61,41 @@ public class SenseFactory {
 
         return new SenseBorder(e, samplePoints);
     }    
+    
+    
+    public static void getBorderSamplePoints(List<Double> x, List<Double> y, double radius) {
+        x.add(0.0);
+        x.add(0.0);
+        x.add(radius);
+        x.add(-radius);
+        y.add(radius);
+        y.add(-radius);
+        y.add(0.0);
+        y.add(0.0);        
+    } 
+    
+    public static void getEnviroSamplePoints(List<Double> xVals, List<Double> yVals, boolean centred, int rings, int pointsPerRing, double radius) {
+        List<Point> samplePoints = new ArrayList<>();
+        
+        if(centred) {
+            samplePoints.add(new Point(0,0));
+        } 
+        
+        if (rings > 0 && pointsPerRing > 0) {
+            double radianStep = Math.PI*2/pointsPerRing;
+            for (int ring = 0; ring < rings; ring++) {
+                for (int points = 0; points < pointsPerRing; points++) {
+                    double radians = (radianStep * points);
+                    double x = radius*(ring+1)*Math.cos(radians);
+                    double y = radius*(ring+1)*Math.sin(radians);
+                    samplePoints.add(new Point(x, y));
+                }
+            }
+        }    
+        
+        for (Point p : samplePoints) {
+            xVals.add(p.getX());
+            yVals.add(p.getY());            
+        }
+    }     
 }

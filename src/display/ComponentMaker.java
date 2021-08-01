@@ -16,7 +16,7 @@ import simulation.SimStateFacade;
  *
  * @author Kathryn Andrew
  */
-public abstract class ComponentMaker extends JPanel implements ActionListener {
+public abstract class ComponentMaker extends JPanel implements ActionListener, Updatable  {
     
     private SimControl simControl;
     private SimStateFacade simFacade;

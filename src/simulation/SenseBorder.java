@@ -27,7 +27,7 @@ public class SenseBorder extends Sense {
         for (int i = 0; i < points.size(); i++) {
             this.points.put(i, points.get(i));
         }
-    }    
+    }  
     
     /**
      *

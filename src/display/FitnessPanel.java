@@ -47,7 +47,7 @@ public class FitnessPanel extends JPanel {
         fitnessSliders = new ArrayList<>();
         this.setBorder(BorderFactory.createTitledBorder(title));
         for(String name : ParamsAndWeights.keySet()) {
-            LabelledSlider entry = new LabelledSlider(name, -10, 10, 20, ParamsAndWeights.get(name)+10);
+            LabelledSlider entry = new LabelledSlider(name, -10, 10, 20, ParamsAndWeights.get(name)+10, null);
             this.add(entry);
             fitnessSliders.add(entry);
         }             

@@ -6,6 +6,7 @@
 package display;
 
 import java.awt.Dimension;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -24,13 +25,15 @@ public class LabelledSlider extends JPanel {
     double min;
     double max;
     int steps;
+    Updatable container;
     
-    public LabelledSlider(String name, int min, int max, int steps, int start) {
+    public LabelledSlider(String name, double min, double max, int steps, int start, Updatable container) {
         this.setPreferredSize(new Dimension(300, 50));
         
         this.min = min;
         this.max = max;
         this.steps = steps;
+        this.container = container;
 
         this.name = name;
         slider = new JSlider(JSlider.HORIZONTAL, 0, steps, start);
@@ -43,9 +46,13 @@ public class LabelledSlider extends JPanel {
           @Override
           public void stateChanged(ChangeEvent event) {
             label.setText(name + ": " + String.format("%.2f",getValue()));
+            if (container != null) {
+                container.update();
+            }
           }
         });
                 
+        
         this.add(label);
         this.add(slider);      
     }
@@ -57,6 +64,12 @@ public class LabelledSlider extends JPanel {
     @Override
     public String getName() {
         return name;
+    }
+    
+    @Override
+    public void setToolTipText(String s) {
+        label.setToolTipText(s);
+        slider.setToolTipText(s);
     }
 
 }
