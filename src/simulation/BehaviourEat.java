@@ -81,6 +81,8 @@ public class BehaviourEat extends Behaviour {
     @Override
     public String toString() {
         return "Type: eat, " + 
-                "target: " +  target;
+                "target: " +  target +               
+                ", forage %: " +  (forageEfficiency * 100) +
+                ", energy %: " +  (energyEfficiency * 100);
     }
 }

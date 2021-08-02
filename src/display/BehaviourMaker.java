@@ -147,7 +147,7 @@ public class BehaviourMaker extends ComponentMaker {
                 }  
             case "eat":
                 String target = (String) fieldSelector.getSelectedItem();
-                error = super.getControl().addBehaviourEat(selectForageEfficiency.getValue()/100.0, selectForageEfficiency.getValue()/100.0, target);
+                error = super.getControl().addBehaviourEat(selectForageEfficiency.getValue()/100.0, selectEnergyEfficiency.getValue()/100.0, target);
                 switch(error) {
                     case 0:
                         this.update();
@@ -196,7 +196,7 @@ public class BehaviourMaker extends ComponentMaker {
         selectForageEfficiency .setToolTipText("<html>Controls how much of the resource the bot will consume in a single round.<br>"
                 + "Negative values will instead cause the bot to desposit the resource in the environment.</html>");      
         typeSpecificMakerPanel.add(selectForageEfficiency); 
-        selectEnergyEfficiency = new LabelledSlider("Energy efficiency (%)", -10, 10, 20, 11, null);
+        selectEnergyEfficiency = new LabelledSlider("Energy efficiency (%)", -100, 100, 200, 101, null);
         selectEnergyEfficiency .setToolTipText("<html>Controls what proportion of the resource consumed will be converted to energy.</html>");            
         typeSpecificMakerPanel.add(selectEnergyEfficiency); 
         info.setText("<html>An eat behaviour allows the bot to interact with an environment field by consuming or excreting resources.<br> "
