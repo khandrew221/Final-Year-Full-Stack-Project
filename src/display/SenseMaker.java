@@ -31,21 +31,21 @@ public class SenseMaker extends ComponentMaker {
     
     private SensesSelect sensesSelect; 
     
-    JPanel makerPanel;
-    JPanel typeSpecificMakerPanel;
+    private JPanel makerPanel;
+    private JPanel typeSpecificMakerPanel;
    
-    JComboBox typeSelector;
-    JComboBox fieldSelector;
-    JCheckBox envCentred = new JCheckBox("Include point at bot location?");
+    private JComboBox typeSelector;
+    private JComboBox fieldSelector;
+    private JCheckBox envCentred = new JCheckBox("Include point at bot location?");
     
-    LabelledSlider borderRadiusSlider;
-    LabelledSlider envRadiusSlider;
-    LabelledSlider envRingsSlider;   
-    LabelledSlider envPointsSlider; 
+    private LabelledSlider borderRadiusSlider;
+    private LabelledSlider envRadiusSlider;
+    private LabelledSlider envRingsSlider;   
+    private LabelledSlider envPointsSlider; 
     
-    SamplePointsPreview preview;
+    private SamplePointsPreview preview;
     
-    JLabel info;
+    private JLabel info;
     
 
     /**

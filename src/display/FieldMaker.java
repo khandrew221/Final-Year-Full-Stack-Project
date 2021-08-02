@@ -33,15 +33,15 @@ public class FieldMaker extends ComponentMaker {
     private FieldsSelect fieldsSelect; 
     private FieldsGraphics fieldsGraphics;    
     
-    JTextField nameField;
-    JButton colorChooser;
-    JPanel colorSwatch;
-    JPanel makerPanel;
+    private JTextField nameField;
+    private JButton colorChooser;
+    private JPanel colorSwatch;
+    private JPanel makerPanel;
     
     
-    JPanel fieldsPreview;
-    LabelledSlider growthRateSlider;
-    LabelledSlider densitySlider;
+    private JPanel fieldsPreview;
+    private LabelledSlider growthRateSlider;
+    private LabelledSlider densitySlider;
         
 
     

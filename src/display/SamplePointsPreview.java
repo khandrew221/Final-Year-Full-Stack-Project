@@ -19,8 +19,8 @@ public class SamplePointsPreview extends JComponent {
 
     private int HEIGHT;  
     private int WIDTH; 
-    List<Double> xValues; 
-    List<Double> yValues;
+    private List<Double> xValues; 
+    private List<Double> yValues;
     
     /**
      * 

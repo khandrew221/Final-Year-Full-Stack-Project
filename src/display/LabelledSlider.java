@@ -19,13 +19,13 @@ import javax.swing.event.ChangeListener;
  */
 public class LabelledSlider extends JPanel {
 
-    JSlider slider;
-    JLabel label;
-    String name;
-    double min;
-    double max;
-    int steps;
-    Updatable container;
+    private JSlider slider;
+    private JLabel label;
+    private String name;
+    private double min;
+    private double max;
+    private int steps;
+    private Updatable container;
     
     public LabelledSlider(String name, double min, double max, int steps, int start, Updatable container) {
         this.setPreferredSize(new Dimension(300, 50));

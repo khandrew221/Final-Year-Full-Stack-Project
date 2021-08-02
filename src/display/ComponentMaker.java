@@ -36,7 +36,7 @@ public abstract class ComponentMaker extends JPanel implements ActionListener, U
     
     SimStateFacade getFacade() {
         return simFacade;
-    }
+    } 
         
     /**
      * 

@@ -24,7 +24,7 @@ public class SimVis extends JComponent {
     private int simHeight;  
     private int simWidth;     
     private SimStateFacade sim;
-    FieldsGraphics fieldsGraphics;
+    private FieldsGraphics fieldsGraphics;
     
     public SimVis(SimStateFacade s, int simW, int simH, int w, int h) {
         HEIGHT = h;

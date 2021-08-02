@@ -27,17 +27,17 @@ import simulation.SimStateFacade;
 public class BehaviourMaker extends ComponentMaker {
     private BehavioursSelect behavioursSelect; 
     
-    JPanel makerPanel;
-    JPanel typeSpecificMakerPanel;
+    private JPanel makerPanel;
+    private JPanel typeSpecificMakerPanel;
    
-    JComboBox typeSelector; 
-    JComboBox fieldSelector;
+    private JComboBox typeSelector; 
+    private JComboBox fieldSelector;
     
-    LabelledSlider maxSpeedSlider;  
-    LabelledSlider selectForageEfficiency;
-    LabelledSlider selectEnergyEfficiency;
+    private LabelledSlider maxSpeedSlider;  
+    private LabelledSlider selectForageEfficiency;
+    private LabelledSlider selectEnergyEfficiency;
     
-    JLabel info;
+    private JLabel info;
 
     /**
      * 

@@ -25,8 +25,8 @@ public class FitnessPanel extends JPanel {
     private SimControl simControl;
     private SimStateFacade simFacade;    
     
-    JPanel fitnessSliderPanel;
-    List<LabelledSlider> fitnessSliders;
+    private JPanel fitnessSliderPanel;
+    private List<LabelledSlider> fitnessSliders;
     
     public FitnessPanel(SimControl simControl, SimStateFacade simFacade) {        
         this.simControl = simControl;
