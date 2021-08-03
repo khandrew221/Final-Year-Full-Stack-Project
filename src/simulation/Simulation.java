@@ -245,6 +245,9 @@ public class Simulation {
                 b.put("PosX", bot.getPosition().getX());
                 b.put("PosY", bot.getPosition().getY());
                 b.put("ID", bot.getID());
+                b.put("Fitness", bot.getFitness());
+                b.put("Age", bot.getAge());
+                b.put("Generation", bot.getGeneration());
                 out.add(b);
             }   
         }        

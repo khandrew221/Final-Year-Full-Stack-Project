@@ -69,7 +69,7 @@ public class RunView extends JPanel {
         try {
             time  = (long) simReport.get("time");
         } catch (Exception e) {
-            System.out.println("Error casting timen to long.");
+            System.out.println("Error casting time to long.");
         }
         dataPanel.updateData(population, time);
         simVis.updateData();        

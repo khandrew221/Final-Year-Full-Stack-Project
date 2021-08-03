@@ -26,6 +26,9 @@ public class SimVis extends JComponent {
     private SimStateFacade sim;
     private FieldsGraphics fieldsGraphics;
     
+    private int minGen;
+    private int maxGen;
+    
     public SimVis(SimStateFacade s, int simW, int simH, int w, int h) {
         HEIGHT = h;
         WIDTH = w;
@@ -39,9 +42,9 @@ public class SimVis extends JComponent {
     }
     
     protected void paintBots(Graphics g) {
-        int r = 7;
-        g.setColor(Color.RED);        
+        int r = 7;    
         for (Map<String, Object> m : sim.botReport()) {
+            g.setColor(genToColour((int) m.get("Generation"))); 
             double x = simToVisX((double) m.get("PosX"));
             double y = simToVisY((double) m.get("PosY"));
             g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));
@@ -53,6 +56,7 @@ public class SimVis extends JComponent {
      */
     public void updateData() {
         fieldsGraphics.updateData(sim.fieldsReport());
+        setMinMaxGen();
         repaint();
     }
     
@@ -108,6 +112,20 @@ public class SimVis extends JComponent {
         fieldsGraphics.setActiveFields(newActiveFields);
     } 
     
+    public Color genToColour(int gen) {
+        if (minGen == maxGen) {
+            return new Color(255, 0, 0);
+        } else {
+           double range = maxGen-minGen;
+           double val = (double) gen-minGen;
+           val = val/range*255;
+           if (val > 255)
+               val = 255;
+           if (val < 0)
+               val = 0;           
+           return new Color((int) Math.round(val), 0, 0);
+        }
+    }
     
     @Override
     protected void paintComponent(Graphics g) {
@@ -116,4 +134,17 @@ public class SimVis extends JComponent {
         this.paintBots(g);
     } 
     
+    private void setMinMaxGen() {
+        minGen = Integer.MAX_VALUE;
+        maxGen = 0;
+        for (Map<String, Object> m : sim.botReport()) {
+            int gen = (int) m.get("Generation"); 
+            if (gen > maxGen) {
+                maxGen = gen;
+            }
+            if (gen < minGen) {
+                minGen = gen;
+            }
+        }
+    }
 }

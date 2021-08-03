@@ -22,12 +22,13 @@ public class LabelledSlider extends JPanel {
     private JSlider slider;
     private JLabel label;
     private String name;
+    private String text;
     private double min;
     private double max;
     private int steps;
     private Updatable container;
     
-    public LabelledSlider(String name, double min, double max, int steps, int start, Updatable container) {
+    public LabelledSlider(String name, String text, double min, double max, int steps, int start, Updatable container) {
         this.setPreferredSize(new Dimension(300, 50));
         
         this.min = min;
@@ -36,16 +37,17 @@ public class LabelledSlider extends JPanel {
         this.container = container;
 
         this.name = name;
+        this.text = text;
         slider = new JSlider(JSlider.HORIZONTAL, 0, steps, start);
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
         
-        label = new JLabel(name + ": " + String.format("%.2f",getValue())); 
+        label = new JLabel(text + ": " + String.format("%.2f",getValue())); 
         
         slider.addChangeListener(new ChangeListener() {
           @Override
           public void stateChanged(ChangeEvent event) {
-            label.setText(name + ": " + String.format("%.2f",getValue()));
+            label.setText(text + ": " + String.format("%.2f",getValue()));
             if (container != null) {
                 container.update();
             }

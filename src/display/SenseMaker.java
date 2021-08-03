@@ -212,15 +212,15 @@ public class SenseMaker extends ComponentMaker {
         centredPanel.add(envCentred);
         typeSpecificMakerPanel.add(centredPanel);       
               
-        envRingsSlider = new LabelledSlider("Rings", 0, 3, 3, 0, this);
+        envRingsSlider = new LabelledSlider("","Rings", 0, 3, 3, 0, this);
         envRingsSlider.setToolTipText("<html>Sets the number of rings of sample points.</html>");
         typeSpecificMakerPanel.add(envRingsSlider);     
 
-        envPointsSlider = new LabelledSlider("Points per ring", 1, 20, 19, 0, this);
+        envPointsSlider = new LabelledSlider("","Points per ring", 1, 20, 19, 0, this);
         envPointsSlider.setToolTipText("<html>Sets the number of sample points per ring.</html>");
         typeSpecificMakerPanel.add(envPointsSlider); 
         
-        envRadiusSlider = new LabelledSlider("Ring radius", 1, 20, 19, 0, this);
+        envRadiusSlider = new LabelledSlider("","Ring radius", 1, 20, 19, 0, this);
         envRadiusSlider.setToolTipText("<html>Sets the distance between sample point rings.</html>");
         typeSpecificMakerPanel.add(envRadiusSlider);    
         
@@ -241,7 +241,7 @@ public class SenseMaker extends ComponentMaker {
      */    
     private void setForBorderSense() {
         typeSpecificMakerPanel.removeAll();                     
-        borderRadiusSlider = new LabelledSlider("radius", 1, 5, 4, 0, this);
+        borderRadiusSlider = new LabelledSlider("", "radius", 1, 5, 4, 0, this);
         borderRadiusSlider.setPreferredSize(new Dimension(350, 50));    
         borderRadiusSlider.setToolTipText("<html>Sets the distance at which the bot will detect the border.</html>");
         typeSpecificMakerPanel.add(borderRadiusSlider);      

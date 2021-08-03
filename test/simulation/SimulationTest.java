@@ -588,9 +588,11 @@ public class SimulationTest {
         for (Map<String, Object> m : r) {
             fails += testDouble(m, "PosX", v);
             fails += testDouble(m, "PosY", v);
-            fails += testLong(m, "ID", v);    
+            fails += testLong(m, "ID", v); 
+            fails += testDouble(m, "Fitness", v);
+            fails += testInt(m, "Age", v);
+            fails += testInt(m, "Generation", v);
         }
-        
         return fails;
     }
     

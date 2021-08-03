@@ -98,7 +98,7 @@ public class FieldMaker extends ComponentMaker {
     }
     
     private void makeDensityPanel() {    
-        densitySlider = new LabelledSlider("Density", 2, 20, 18, 11, null);
+        densitySlider = new LabelledSlider("", "Density", 2, 20, 18, 11, null);
         makerPanel.add(densitySlider);   
         densitySlider.setToolTipText("<html>Controls how close sample points in the scalar field are.<br>"
                 + "Lower density leads to smoother gradients in larger patches,"
@@ -106,7 +106,7 @@ public class FieldMaker extends ComponentMaker {
     }
     
     private void makeGrowthRateSlider() {
-        growthRateSlider = new LabelledSlider("Growth %", 0, 0.1, 100, 0, null);       
+        growthRateSlider = new LabelledSlider("", "Growth %", 0, 0.1, 100, 0, null);       
         makerPanel.add(growthRateSlider); 
         growthRateSlider.setToolTipText("<html>Controls how quickly the resource represented by the field will increase over time,<br>"
                 + "up to its maximum value.</html>");        

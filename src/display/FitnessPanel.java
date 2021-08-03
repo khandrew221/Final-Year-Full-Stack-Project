@@ -6,6 +6,7 @@
 package display;
 
 import controls.SimControl;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import simulation.SimStateFacade;
 
@@ -26,12 +28,14 @@ public class FitnessPanel extends JPanel {
     private SimStateFacade simFacade;    
     
     private JPanel fitnessSliderPanel;
+    private JLabel info;
     private List<LabelledSlider> fitnessSliders;
     
     public FitnessPanel(SimControl simControl, SimStateFacade simFacade) {        
         this.simControl = simControl;
         this.simFacade = simFacade;
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        info = new JLabel();
     }
     
    /**
@@ -43,16 +47,31 @@ public class FitnessPanel extends JPanel {
      */
     public void setup(String title, Map<String, Integer> ParamsAndWeights) {
         this.removeAll();
+        
+        JPanel mainHolder = new JPanel();
+        mainHolder.setBorder(BorderFactory.createEtchedBorder());
+        this.add(mainHolder);
+        mainHolder.setLayout(new BorderLayout());
+        
         fitnessSliderPanel = new JPanel();
+        fitnessSliderPanel.setLayout(new BoxLayout(fitnessSliderPanel, BoxLayout.PAGE_AXIS));
+        
         fitnessSliders = new ArrayList<>();
-        this.setBorder(BorderFactory.createTitledBorder(title));
+        fitnessSliderPanel.setBorder(BorderFactory.createTitledBorder(title));
         for(String name : ParamsAndWeights.keySet()) {
-            LabelledSlider entry = new LabelledSlider(name, -10, 10, 20, ParamsAndWeights.get(name)+10, null);
-            this.add(entry);
+            LabelledSlider entry = new LabelledSlider(name, paramNameToText(name), -10, 10, 20, ParamsAndWeights.get(name)+10, null);
+            fitnessSliderPanel.add(entry);
             fitnessSliders.add(entry);
+            entry.setToolTipText(paramNameToTooltip(name));
         }             
-        fitnessSliderPanel.setPreferredSize(new Dimension(200,35*ParamsAndWeights.size() + 30));
-        this.add(fitnessSliderPanel);        
+        //fitnessSliderPanel.setPreferredSize(new Dimension(200,35*ParamsAndWeights.size() + 30));
+        mainHolder.add(fitnessSliderPanel);   
+        mainHolder.add(info, BorderLayout.PAGE_END);
+        info.setPreferredSize(new Dimension(600, 100));
+        info.setBorder(BorderFactory.createEtchedBorder());  
+        info.setText("<html>Bots are scored by a fitness function. The score updates every simulation cycle, "
+                + "and bots with a higher score are more likely to breed. Positive weights encourage the evolution of the "
+                + "associated trait, and negative weights discourage the trait.</html>");
     }   
     
     /**
@@ -65,5 +84,35 @@ public class FitnessPanel extends JPanel {
         }
         simControl.setFitnessWeights(newWeights);
     }
+    
+    private String paramNameToText(String n) {
+        switch (n) {
+            case "COLLISIONS_PER_CYCLE":
+                return "Number of collisions";
+            case "DISTANCE_TRAVELLED":
+                return "Speed";   
+            case "CURRENT_ENERGY":
+                return "Current energy";   
+            case "AMOUNT_EATEN":
+                return "Amount eaten";                             
+        }
+        return "ERROR";
+    }
+    
+    private String paramNameToTooltip(String n) {
+        switch (n) {
+            case "COLLISIONS_PER_CYCLE":
+                return "<html>Rewards or penalises collisions with the environment boundary.</html>";
+            case "DISTANCE_TRAVELLED":
+                return "<html>Rewards or penalises moving at a high speed.</html>";  
+            case "CURRENT_ENERGY":
+                return "<html>Rewards or penalises having a large amount of energy<br>"
+                        + "at the moment parents are selected.</html>";   
+            case "AMOUNT_EATEN":
+                return "<html>Rewards or penalises bots that have eaten a lot<br> "
+                        + "(across all eat behaviours over the bot's lifetime).</html>";                               
+        }
+        return "ERROR";
+    }    
    
 }

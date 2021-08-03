@@ -145,6 +145,7 @@ public class BehaviourMaker extends ComponentMaker {
                         }
                         break;                          
                 }  
+                break;
             case "eat":
                 String target = (String) fieldSelector.getSelectedItem();
                 error = super.getControl().addBehaviourEat(selectForageEfficiency.getValue()/100.0, selectEnergyEfficiency.getValue()/100.0, target);
@@ -173,7 +174,7 @@ public class BehaviourMaker extends ComponentMaker {
      */    
     private void setForBehaviourMove() {
         typeSpecificMakerPanel.removeAll();
-        maxSpeedSlider = new LabelledSlider("Maximum speed", 1, 5, 4, 0, this);
+        maxSpeedSlider = new LabelledSlider("", "Maximum speed", 1, 5, 4, 0, this);
         typeSpecificMakerPanel.add(maxSpeedSlider);
         info.setText("<html>A move behaviour allows the bot to move in response to its sensory inputs. Bots cannot move outside of the bounds of the environment.</html>");
         this.repaint();    
@@ -192,14 +193,14 @@ public class BehaviourMaker extends ComponentMaker {
         selectorPanel.add(fieldSelector, BorderLayout.EAST);
         typeSpecificMakerPanel.add(selectorPanel); 
         
-        selectForageEfficiency = new LabelledSlider("Forage efficiency (%)", -10, 10, 20, 11, null);
+        selectForageEfficiency = new LabelledSlider("", "Forage efficiency (%)", -10, 10, 20, 11, null);
         selectForageEfficiency .setToolTipText("<html>Controls how much of the resource the bot will consume in a single round.<br>"
                 + "Negative values will instead cause the bot to desposit the resource in the environment.</html>");      
         typeSpecificMakerPanel.add(selectForageEfficiency); 
-        selectEnergyEfficiency = new LabelledSlider("Energy efficiency (%)", -100, 100, 200, 101, null);
+        selectEnergyEfficiency = new LabelledSlider("", "Energy efficiency (%)", -100, 100, 200, 101, null);
         selectEnergyEfficiency .setToolTipText("<html>Controls what proportion of the resource consumed will be converted to energy.</html>");            
         typeSpecificMakerPanel.add(selectEnergyEfficiency); 
-        info.setText("<html>An eat behaviour allows the bot to interact with an environment field by consuming or excreting resources.<br> "
+        info.setText("<html>An eat behaviour allows the bot to interact with an environment field by consuming or excreting resources. Bots will only eat if the behaviour recieves a neural network output over a certain threshold.<br> "
                 + "Two positive values for forage and energy efficiency will cause the bot to gain energy from consuming the resource.<br>"
                 + "A negative forage and a positive energy efficiency will cause the bot to lose energy from depositing the resource.<br>"
                 + "A positive forage and a negative energy efficiency will cause the bot to lose energy from consuming the resource.<br>"
