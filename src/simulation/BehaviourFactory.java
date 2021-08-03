@@ -5,6 +5,7 @@
  */
 package simulation;
 
+import utility.MinMaxPair;
 import utility.Point;
 
 /**
@@ -13,6 +14,10 @@ import utility.Point;
  */
 public class BehaviourFactory {
     
+    public static final MinMaxPair EAT_FORAGE_EFFICIENCY_LIMITS = new MinMaxPair(-1, 1);
+    public static final MinMaxPair EAT_ENERGY_EFFICIENCY_LIMITS = new MinMaxPair(-1, 1);
+    
+    public static final MinMaxPair MOVE_SPEED_LIMITS = new MinMaxPair(1, 5);
     
     /**
      * Creates a move behaviour.  min and max must be minimum and maximum coords

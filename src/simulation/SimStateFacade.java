@@ -130,4 +130,55 @@ public class SimStateFacade {
         return sim.envYSize();
     }    
     
+    
+    public double getBehaviourEatForageEfficiencyMin() {
+        return BehaviourFactory.EAT_FORAGE_EFFICIENCY_LIMITS.getMin();
+    }
+
+    public double getBehaviourEatForageEfficiencyMax() {
+        return BehaviourFactory.EAT_FORAGE_EFFICIENCY_LIMITS.getMax();
+    }    
+    
+    public double getBehaviourEatEnergyEfficiencyMin() {
+        return BehaviourFactory.EAT_ENERGY_EFFICIENCY_LIMITS.getMin();
+    }
+
+    public double getBehaviourEatEnergyEfficiencyMax() {
+        return BehaviourFactory.EAT_ENERGY_EFFICIENCY_LIMITS.getMax();
+    }    
+    
+    public double getBehaviourMoveSpeedMax() {
+        return BehaviourFactory.MOVE_SPEED_LIMITS.getMax();
+    }    
+    public double getBehaviourMoveSpeedMin() {
+        return BehaviourFactory.MOVE_SPEED_LIMITS.getMin();
+    }  
+
+    public double getSenseEnviroRingsMax() {
+        return SenseFactory.ENVIRO_RING_LIMITS.getMax();
+    }    
+    public double getSenseEnviroRingsMin() {
+        return SenseFactory.ENVIRO_RING_LIMITS.getMin();
+    }      
+    
+    public double getSenseEnviroPointsPerRingMax() {
+        return SenseFactory.ENVIRO_POINTS_PER_RING_LIMITS.getMax();
+    }    
+    public double getSenseEnviroPointsPerRingMin() {
+        return SenseFactory.ENVIRO_POINTS_PER_RING_LIMITS.getMin();
+    }    
+    
+    public double getSenseEnviroRadiusMin() {
+        return SenseFactory.ENVIRO_RADIUS_LIMITS.getMin();
+    }    
+    public double getSenseEnviroRadiusMax() {
+        return SenseFactory.ENVIRO_RADIUS_LIMITS.getMax();
+    }    
+    
+    public double getSenseBorderRadiusMin() {
+        return SenseFactory.BORDER_RADIUS_LIMITS.getMin();
+    }    
+    public double getSenseBorderRadiusMax() {
+        return SenseFactory.BORDER_RADIUS_LIMITS.getMax();
+    }     
 }

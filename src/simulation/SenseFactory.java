@@ -7,6 +7,7 @@ package simulation;
 
 import java.util.ArrayList;
 import java.util.List;
+import utility.MinMaxPair;
 import utility.Point;
 
 /**
@@ -15,7 +16,10 @@ import utility.Point;
  */
 public class SenseFactory {
     
-    
+    public static final MinMaxPair ENVIRO_RING_LIMITS = new MinMaxPair(0, 3);
+    public static final MinMaxPair ENVIRO_POINTS_PER_RING_LIMITS = new MinMaxPair(1, 20);
+    public static final MinMaxPair ENVIRO_RADIUS_LIMITS = new MinMaxPair(1, 10);
+    public static final MinMaxPair BORDER_RADIUS_LIMITS = new MinMaxPair(1, 10);
     
     /**
      * Creates an envirosense.

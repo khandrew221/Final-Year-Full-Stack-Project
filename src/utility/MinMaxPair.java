@@ -31,4 +31,11 @@ public class MinMaxPair {
     public double getMax() {
         return max;
     }    
+    
+    public boolean inRange(double n) {
+        if (n >= min && n <= max) {
+            return true;
+        }
+        return false;
+    }
 }

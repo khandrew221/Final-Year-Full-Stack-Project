@@ -14,6 +14,7 @@ import utility.Point;
  * @author Kathryn Andrew
  */
 public class BehaviourMove extends Behaviour {
+  
     
     private double maxSpeed;
     private Point min;

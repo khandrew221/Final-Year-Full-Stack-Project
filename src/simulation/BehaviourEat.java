@@ -15,13 +15,14 @@ import java.util.Set;
  * @author Kathryn Andrew
  */
 public class BehaviourEat extends Behaviour {
-    
+      
     int slot;
     String target;
     Environment environment;
     double forageEfficiency; 
     double energyEfficiency; 
     
+
     /**
      * Creates an eat behaviour.
      * 

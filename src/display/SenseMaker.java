@@ -166,6 +166,9 @@ public class SenseMaker extends ComponentMaker {
                            super.getControl().stop();
                            addSenseType(type);                           
                         }
+                        break;    
+                    case 4:
+                        JOptionPane.showMessageDialog(null, "Invalid parameters passed to sense. This message indicates a major interface error.", "Warning", JOptionPane.WARNING_MESSAGE);
                         break;                          
                 }  
                 break;
@@ -188,7 +191,10 @@ public class SenseMaker extends ComponentMaker {
                            super.getControl().stop();
                            addSenseType(type);                           
                         }
-                        break;                          
+                        break;  
+                    case 4:
+                        JOptionPane.showMessageDialog(null, "Invalid parameters passed to sense. This message indicates a major interface error.", "Warning", JOptionPane.WARNING_MESSAGE);
+                        break;                         
                 }
             break;
         }        
@@ -212,15 +218,22 @@ public class SenseMaker extends ComponentMaker {
         centredPanel.add(envCentred);
         typeSpecificMakerPanel.add(centredPanel);       
               
-        envRingsSlider = new LabelledSlider("","Rings", 0, 3, 3, 0, this);
+        
+        int ringsMin = (int) Math.ceil(super.getFacade().getSenseEnviroRingsMin());
+        int ringsMax = (int) Math.floor(super.getFacade().getSenseEnviroRingsMax());  
+        envRingsSlider = new LabelledSlider("","Rings", ringsMin, ringsMax, ringsMax-ringsMin, 0, this);
         envRingsSlider.setToolTipText("<html>Sets the number of rings of sample points.</html>");
         typeSpecificMakerPanel.add(envRingsSlider);     
 
-        envPointsSlider = new LabelledSlider("","Points per ring", 1, 20, 19, 0, this);
+        int pprMin = (int) Math.ceil(super.getFacade().getSenseEnviroPointsPerRingMin());
+        int pprMax = (int) Math.floor(super.getFacade().getSenseEnviroPointsPerRingMax()); 
+        envPointsSlider = new LabelledSlider("","Points per ring", pprMin, pprMax, pprMax-pprMin, 0, this);
         envPointsSlider.setToolTipText("<html>Sets the number of sample points per ring.</html>");
         typeSpecificMakerPanel.add(envPointsSlider); 
         
-        envRadiusSlider = new LabelledSlider("","Ring radius", 1, 20, 19, 0, this);
+        int radiusMin = (int) Math.ceil(super.getFacade().getSenseEnviroRadiusMin());
+        int radiusMax = (int) Math.floor(super.getFacade().getSenseEnviroRadiusMax());       
+        envRadiusSlider = new LabelledSlider("","Ring radius", radiusMin, radiusMax, radiusMax-radiusMin, 0, this);
         envRadiusSlider.setToolTipText("<html>Sets the distance between sample point rings.</html>");
         typeSpecificMakerPanel.add(envRadiusSlider);    
         
@@ -240,8 +253,12 @@ public class SenseMaker extends ComponentMaker {
      * 
      */    
     private void setForBorderSense() {
-        typeSpecificMakerPanel.removeAll();                     
-        borderRadiusSlider = new LabelledSlider("", "radius", 1, 5, 4, 0, this);
+        typeSpecificMakerPanel.removeAll();        
+        
+        int radiusMin = (int) Math.ceil(super.getFacade().getSenseBorderRadiusMin());
+        int radiusMax = (int) Math.floor(super.getFacade().getSenseBorderRadiusMax());
+        
+        borderRadiusSlider = new LabelledSlider("", "radius", radiusMin, radiusMax, radiusMax-radiusMin, 0, this);
         borderRadiusSlider.setPreferredSize(new Dimension(350, 50));    
         borderRadiusSlider.setToolTipText("<html>Sets the distance at which the bot will detect the border.</html>");
         typeSpecificMakerPanel.add(borderRadiusSlider);      

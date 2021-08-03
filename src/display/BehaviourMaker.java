@@ -143,7 +143,10 @@ public class BehaviourMaker extends ComponentMaker {
                            super.getControl().stop();
                            addBehaviourType(type);                           
                         }
-                        break;                          
+                        break;  
+                    case 4:
+                        JOptionPane.showMessageDialog(null, "Invalid parameters passed to behaviour. This message indicates a major interface error.", "Warning", JOptionPane.WARNING_MESSAGE);
+                        break;                           
                 }  
                 break;
             case "eat":
@@ -163,7 +166,10 @@ public class BehaviourMaker extends ComponentMaker {
                            super.getControl().stop();
                            addBehaviourType(type);                           
                         }
-                        break;                          
+                        break; 
+                    case 4:
+                        JOptionPane.showMessageDialog(null, "Invalid parameters passed to behaviour. This message indicates a major interface error.", "Warning", JOptionPane.WARNING_MESSAGE);
+                        break;      
                 }                  
                 break;
         }        
@@ -174,7 +180,9 @@ public class BehaviourMaker extends ComponentMaker {
      */    
     private void setForBehaviourMove() {
         typeSpecificMakerPanel.removeAll();
-        maxSpeedSlider = new LabelledSlider("", "Maximum speed", 1, 5, 4, 0, this);
+        int speedMin = (int) Math.ceil(super.getFacade().getBehaviourMoveSpeedMin());
+        int speedMax = (int) Math.floor(super.getFacade().getBehaviourMoveSpeedMax());
+        maxSpeedSlider = new LabelledSlider("", "Maximum speed", speedMin, speedMax, speedMax-speedMin, 0, this);
         typeSpecificMakerPanel.add(maxSpeedSlider);
         info.setText("<html>A move behaviour allows the bot to move in response to its sensory inputs. Bots cannot move outside of the bounds of the environment.</html>");
         this.repaint();    
@@ -193,11 +201,17 @@ public class BehaviourMaker extends ComponentMaker {
         selectorPanel.add(fieldSelector, BorderLayout.EAST);
         typeSpecificMakerPanel.add(selectorPanel); 
         
-        selectForageEfficiency = new LabelledSlider("", "Forage efficiency (%)", -10, 10, 20, 11, null);
+        //multiply by 100 to convert to %
+        int forageEfficiencyMin = (int) Math.ceil(super.getFacade().getBehaviourEatForageEfficiencyMin()) * 100;
+        int forageEfficiencyMax = (int) Math.floor(super.getFacade().getBehaviourEatForageEfficiencyMax()) * 100;
+        int energyEfficiencyMin = (int) Math.ceil(super.getFacade().getBehaviourEatEnergyEfficiencyMin()) * 100;
+        int energyEfficiencyMax = (int) Math.floor(super.getFacade().getBehaviourEatEnergyEfficiencyMax()) * 100;        
+        
+        selectForageEfficiency = new LabelledSlider("", "Forage efficiency (%)", forageEfficiencyMin, forageEfficiencyMax, (forageEfficiencyMax-forageEfficiencyMin), (forageEfficiencyMax-forageEfficiencyMin)/2, null);
         selectForageEfficiency .setToolTipText("<html>Controls how much of the resource the bot will consume in a single round.<br>"
                 + "Negative values will instead cause the bot to desposit the resource in the environment.</html>");      
         typeSpecificMakerPanel.add(selectForageEfficiency); 
-        selectEnergyEfficiency = new LabelledSlider("", "Energy efficiency (%)", -100, 100, 200, 101, null);
+        selectEnergyEfficiency = new LabelledSlider("", "Energy efficiency (%)", energyEfficiencyMin, energyEfficiencyMax, (energyEfficiencyMax-energyEfficiencyMin), (energyEfficiencyMax-energyEfficiencyMin)/2, null);
         selectEnergyEfficiency .setToolTipText("<html>Controls what proportion of the resource consumed will be converted to energy.</html>");            
         typeSpecificMakerPanel.add(selectEnergyEfficiency); 
         info.setText("<html>An eat behaviour allows the bot to interact with an environment field by consuming or excreting resources. Bots will only eat if the behaviour recieves a neural network output over a certain threshold.<br> "

@@ -143,6 +143,7 @@ public class SimControl {
      * 1 for existing sense
      * 2 for no points
      * 3 for modification while running warning
+     * 4 for invalid parameters
      * 
      * @param target
      * @param centred
@@ -153,18 +154,24 @@ public class SimControl {
      */
     public int addSenseEnviro(String target, boolean centred, int rings, int pointsPerRing, int radius) {
         if (isStopped()) {
-            Sense sense = SenseFactory.MakeEnvironmentSense(target, simulation.getEnvironment(), centred, rings, pointsPerRing, radius);
-            if (!centred) {
-                if (rings == 0 || pointsPerRing == 0) {
-                    return 2;
+            if (SenseFactory.ENVIRO_POINTS_PER_RING_LIMITS.inRange(pointsPerRing) 
+             && SenseFactory.ENVIRO_RADIUS_LIMITS.inRange(radius)
+             && SenseFactory.ENVIRO_RING_LIMITS.inRange(rings)) {            
+                Sense sense = SenseFactory.MakeEnvironmentSense(target, simulation.getEnvironment(), centred, rings, pointsPerRing, radius);
+                if (!centred) {
+                    if (rings == 0 || pointsPerRing == 0) {
+                        return 2;
+                    }
                 }
-            }
-            if (simulation.containsSense(sense)) {
-                return 1;
-            }
+                if (simulation.containsSense(sense)) {
+                    return 1;
+                }
 
-            simulation.addSense(sense);
-            return 0;
+                simulation.addSense(sense);
+                return 0;
+            } else {
+                return 4;
+            }
         } 
         return 3;
     }
@@ -174,18 +181,23 @@ public class SimControl {
      * 0 for no errors
      * 1 for existing sense
      * 3 for modification while running warning
+     * 4 for invalid parameters
      * 
      * @param radius
      * @return error code
      */
     public int addSenseBorder(double radius) {
         if (isStopped()) {
-            Sense sense = SenseFactory.MakeBorderSense(simulation.getEnvironment(), radius);
-            if (simulation.containsSense(sense)) {
-                return 1;
+            if (SenseFactory.BORDER_RADIUS_LIMITS.inRange(radius)) {                 
+                Sense sense = SenseFactory.MakeBorderSense(simulation.getEnvironment(), radius);
+                if (simulation.containsSense(sense)) {
+                    return 1;
+                }
+                simulation.addSense(sense);
+                return 0;
+            } else {
+                return 4;
             }
-            simulation.addSense(sense);
-            return 0;
         } 
         return 3;
     }    
@@ -194,17 +206,22 @@ public class SimControl {
      * 0 for no errors
      * 1 for existing behaviour
      * 3 for modification while running warning
+     * 4 for invalid parameters
      * @param maxSpeed
      * @return 
      */
     public int addBehaviourMove(double maxSpeed) {
         if (isStopped()) {
-            Behaviour behaviour = BehaviourFactory.makeBehaviourMove(maxSpeed, new Point(0,0), new Point(simulation.envXSize(), simulation.envYSize()));
-            if (simulation.containsMoveBehaviour()) {
-                return 1;
+            if (BehaviourFactory.MOVE_SPEED_LIMITS.inRange(maxSpeed)) {             
+                Behaviour behaviour = BehaviourFactory.makeBehaviourMove(maxSpeed, new Point(0,0), new Point(simulation.envXSize(), simulation.envYSize()));
+                if (simulation.containsMoveBehaviour()) {
+                    return 1;
+                }
+                simulation.addBehaviour(behaviour);
+                return 0;
+            } else {
+                return 4;
             }
-            simulation.addBehaviour(behaviour);
-            return 0;
         } 
         return 3;
     }    
@@ -212,14 +229,20 @@ public class SimControl {
     /**
      * 0 for no errors
      * 3 for modification while running warning
+     * 4 for invalid parameters
      * @return 
      */
     public int addBehaviourEat(double forageEfficiency, double energyEfficiency, String target) {
         if (isStopped()) {
-            Behaviour behaviour = BehaviourFactory.makeBehaviourEat(forageEfficiency, energyEfficiency, target, simulation.getEnvironment());
-            simulation.addBehaviour(behaviour);
-            return 0;
-        } 
+            if (BehaviourFactory.EAT_ENERGY_EFFICIENCY_LIMITS.inRange(energyEfficiency)
+             && BehaviourFactory.EAT_FORAGE_EFFICIENCY_LIMITS.inRange(forageEfficiency)) {       
+                Behaviour behaviour = BehaviourFactory.makeBehaviourEat(forageEfficiency, energyEfficiency, target, simulation.getEnvironment());
+                simulation.addBehaviour(behaviour);
+                return 0;
+            } else {
+                return 4;
+            }
+        }
         return 3;
     }    
         
@@ -321,5 +344,4 @@ public class SimControl {
         SimConsts.setMAX_NODES_PER_LAYER(MAX_NODES_PER_LAYER);
     }  
     
-
 }
