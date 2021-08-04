@@ -5,14 +5,19 @@
  */
 package display;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import simulation.SimStateFacade;
 
 /**
  *
@@ -21,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 public class DataPanel extends JComponent {
     
     private RunView main;
+    private SimStateFacade facade;
     private FieldsSelect fieldsSelect;     
     private SensesSelect sensesSelect;  
     private BehavioursSelect behavioursSelect;
@@ -28,27 +34,35 @@ public class DataPanel extends JComponent {
     private JLabel population = new JLabel("Population: ");
     private JLabel cycles = new JLabel("Simulation Cycles: ");   
     
-    public DataPanel(RunView main) {
+    public DataPanel(RunView main, SimStateFacade facade) {
         this.main = main;
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        this.add(population);
+        this.facade = facade;
+        this.setLayout(new BorderLayout());
+               
+        JPanel mainHolder = new JPanel();
+        mainHolder.setBorder(BorderFactory.createEtchedBorder());
+        mainHolder.setLayout(new BoxLayout(mainHolder, BoxLayout.PAGE_AXIS));
+        mainHolder.setPreferredSize(new Dimension(200,200));
+        this.add(mainHolder, BorderLayout.CENTER);
+        
+        mainHolder.add(population);
         Font font = population.getFont().deriveFont(Font.PLAIN);
         population.setFont(font);
-        this.add(cycles);
+        mainHolder.add(cycles);
         cycles.setFont(font);
         
         sensesSelect = new SensesSelect(null);
-        this.add(sensesSelect);
+        mainHolder.add(sensesSelect);
         sensesSelect.setFont(font);
         
         behavioursSelect = new BehavioursSelect(null);
-        this.add(behavioursSelect);
+        mainHolder.add(behavioursSelect);
         behavioursSelect.setFont(font);
         
         fieldsSelect = new FieldsSelect(this.main);
-        this.add(fieldsSelect);
+        mainHolder.add(fieldsSelect);
         
-        this.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
     }
     
     /**
@@ -57,9 +71,10 @@ public class DataPanel extends JComponent {
      * @param currentPopulation
      * @param currentTime 
      */
-    public void updateData(int currentPopulation, long currentTime) {        
-        population.setText("<html><b>Population:</b> " + currentPopulation + "</html>");        
-        cycles.setText("<html><b>Simulation Cycles:</b> " + currentTime + "</html>");             
+    public void updateData() {   
+        Map<String, Object> simReport = facade.simReport();
+        population.setText("<html><b>Population:</b> " + (int) simReport.get("population") + "</html>");        
+        cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");             
         repaint();
     }
     
@@ -69,7 +84,9 @@ public class DataPanel extends JComponent {
      * @param simReport
      * @param fieldsReport 
      */
-    public void setAll(Map<String, Object> simReport, List<Map<String, Object>> fieldsReport) {
+    public void setAll() {
+        Map<String, Object> simReport = facade.simReport();
+        List<Map<String, Object>> fieldsReport = facade.fieldsReport();
         
         population.setText("<html><b>Population:</b> " + (int) simReport.get("population") + "</html>");        
         cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");

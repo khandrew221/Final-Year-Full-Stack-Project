@@ -399,7 +399,6 @@ public class Simulation {
     
     /**
      * Restarts the simulation with the same settings but new bots.  
-     * TEMPORARILY HARDCODED
      * 
      * Req for: UC026
      */    
@@ -412,6 +411,9 @@ public class Simulation {
             addStarterBot(SimConsts.getSTART_ENERGY());
         }          
         
+        for (String field : environment.listFields()) {
+            environment.randomiseField(field);
+        }
         
         
         if (getState() == SimState.STOPPED_WITH_CRITICAL_CHANGE) {

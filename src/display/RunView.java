@@ -7,10 +7,10 @@ package display;
 
 import controls.SimControl;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import simulation.SimStateFacade;
 
@@ -21,19 +21,19 @@ import simulation.SimStateFacade;
 public class RunView extends JPanel {
     
     private SimStateFacade facade;       
-    private DataPanel dataPanel;
     private SimVis simVis;
+    private ControlPanel controlPanel;
     
     
     RunView(SimControl control, SimStateFacade simFacade, int visX, int visY) {
         this.setLayout(new BorderLayout());
         this.facade = simFacade;
-        this.dataPanel = new DataPanel(this);
-        dataPanel.setPreferredSize(new Dimension(500, 500));
         this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
         this.add(simVis, BorderLayout.LINE_START);
-        this.add(dataPanel, BorderLayout.LINE_END);
+        this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setAll();
+        controlPanel = new ControlPanel(control);
+        this.add(controlPanel, BorderLayout.PAGE_END);
     }
     
 
@@ -42,7 +42,6 @@ public class RunView extends JPanel {
      * have occurred.
      */
     public void setAll() {
-        dataPanel.setAll(facade.simReport(), facade.fieldsReport());
         simVis.updateData();     
         repaint();
     }
@@ -71,7 +70,6 @@ public class RunView extends JPanel {
         } catch (Exception e) {
             System.out.println("Error casting time to long.");
         }
-        dataPanel.updateData(population, time);
         simVis.updateData();        
         repaint();
     }

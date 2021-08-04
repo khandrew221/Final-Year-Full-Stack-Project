@@ -130,6 +130,17 @@ public class Environment {
     }    
     
     /**
+     * randomises the field with the given String as name/key 
+     * If the name is already present as a map key, nothing is added.
+     * 
+     * @param name name of the field to be randomised
+     */
+    void randomiseField(String name) {
+        if (fields.containsKey(name))
+            fields.get(name).randomise();
+    }      
+    
+    /**
      * 
      * Req for: testing
      * 

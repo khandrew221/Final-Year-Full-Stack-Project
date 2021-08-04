@@ -19,13 +19,15 @@ public class ControlPanel extends JPanel {
     
     private SimControl simControl;
     private JButton pausePlay;
-    private JButton restart;
+    private JButton reset;
+    private JButton stop;
     
     
     public ControlPanel(SimControl control) {
         this.simControl = control;   
         makePausePlayButton();
-        makeRestartButton();
+        makeStopButton();
+        makeResetButton();
     }
     
     
@@ -51,10 +53,10 @@ public class ControlPanel extends JPanel {
         }); 
     }
     
-    private void makeRestartButton() {
-        restart = new JButton("Restart");
-        this.add(restart);
-        restart.addActionListener(new ActionListener() {
+    private void makeResetButton() {
+        reset = new JButton("Reset");
+        this.add(reset);
+        reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 simControl.restart();
@@ -71,4 +73,15 @@ public class ControlPanel extends JPanel {
         }            
     }
     
+
+    private void makeStopButton() {
+        stop = new JButton("Stop");
+        this.add(stop);
+        stop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                simControl.stop();
+            }
+        }); 
+    }     
 }

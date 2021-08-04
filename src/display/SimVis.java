@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import simulation.SimStateFacade;
 
@@ -37,7 +38,8 @@ public class SimVis extends JComponent {
         this.setPreferredSize(new Dimension(w,h));
         sim = s;    
         fieldsGraphics = new FieldsGraphics(w, h, sim.fieldsReport());
-        this.add(fieldsGraphics);        
+        this.add(fieldsGraphics);  
+        this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         updateData();
     }
     
@@ -47,6 +49,15 @@ public class SimVis extends JComponent {
             g.setColor(genToColour((int) m.get("Generation"))); 
             double x = simToVisX((double) m.get("PosX"));
             double y = simToVisY((double) m.get("PosY"));
+            //fudge edge positions so the bots aren't drawn off environment
+            if (x > sim.envXSize()-r*0.5)
+                x = sim.envXSize()-r*0.5;
+            if (x < r*0.5)
+                x = r*0.5;            
+            if (y > sim.envYSize()-r*0.5)
+                y = sim.envYSize()-r*0.5;  
+            if (y < r*0.5)
+                y = r*0.5;                
             g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));
         }
     }  

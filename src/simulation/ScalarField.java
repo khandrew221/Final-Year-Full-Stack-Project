@@ -51,6 +51,17 @@ public class ScalarField {
      * @param max
      */
     void randomise(double min, double max) {
+        this.randomise();
+        this.valMin = min;
+        this.valMax = max;
+    }
+    
+    /**
+     * Randomise the grid
+     * @param min
+     * @param max
+     */
+    void randomise() {
         Random random = new Random();
         for (int i = 0; i < xSamples; i++) {
             for (int i2 = 0; i2 < ySamples; i2++) {
@@ -58,9 +69,7 @@ public class ScalarField {
                 values[i][i2] = val;
             }
         }
-        this.valMin = min;
-        this.valMax = max;
-    }
+    }    
     
     /**
      * Sets the entire field to a given value

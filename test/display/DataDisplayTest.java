@@ -39,14 +39,14 @@ public class DataDisplayTest {
         SimControl control = new SimControl(s);
         
         RunView sup = new RunView(control, facade, 500, 500);
-        DataPanel comp = new DataPanel(sup);
+        DataPanel comp = new DataPanel(sup, facade);
         comp.setPreferredSize(new Dimension(envXsize,envYsize)); 
         
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
 
         
         //comp.updateData(facade.simReport(), facade.fieldsReport());
-        comp.setAll(facade.simReport(), facade.fieldsReport());
+        comp.setAll();
         
         
         testFrame.pack();
@@ -74,7 +74,7 @@ public class DataDisplayTest {
                     System.out.println("Error casting timen to long.");
                 }
                 
-                comp.updateData(population, time);
+                comp.updateData();
                 //long endTime = System.nanoTime();
                 //System.out.println((endTime - startTime)/1000000);
             }
