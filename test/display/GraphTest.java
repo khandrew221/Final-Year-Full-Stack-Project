@@ -36,7 +36,10 @@ public class GraphTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        Graph comp = new Graph(facade, 600, 400);
+        Graph comp = new Graph("Average Fitness", facade, 600, 400);
+        comp.addSeries("Fitness");
+        comp.addSeries("Population");
+        comp.setYAxisLabel("Fitness");
         comp.updateData();
 
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        

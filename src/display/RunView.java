@@ -23,16 +23,25 @@ public class RunView extends JPanel {
     private SimStateFacade facade;       
     private SimVis simVis;
     private ControlPanel controlPanel;
+    private Graph fitnessGraph;
     
     
     RunView(SimControl control, SimStateFacade simFacade, int visX, int visY) {
         this.setLayout(new BorderLayout());
         this.facade = simFacade;
         this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
-        this.add(simVis, BorderLayout.LINE_START);
+        this.add(simVis, BorderLayout.CENTER);
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setAll();
         controlPanel = new ControlPanel(control);
+        
+        fitnessGraph = new Graph("Average Fitness", facade, 200, 200);
+        fitnessGraph.addSeries("Fitness");
+        fitnessGraph.setYAxisLabel("Fitness");
+        fitnessGraph.updateData();
+        
+        this.add(fitnessGraph, BorderLayout.WEST);
+        
         this.add(controlPanel, BorderLayout.PAGE_END);
     }
     
@@ -70,7 +79,8 @@ public class RunView extends JPanel {
         } catch (Exception e) {
             System.out.println("Error casting time to long.");
         }
-        simVis.updateData();        
+        simVis.updateData(); 
+        fitnessGraph.updateData();
         repaint();
     }
     
@@ -81,5 +91,5 @@ public class RunView extends JPanel {
     public void setSelected(Set<String> newActiveFields) {
         simVis.setActiveFields(newActiveFields);
     }
-  
+    
 }

@@ -28,20 +28,32 @@ public class Graph extends JComponent {
     private  Map<String, Double> absMax;
     private int border = 40;
     private int timeRange = 1000;
-    private String name = "Fitness";
     private long currentTime = 0;
+    private String yAxisLabelSeries;
+    private String graphTitle;
     
     
-    public Graph(SimStateFacade s, int w, int h) {
+    public Graph(String title, SimStateFacade s, int w, int h) {
         HEIGHT = h;
         WIDTH = w;
         this.setPreferredSize(new Dimension(w,h));
         sim = s;    
         data = new HashMap<>();
         absMax = new HashMap<>();
+        graphTitle = title;
     }
     
-    private synchronized void drawSeries(Graphics g) {
+    public void addSeries(String name) {
+        data.put(name, new HashMap<>());
+    }
+    
+    public void setYAxisLabel(String name) {
+        if (data.containsKey(name)) {
+            yAxisLabelSeries = name;
+        }
+    }    
+    
+    private synchronized void drawSeries(Graphics g, String name) {
         
         g.setColor(Color.BLACK); 
         double val = data.get(name).get(new Long(currentTime-timeRange));
@@ -70,7 +82,7 @@ public class Graph extends JComponent {
         g.drawLine(xToGraphX(0), normyToGraphY(0.5), xToGraphX(1), normyToGraphY(0.5));
     }   
     
-    private void drawLabels(Graphics g) {
+    private void drawLabels(Graphics g, String name) {
         if(g instanceof Graphics2D) {
           Graphics2D g2 = (Graphics2D)g;
           g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -85,6 +97,9 @@ public class Graph extends JComponent {
           g2.drawString(Long.toString(currentTime),xToGraphX(1)-10,normyToGraphY(0)+14);
           //x axis left
           g2.drawString(Long.toString(currentTime-timeRange),xToGraphX(0)-10,normyToGraphY(0)+14);
+          
+          //title
+          g2.drawString(graphTitle, border, border-10);
         }
     } 
     
@@ -105,20 +120,29 @@ public class Graph extends JComponent {
     
     public synchronized void updateData() {
         currentTime = sim.currentTime();
-        Map<Long, Double> newSeries = sim.getDataSeries(name, currentTime-timeRange, currentTime);
-        double min = getMin(sim.getDataSeriesMin(name), 0);
-        double max = sim.getDataSeriesMax(name); 
-        absMax.put(name, getAbsMax(min, max));
-        data.put(name, normaliseSeries(newSeries, -absMax.get(name), absMax.get(name)));   
+        for (String name : data.keySet()) {
+            Map<Long, Double> newSeries = sim.getDataSeries(name, currentTime-timeRange, currentTime);
+            double min = getMin(sim.getDataSeriesMin(name), 0);
+            double max = sim.getDataSeriesMax(name); 
+            absMax.put(name, getAbsMax(min, max));
+            data.put(name, normaliseSeries(newSeries, -absMax.get(name), absMax.get(name)));   
+        }
         repaint();
+    }
+    
+    public void reset() {
+        absMax = new HashMap<>();
+        updateData();
     }
     
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); 
         this.drawAxes(g);
-        this.drawSeries(g);
-        this.drawLabels(g);
+        for (String name : data.keySet()) {
+            this.drawSeries(g, name);
+        }      
+        this.drawLabels(g, yAxisLabelSeries);
     }     
     
     

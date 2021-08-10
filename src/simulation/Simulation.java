@@ -449,6 +449,8 @@ public class Simulation {
         }
         
         
+        initialiseDataRecords();
+        
         if (getState() == SimState.STOPPED_WITH_CRITICAL_CHANGE) {
             setState(SimState.STOPPED);
         }
