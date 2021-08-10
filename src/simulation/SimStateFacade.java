@@ -130,6 +130,29 @@ public class SimStateFacade {
         return sim.envYSize();
     }    
     
+    /**
+     * 
+     * Returns a data series mapping values (double) to a time (long)
+     * 
+     * Req for:
+     * @return 
+     */
+    public  Map<Long, Double> getDataSeries(String name, long start, long end) {
+        return sim.getDataSeries(name, start, end);
+    }     
+    
+    /**
+     * 
+     * Req for:
+     * @return 
+     */
+    public double getDataSeriesMax(String name) {
+        return sim.getDataSeriesMax(name);
+    }     
+    
+    public double getDataSeriesMin(String name) {
+        return sim.getDataSeriesMin(name);
+    }       
     
     public double getBehaviourEatForageEfficiencyMin() {
         return BehaviourFactory.EAT_FORAGE_EFFICIENCY_LIMITS.getMin();
@@ -181,4 +204,8 @@ public class SimStateFacade {
     public double getSenseBorderRadiusMax() {
         return SenseFactory.BORDER_RADIUS_LIMITS.getMax();
     }     
+    
+    public long currentTime() {
+        return sim.time();
+    }
 }

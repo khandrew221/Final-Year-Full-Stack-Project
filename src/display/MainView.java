@@ -63,6 +63,7 @@ public class MainView extends JFrame {
         tabbedPane.addTab("Environment", null, fieldMaker, "<html>Add/Remove environment fields<br>Simulation must be stopped to use.</html>");           
         tabbedPane.addTab("Senses", null, senseMaker, "<html>Add/Remove senses<br>Simulation must be stopped to use.</html>");
         tabbedPane.addTab("Behaviours", null, behaviourMaker, "<html>Add/Remove behaviours<br>Simulation must be stopped to use./html>");  
+        tabbedPane.addTab("Help", null, new HelpPanel());  
     
         tabbedPane.addChangeListener( new ChangeListener() {
             @Override

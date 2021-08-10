@@ -37,6 +37,8 @@ public class Simulation {
     private Set<Sense> senses;
     private Set<Behaviour> behaviours;
     private SortedSet<Bot> bots;
+    
+    private DataRecord dataRecord;
    
     
     public Simulation(int envXsize, int envYsize, int maxPop) {
@@ -47,6 +49,7 @@ public class Simulation {
         this.behaviours = new HashSet<>();
         this.runState = SimState.RUNNING;
         this.GAEngine = new GeneticAlgorithmEngine(SimConsts.getMAX_LAYERS(), SimConsts.getMAX_NODES_PER_LAYER());
+        this.dataRecord = new DataRecord();
     }
       
     
@@ -72,6 +75,8 @@ public class Simulation {
             addStarterBot(SimConsts.getSTART_ENERGY());
         }  
         
+        initialiseDataRecords();
+        
         this.runState = SimState.RUNNING;
     }
 
@@ -89,6 +94,7 @@ public class Simulation {
         behaviours.clear();  
         nnInputs = 0;
         nnOutputs = 0;
+        initialiseDataRecords();
     }
     
     /**
@@ -110,7 +116,6 @@ public class Simulation {
             bots.removeIf(bot -> bot.isDead());
 
             if (population() < maxPop) {
-                GRep g;
                 if (bots.size() > SimConsts.getGENETIC_BOTTLENECK_POPULATION()) {  //avoids genetic bottleneck
                     addBredBot(SimConsts.getSTART_ENERGY());
                 }
@@ -118,8 +123,10 @@ public class Simulation {
                    addStarterBot(SimConsts.getSTART_ENERGY()); 
                 }  
             }  
-        
-            simTime++;         
+            
+            updateDataRecords();
+            
+            simTime++;      
            
         }
     }
@@ -299,8 +306,7 @@ public class Simulation {
     public synchronized Map<String, Object> simulationReport() { 
         Map<String, Object> out = new HashMap<>();
         out.put("time", simTime);
-        out.put("population", population());
-        
+        out.put("population", population());        
         out.put("senses", senseReport());       
         out.put("behaviours", behaviourReport());        
         
@@ -332,6 +338,33 @@ public class Simulation {
         }        
         return out;
     }        
+    
+    /**
+     * 
+     * Req for:
+     * @return 
+     */    
+    public synchronized Map<Long, Double> getDataSeries(String name, long start, long end) {     
+        return dataRecord.getSeries(name, start, end);
+    }    
+    
+    /**
+     * 
+     * Req for:
+     * @return 
+     */    
+    public synchronized double getDataSeriesMax(String name) {     
+        return dataRecord.getSeriesMax(name);
+    }    
+    
+    /**
+     * 
+     * Req for:
+     * @return 
+     */    
+    public synchronized double getDataSeriesMin(String name) {     
+        return dataRecord.getSeriesMin(name);
+    }     
     
     /**
      * returns the color of the named field, or white if no field with that name
@@ -673,5 +706,33 @@ public class Simulation {
     public SortedSet<Bot> getBots() {
         return bots;
     }
+    
+    
+    private synchronized double averageFitness() {
+        if (bots.isEmpty())
+            return 0;
+        else {
+            double avFitness = 0;
+            for(Bot bot : bots) {
+                avFitness += bot.getFitness();
+            }
+            return avFitness/bots.size();
+        }
+    }
+    
+    private void initialiseDataRecords() {
+        dataRecord = new DataRecord();
+        dataRecord.addRecord("Fitness");
+        dataRecord.addRecord("Population");
+    }
+    
+
+    private void updateDataRecords() {
+        dataRecord.addEntry("Population", simTime, population());
+        dataRecord.addEntry("Fitness", simTime, averageFitness());
+    }    
+    
+    
+
     
 }

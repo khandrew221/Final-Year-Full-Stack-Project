@@ -50,12 +50,12 @@ public class SimVis extends JComponent {
             double x = simToVisX((double) m.get("PosX"));
             double y = simToVisY((double) m.get("PosY"));
             //fudge edge positions so the bots aren't drawn off environment
-            if (x > sim.envXSize()-r*0.5)
-                x = sim.envXSize()-r*0.5;
+            if (x > WIDTH-r*0.5)
+                x = WIDTH-r*0.5;
             if (x < r*0.5)
                 x = r*0.5;            
-            if (y > sim.envYSize()-r*0.5)
-                y = sim.envYSize()-r*0.5;  
+            if (y > HEIGHT-r*0.5)
+                y = HEIGHT-r*0.5;  
             if (y < r*0.5)
                 y = r*0.5;                
             g.fillOval((int)Math.round(x - r*0.5), (int)Math.round(y - r*0.5), (int)Math.round(r), (int)Math.round(r));

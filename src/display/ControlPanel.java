@@ -70,7 +70,7 @@ public class ControlPanel extends JPanel {
             pausePlay.setText("Pause");
         } else if(simControl.isPaused() || simControl.isStopped()) {
             pausePlay.setText("Play");
-        }            
+        }         
     }
     
 
@@ -81,6 +81,7 @@ public class ControlPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
                 simControl.stop();
+                setPausePlayText();
             }
         }); 
     }     

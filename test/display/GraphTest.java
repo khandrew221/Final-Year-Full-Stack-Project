@@ -6,7 +6,6 @@
 package display;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -18,16 +17,12 @@ import simulation.Simulation;
  *
  * @author Kathryn Andrew
  */
-public class SimVisTest {
-    
+public class GraphTest {
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        
-                // TODO code application logic here
-        
+
         JFrame testFrame = new JFrame();
         testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
@@ -41,7 +36,8 @@ public class SimVisTest {
         SimStateFacade facade = new SimStateFacade(s);
         
         
-        SimVis comp = new SimVis(facade, envXsize, envYsize, 700, 700);
+        Graph comp = new Graph(facade, 600, 400);
+        comp.updateData();
 
         testFrame.getContentPane().add(comp, BorderLayout.CENTER);        
         testFrame.pack();
@@ -54,14 +50,13 @@ public class SimVisTest {
             public void run() {
                 runDisplay(s, comp, facade);
             }
-        }, 0, 1, TimeUnit.MILLISECONDS); 
+        }, 0, 15, TimeUnit.MILLISECONDS); 
          
     }
     
     
-    private static void runDisplay(Simulation s, SimVis comp, SimStateFacade facade) {
+    private static void runDisplay(Simulation s, Graph comp, SimStateFacade facade) {
         s.run();
         comp.updateData();
-    }
-    
+    }    
 }

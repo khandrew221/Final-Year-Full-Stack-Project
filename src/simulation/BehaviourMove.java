@@ -133,9 +133,7 @@ public class BehaviourMove extends Behaviour {
     
     @Override
     public String toString() {
-        return "Type: move, " + 
-                "Max speed: " +  maxSpeed +
-                ", Rectangle: " + min + max;
+        return "Move speed: " +  maxSpeed;
     }
     
     

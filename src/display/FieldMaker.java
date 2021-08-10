@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
@@ -38,6 +39,8 @@ public class FieldMaker extends ComponentMaker {
     private JPanel colorSwatch;
     private JPanel makerPanel;
     
+    
+    private JPanel fieldsSelectHolder;
     
     private JPanel fieldsPreview;
     private LabelledSlider growthRateSlider;
@@ -72,16 +75,15 @@ public class FieldMaker extends ComponentMaker {
         makeAddComponentButton();
 
       
-                fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
-        fieldsSelect= new FieldsSelect(this);
-        mainHolder.add(fieldsSelect);
-        
-        fieldsSelect.setup("Fields", getIDsAndLabels(), true, true);
-
-        
+        fieldsSelectHolder = new JPanel();
+        fieldsSelectHolder.setLayout(new BoxLayout(fieldsSelectHolder, BoxLayout.PAGE_AXIS));
+        fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
+        fieldsSelect = new FieldsSelect(this);
+        fieldsSelect.setup("Fields", getIDsAndLabels(), true, true);        
+        fieldsSelectHolder.add(fieldsSelect);
         makeRemoveComponentButton();
         
-
+        mainHolder.add(fieldsSelectHolder);
         mainHolder.add(fieldsGraphics);
         
     }
@@ -137,9 +139,9 @@ public class FieldMaker extends ComponentMaker {
     
     @Override
     void makeRemoveComponentButton() {
-        removeComponentButton = new JButton("Remove fields");
+        removeComponentButton = new JButton("Remove selected fields");
         removeComponentButton.addActionListener(this);        
-        makerPanel.add(removeComponentButton);               
+        fieldsSelectHolder.add(removeComponentButton);               
     }    
     
     @Override

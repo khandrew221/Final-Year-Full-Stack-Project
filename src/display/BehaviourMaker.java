@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -29,6 +30,7 @@ public class BehaviourMaker extends ComponentMaker {
     
     private JPanel makerPanel;
     private JPanel typeSpecificMakerPanel;
+    private JPanel behaviourSelectHolder;
    
     private JComboBox typeSelector; 
     private JComboBox fieldSelector;
@@ -73,12 +75,20 @@ public class BehaviourMaker extends ComponentMaker {
         
         
         makeAddComponentButton();
-        makeRemoveComponentButton();
        
+        
+        behaviourSelectHolder = new JPanel();
+        behaviourSelectHolder.setLayout(new BoxLayout(behaviourSelectHolder, BoxLayout.PAGE_AXIS));
         behavioursSelect = new BehavioursSelect(this);
-        mainHolder.add(behavioursSelect);        
-        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true);  
-        behavioursSelect.setPreferredSize(new Dimension(500,500));
+        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true); 
+        behavioursSelect.setPreferredSize(new Dimension(500,500));       
+        behaviourSelectHolder.add(behavioursSelect);
+        makeRemoveComponentButton();
+        
+
+        mainHolder.add(behaviourSelectHolder);        
+         
+        
         
         setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
         
@@ -278,9 +288,9 @@ public class BehaviourMaker extends ComponentMaker {
     
     @Override
     void makeRemoveComponentButton() {
-        removeComponentButton = new JButton("Remove behaviours");
+        removeComponentButton = new JButton("Remove selected behaviours");
         removeComponentButton.addActionListener(this);        
-        makerPanel.add(removeComponentButton);               
+        behaviourSelectHolder.add(removeComponentButton);               
     }
 
 

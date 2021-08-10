@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -33,6 +34,7 @@ public class SenseMaker extends ComponentMaker {
     
     private JPanel makerPanel;
     private JPanel typeSpecificMakerPanel;
+    private JPanel senseSelectHolder;
    
     private JComboBox typeSelector;
     private JComboBox fieldSelector;
@@ -81,12 +83,16 @@ public class SenseMaker extends ComponentMaker {
         
         
         makeAddComponentButton();
-        makeRemoveComponentButton();
        
-        sensesSelect= new SensesSelect(this);
-        mainHolder.add(sensesSelect);        
-        sensesSelect.setup("Senses", getIDsAndLabels(), true, true);  
-        sensesSelect.setPreferredSize(new Dimension(500,500));
+        
+        senseSelectHolder = new JPanel();
+        senseSelectHolder.setLayout(new BoxLayout(senseSelectHolder, BoxLayout.PAGE_AXIS));
+        sensesSelect = new SensesSelect(this);
+        sensesSelect.setup("Senses", getIDsAndLabels(), true, true); 
+        sensesSelect.setPreferredSize(new Dimension(500,500));       
+        senseSelectHolder.add(sensesSelect);
+        makeRemoveComponentButton();
+        mainHolder.add(senseSelectHolder);
         
         setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
         
@@ -327,9 +333,9 @@ public class SenseMaker extends ComponentMaker {
     
     @Override
     void makeRemoveComponentButton() {
-        removeComponentButton = new JButton("Remove senses");
+        removeComponentButton = new JButton("Remove selected senses");
         removeComponentButton.addActionListener(this);        
-        makerPanel.add(removeComponentButton);               
+        senseSelectHolder.add(removeComponentButton);               
     }
 
 

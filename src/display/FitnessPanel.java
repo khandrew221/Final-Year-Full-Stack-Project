@@ -69,7 +69,7 @@ public class FitnessPanel extends JPanel {
         mainHolder.add(info, BorderLayout.PAGE_END);
         info.setPreferredSize(new Dimension(600, 100));
         info.setBorder(BorderFactory.createEtchedBorder());  
-        info.setText("<html>Bots are scored by a fitness function. The score updates every simulation cycle, "
+        info.setText("<html>Bots are each given a fitness score. The score updates every simulation cycle, "
                 + "and bots with a higher score are more likely to breed. Positive weights encourage the evolution of the "
                 + "associated trait, and negative weights discourage the trait.</html>");
     }   
