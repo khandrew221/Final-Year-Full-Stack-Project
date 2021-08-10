@@ -71,7 +71,8 @@ public class FitnessPanel extends JPanel {
         info.setBorder(BorderFactory.createEtchedBorder());  
         info.setText("<html>Bots are each given a fitness score. The score updates every simulation cycle, "
                 + "and bots with a higher score are more likely to breed. Positive weights encourage the evolution of the "
-                + "associated trait, and negative weights discourage the trait.</html>");
+                + "associated trait, and negative weights discourage the trait. A weight of zero causes the trait to be "
+                + "ignored in terms of fitness score.</html>");
     }   
     
     /**
@@ -88,9 +89,9 @@ public class FitnessPanel extends JPanel {
     private String paramNameToText(String n) {
         switch (n) {
             case "COLLISIONS_PER_CYCLE":
-                return "Number of collisions";
+                return "Collisions with the environment border";
             case "DISTANCE_TRAVELLED":
-                return "Speed";   
+                return "Average speed";   
             case "CURRENT_ENERGY":
                 return "Current energy";   
             case "AMOUNT_EATEN":
