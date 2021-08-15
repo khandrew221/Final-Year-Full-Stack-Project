@@ -5,11 +5,14 @@
  */
 package display;
 
-import java.awt.Dimension;
-import javax.swing.JComponent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -29,7 +32,9 @@ public class LabelledSlider extends JPanel {
     private Updatable container;
     
     public LabelledSlider(String name, String text, double min, double max, int steps, int start, Updatable container) {
-        this.setPreferredSize(new Dimension(300, 50));
+        this.setLayout(new BorderLayout());
+        
+        this.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 1), new EmptyBorder(5, 5, 5, 5)));
         
         this.min = min;
         this.max = max;
@@ -55,8 +60,8 @@ public class LabelledSlider extends JPanel {
         });
                 
         
-        this.add(label);
-        this.add(slider);      
+        this.add(label, BorderLayout.WEST);
+        this.add(slider, BorderLayout.EAST);      
     }
     
     public final double getValue() {

@@ -7,6 +7,8 @@ package display;
 
 import controls.SimControl;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -26,9 +28,9 @@ import simulation.SimStateFacade;
  * @author Kathryn Andrew
  */
 public class BehaviourMaker extends ComponentMaker {
+    
     private BehavioursSelect behavioursSelect; 
     
-    private JPanel makerPanel;
     private JPanel typeSpecificMakerPanel;
     private JPanel behaviourSelectHolder;
    
@@ -40,6 +42,7 @@ public class BehaviourMaker extends ComponentMaker {
     private LabelledSlider selectEnergyEfficiency;
     
     private JLabel info;
+    private JPanel typeSelectorPanel;
 
     /**
      * 
@@ -55,41 +58,40 @@ public class BehaviourMaker extends ComponentMaker {
         info = new JLabel();
         info.setText("<html>Behaviours are controlled by the output of a bot's neural network, and allow it to respond to sensory inputs e.g. by moving or eating.</html>");
         this.add(info, BorderLayout.PAGE_END); 
-        info.setPreferredSize(new Dimension(600, 100));
+        info.setPreferredSize(new Dimension(100, 100));
         info.setBorder(BorderFactory.createEtchedBorder());
+        
+        makeTypeSelectorPanel();
         
         JPanel mainHolder = new JPanel();
         mainHolder.setBorder(BorderFactory.createEtchedBorder());
-        this.add(mainHolder);
+        mainHolder.setLayout(new GridLayout(1,2));        
+        this.add(mainHolder); 
         
-        makerPanel = new JPanel(new GridLayout(5, 1));
-        mainHolder.add(makerPanel);        
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        mainHolder.add(leftPanel);        
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        mainHolder.add(rightPanel);        
               
-        
-        makeTypeSelector();
-              makeFieldSelector();
+        makeFieldSelector();
         
         typeSpecificMakerPanel = new JPanel();
-        typeSpecificMakerPanel.setPreferredSize(new Dimension(500,500));
-        mainHolder.add(typeSpecificMakerPanel);
-        
-        
-        makeAddComponentButton();
+        typeSpecificMakerPanel.setLayout(new BoxLayout(typeSpecificMakerPanel, BoxLayout.PAGE_AXIS));
+                    typeSpecificMakerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        leftPanel.add(typeSpecificMakerPanel);
        
         
         behaviourSelectHolder = new JPanel();
         behaviourSelectHolder.setLayout(new BoxLayout(behaviourSelectHolder, BoxLayout.PAGE_AXIS));
+                    behaviourSelectHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         behavioursSelect = new BehavioursSelect(this);
-        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true); 
-        behavioursSelect.setPreferredSize(new Dimension(500,500));       
+        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true);       
         behaviourSelectHolder.add(behavioursSelect);
         makeRemoveComponentButton();
-        
+        rightPanel.add(behaviourSelectHolder);
 
-        mainHolder.add(behaviourSelectHolder);        
-         
-        
-        
         setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
         
     }
@@ -104,7 +106,7 @@ public class BehaviourMaker extends ComponentMaker {
         String[] t = types.toArray(new String[0]);
         typeSelector = new JComboBox(t);
         typeSelector.addActionListener(this);
-        makerPanel.add(typeSelector);  
+        typeSelectorPanel.add(typeSelector);  
     }
         
     /**
@@ -190,10 +192,12 @@ public class BehaviourMaker extends ComponentMaker {
      */    
     private void setForBehaviourMove() {
         typeSpecificMakerPanel.removeAll();
+        typeSpecificMakerPanel.setPreferredSize(new Dimension(400,100));
         int speedMin = (int) Math.ceil(super.getFacade().getBehaviourMoveSpeedMin());
         int speedMax = (int) Math.floor(super.getFacade().getBehaviourMoveSpeedMax());
         maxSpeedSlider = new LabelledSlider("", "Maximum speed", speedMin, speedMax, speedMax-speedMin, 0, this);
         typeSpecificMakerPanel.add(maxSpeedSlider);
+        makeAddComponentButton();
         info.setText("<html>A move behaviour allows the bot to move in response to its sensory inputs. Bots cannot move outside of the bounds of the environment.</html>");
         this.repaint();    
     }     
@@ -203,6 +207,7 @@ public class BehaviourMaker extends ComponentMaker {
      */    
     private void setForBehaviourEat() {
         typeSpecificMakerPanel.removeAll();
+        typeSpecificMakerPanel.setPreferredSize(new Dimension(400,200));
         
         JPanel selectorPanel = new JPanel(new BorderLayout()); 
         JLabel selectorLabel = new JLabel("Target field: ");
@@ -222,15 +227,25 @@ public class BehaviourMaker extends ComponentMaker {
                 + "Negative values will instead cause the bot to desposit the resource in the environment.</html>");      
         typeSpecificMakerPanel.add(selectForageEfficiency); 
         selectEnergyEfficiency = new LabelledSlider("", "Energy efficiency (%)", energyEfficiencyMin, energyEfficiencyMax, (energyEfficiencyMax-energyEfficiencyMin), (energyEfficiencyMax-energyEfficiencyMin)/2, null);
-        selectEnergyEfficiency .setToolTipText("<html>Controls what proportion of the resource consumed will be converted to energy.</html>");            
+        selectEnergyEfficiency.setToolTipText("<html>Controls what proportion of the resource consumed will be converted to energy.</html>");            
         typeSpecificMakerPanel.add(selectEnergyEfficiency); 
+        makeAddComponentButton();
         info.setText("<html>An eat behaviour allows the bot to interact with an environment field by consuming or excreting resources. Bots will only eat if the behaviour recieves a neural network output over a certain threshold.<br> "
                 + "Two positive values for forage and energy efficiency will cause the bot to gain energy from consuming the resource.<br>"
                 + "A negative forage and a positive energy efficiency will cause the bot to lose energy from depositing the resource.<br>"
                 + "A positive forage and a negative energy efficiency will cause the bot to lose energy from consuming the resource.<br>"
                 + "Two negative values for forage and energy efficiency will cause the bot to gain energy from depositing the resource.</html>");
         this.repaint();         
-    }     
+    }    
+    
+    
+    private void makeTypeSelectorPanel() {
+        typeSelectorPanel = new JPanel();
+        typeSelectorPanel.setBorder(BorderFactory.createEtchedBorder());
+        this.add(typeSelectorPanel, BorderLayout.PAGE_START); 
+        typeSelectorPanel.add(new JLabel("Select behaviour to create:")); 
+        makeTypeSelector();        
+    }
 
     @Override
     public void actionPerformed(ActionEvent e){    
@@ -261,7 +276,6 @@ public class BehaviourMaker extends ComponentMaker {
     @Override
     public void update() {
         behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, false);
-        behavioursSelect.setPreferredSize(new Dimension(500,500));
         this.repaint();
         this.revalidate();    
     }
@@ -282,14 +296,16 @@ public class BehaviourMaker extends ComponentMaker {
     @Override
     void makeAddComponentButton() {
         addComponentButton = new JButton("Add behaviour");
-        addComponentButton.addActionListener(this);        
-        makerPanel.add(addComponentButton);               
+        addComponentButton.addActionListener(this);    
+        addComponentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        typeSpecificMakerPanel.add(addComponentButton);               
     }  
     
     @Override
     void makeRemoveComponentButton() {
         removeComponentButton = new JButton("Remove selected behaviours");
-        removeComponentButton.addActionListener(this);        
+        removeComponentButton.addActionListener(this);  
+        removeComponentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         behaviourSelectHolder.add(removeComponentButton);               
     }
 

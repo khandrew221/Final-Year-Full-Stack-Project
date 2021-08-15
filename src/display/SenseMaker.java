@@ -7,6 +7,8 @@ package display;
 
 import controls.SimControl;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -32,7 +34,6 @@ public class SenseMaker extends ComponentMaker {
     
     private SensesSelect sensesSelect; 
     
-    private JPanel makerPanel;
     private JPanel typeSpecificMakerPanel;
     private JPanel senseSelectHolder;
    
@@ -48,6 +49,7 @@ public class SenseMaker extends ComponentMaker {
     private SamplePointsPreview preview;
     
     private JLabel info;
+    private JPanel typeSelectorPanel;
     
 
     /**
@@ -64,35 +66,39 @@ public class SenseMaker extends ComponentMaker {
         info = new JLabel();
         info.setText("<html>Senses provide inputs to a bot's neural network, and allow it to percieve its environment.</html>");
         this.add(info, BorderLayout.PAGE_END); 
-        info.setPreferredSize(new Dimension(600, 100));
+        info.setPreferredSize(new Dimension(100, 100));
         info.setBorder(BorderFactory.createEtchedBorder());
+        
+        makeTypeSelectorPanel();
         
         JPanel mainHolder = new JPanel();
         mainHolder.setBorder(BorderFactory.createEtchedBorder());
+        mainHolder.setLayout(new GridLayout(1,2));
         this.add(mainHolder);
         
-        makerPanel = new JPanel(new GridLayout(5, 1));
-        mainHolder.add(makerPanel);
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        mainHolder.add(leftPanel);        
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        mainHolder.add(rightPanel);   
         
-        makeTypeSelector();
+        
         makeFieldSelector();
 
         typeSpecificMakerPanel = new JPanel();
-        typeSpecificMakerPanel.setPreferredSize(new Dimension(500,500));
-        mainHolder.add(typeSpecificMakerPanel);
-        
-        
-        makeAddComponentButton();
-       
+        typeSpecificMakerPanel.setLayout(new BoxLayout(typeSpecificMakerPanel, BoxLayout.PAGE_AXIS));
+                    typeSpecificMakerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        leftPanel.add(typeSpecificMakerPanel);
         
         senseSelectHolder = new JPanel();
         senseSelectHolder.setLayout(new BoxLayout(senseSelectHolder, BoxLayout.PAGE_AXIS));
+                            senseSelectHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         sensesSelect = new SensesSelect(this);
-        sensesSelect.setup("Senses", getIDsAndLabels(), true, true); 
-        sensesSelect.setPreferredSize(new Dimension(500,500));       
+        sensesSelect.setup("Senses", getIDsAndLabels(), true, true);    
         senseSelectHolder.add(sensesSelect);
         makeRemoveComponentButton();
-        mainHolder.add(senseSelectHolder);
+        rightPanel.add(senseSelectHolder);
         
         setTypeSpecificMakerPanel((String) typeSelector.getSelectedItem());
         
@@ -108,8 +114,16 @@ public class SenseMaker extends ComponentMaker {
         String[] t = types.toArray(new String[0]);
         typeSelector = new JComboBox(t);
         typeSelector.addActionListener(this);
-        makerPanel.add(typeSelector);  
+        typeSelectorPanel.add(typeSelector);  
     }
+    
+    private void makeTypeSelectorPanel() {
+        typeSelectorPanel = new JPanel();
+        typeSelectorPanel.setBorder(BorderFactory.createEtchedBorder());
+        this.add(typeSelectorPanel, BorderLayout.PAGE_START); 
+        typeSelectorPanel.add(new JLabel("Select sense to create:")); 
+        makeTypeSelector();        
+    }    
     
     /**
      * !!!Warning from line String[] t = types.toArray(new String[0]); suppressed.
@@ -211,16 +225,15 @@ public class SenseMaker extends ComponentMaker {
      */    
     private void setForEnviromentSense() {
         typeSpecificMakerPanel.removeAll();
+        typeSpecificMakerPanel.setPreferredSize(new Dimension(400,455));
         
         JPanel selectorPanel = new JPanel(new BorderLayout()); 
         JLabel selectorLabel = new JLabel("Target field: ");
-        selectorPanel.setPreferredSize(new Dimension(350, 50));
         selectorPanel.add(selectorLabel, BorderLayout.WEST);
         selectorPanel.add(fieldSelector, BorderLayout.EAST);
         typeSpecificMakerPanel.add(selectorPanel); 
         
         JPanel centredPanel = new JPanel(new BorderLayout()); 
-        centredPanel.setPreferredSize(new Dimension(350, 50));
         centredPanel.add(envCentred);
         typeSpecificMakerPanel.add(centredPanel);       
               
@@ -248,10 +261,13 @@ public class SenseMaker extends ComponentMaker {
         super.getControl().getEnviroSamplePoints(x, y,  envCentred.isSelected(), (int) envRingsSlider.getValue(), (int) envPointsSlider.getValue(), (int) envRadiusSlider.getValue());
         preview = new SamplePointsPreview(200, 200, x, y);
         typeSpecificMakerPanel.add(preview);  
+          
+        makeAddComponentButton();
         
         info.setText("<html>An environment sense allows bots to percieve their surroundings by sampling the values of a target "
                 + "environment field at fixed points relative to themselves. Each sample point represents a single input to the "
                 + "bot's neural network.</html>");
+        
         this.repaint();
     }    
     
@@ -259,13 +275,13 @@ public class SenseMaker extends ComponentMaker {
      * 
      */    
     private void setForBorderSense() {
-        typeSpecificMakerPanel.removeAll();        
+        typeSpecificMakerPanel.removeAll();   
+        typeSpecificMakerPanel.setPreferredSize(new Dimension (400,210));
         
         int radiusMin = (int) Math.ceil(super.getFacade().getSenseBorderRadiusMin());
         int radiusMax = (int) Math.floor(super.getFacade().getSenseBorderRadiusMax());
         
-        borderRadiusSlider = new LabelledSlider("", "radius", radiusMin, radiusMax, radiusMax-radiusMin, 0, this);
-        borderRadiusSlider.setPreferredSize(new Dimension(350, 50));    
+        borderRadiusSlider = new LabelledSlider("", "radius", radiusMin, radiusMax, radiusMax-radiusMin, 0, this);   
         borderRadiusSlider.setToolTipText("<html>Sets the distance at which the bot will detect the border.</html>");
         typeSpecificMakerPanel.add(borderRadiusSlider);      
         info.setText("<html>A border sense alerts the bot that it is within a given distance of the environment border. It produces "
@@ -273,8 +289,10 @@ public class SenseMaker extends ComponentMaker {
         List<Double> x = new ArrayList<>();
         List<Double> y = new ArrayList<>();
         super.getControl().getBorderSamplePoints(x, y, borderRadiusSlider.getValue());
-        preview = new SamplePointsPreview(100, 100, x, y);
+        preview = new SamplePointsPreview(110, 110, x, y);
+        preview.setAlignmentX(Component.CENTER_ALIGNMENT);
         typeSpecificMakerPanel.add(preview);  
+        makeAddComponentButton();
         this.repaint();
     }    
 
@@ -306,7 +324,6 @@ public class SenseMaker extends ComponentMaker {
      */
     public void update() {
         sensesSelect.setup("Senses", getIDsAndLabels(), true, false);
-        sensesSelect.setPreferredSize(new Dimension(500,500));
         updatePreview();
         this.repaint();
         this.revalidate();    
@@ -327,14 +344,16 @@ public class SenseMaker extends ComponentMaker {
     @Override
     void makeAddComponentButton() {
         addComponentButton = new JButton("Add sense");
-        addComponentButton.addActionListener(this);        
-        makerPanel.add(addComponentButton);               
+        addComponentButton.addActionListener(this);     
+        addComponentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        typeSpecificMakerPanel.add(addComponentButton);               
     }  
     
     @Override
     void makeRemoveComponentButton() {
         removeComponentButton = new JButton("Remove selected senses");
-        removeComponentButton.addActionListener(this);        
+        removeComponentButton.addActionListener(this);  
+        removeComponentButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         senseSelectHolder.add(removeComponentButton);               
     }
 

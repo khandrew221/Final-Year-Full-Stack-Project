@@ -57,7 +57,7 @@ public class FieldMaker extends ComponentMaker {
         info.setText("<html>Fields can be used to represent any scalar valued factor within the environment, such as the amount of food or other resource available in a location." +
                 " The values of the field can be sensed at specific points by a bot using an Envirosense.  Resources can be taken from the field and converted into energy by an eat behaviour.");
         this.add(info, BorderLayout.PAGE_END); 
-        info.setPreferredSize(new Dimension(600, 100));
+        info.setPreferredSize(new Dimension(100, 100));
         info.setBorder(BorderFactory.createEtchedBorder());
         
         JPanel mainHolder = new JPanel();

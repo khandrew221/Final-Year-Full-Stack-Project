@@ -20,6 +20,8 @@ import simulation.SimStateFacade;
  */
 public class RunView extends JPanel {
     
+    public static final int GRAPH_SIZE = 150;
+    
     private SimStateFacade facade;       
     private SimVis simVis;
     private ControlPanel controlPanel;
@@ -30,17 +32,17 @@ public class RunView extends JPanel {
         this.setLayout(new BorderLayout());
         this.facade = simFacade;
         this.simVis = new SimVis(simFacade, simFacade.envXSize(), simFacade.envYSize(), visX, visY);
-        this.add(simVis, BorderLayout.CENTER);
+        this.add(simVis, BorderLayout.PAGE_START);
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setAll();
         controlPanel = new ControlPanel(control);
         
-        fitnessGraph = new Graph("Average Fitness", facade, 200, 200);
+        fitnessGraph = new Graph("Average Fitness", facade, GRAPH_SIZE, GRAPH_SIZE);
         fitnessGraph.addSeries("Fitness");
         fitnessGraph.setYAxisLabel("Fitness");
         fitnessGraph.updateData();
         
-        this.add(fitnessGraph, BorderLayout.WEST);
+        this.add(fitnessGraph, BorderLayout.CENTER);
         
         this.add(controlPanel, BorderLayout.PAGE_END);
     }

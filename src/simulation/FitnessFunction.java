@@ -24,7 +24,7 @@ public class FitnessFunction {
         total += bot.getCollisionsPerCycle() * weightCollisionsPerCycle;
         total += bot.getEnergy() / SimConsts.getMAX_ENERGY() * weightCurrentEnergy;
         total += averageDistanceTravelledPerCycle(bot) * weightDistanceTravelled;       
-        total += bot.getAmountEaten() * weightAmountEaten; 
+        total += bot.getAmountEaten() * weightAmountEaten;        
         bot.setFitness(total);
     }   
     

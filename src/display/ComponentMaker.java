@@ -18,6 +18,8 @@ import simulation.SimStateFacade;
  */
 public abstract class ComponentMaker extends JPanel implements ActionListener, Updatable  {
     
+    public static final int MIN_WIDTH = 350;
+    
     private SimControl simControl;
     private SimStateFacade simFacade;
     JButton addComponentButton;

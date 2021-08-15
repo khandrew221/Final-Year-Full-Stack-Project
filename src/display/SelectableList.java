@@ -113,7 +113,7 @@ public abstract class SelectableList extends JPanel {
             this.add(entry);
         }        
         updateContainer();        
-        this.setPreferredSize(new Dimension(200,35*IDsAndLabels.size() + 30));
+        this.setPreferredSize(new Dimension(300,35*IDsAndLabels.size() + 30));
     }    
     
     /**

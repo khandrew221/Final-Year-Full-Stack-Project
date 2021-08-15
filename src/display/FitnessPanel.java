@@ -67,7 +67,7 @@ public class FitnessPanel extends JPanel {
         //fitnessSliderPanel.setPreferredSize(new Dimension(200,35*ParamsAndWeights.size() + 30));
         mainHolder.add(fitnessSliderPanel);   
         mainHolder.add(info, BorderLayout.PAGE_END);
-        info.setPreferredSize(new Dimension(600, 100));
+        info.setPreferredSize(new Dimension(100, 100));
         info.setBorder(BorderFactory.createEtchedBorder());  
         info.setText("<html>Bots are each given a fitness score. The score updates every simulation cycle, "
                 + "and bots with a higher score are more likely to breed. Positive weights encourage the evolution of the "
