@@ -5,6 +5,7 @@
  */
 package display;
 
+import controls.SimConsts;
 import controls.SimControl;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -68,26 +69,30 @@ public class BehaviourMaker extends ComponentMaker {
         mainHolder.setLayout(new GridLayout(1,2));        
         this.add(mainHolder); 
         
-        JPanel leftPanel = new JPanel();
-        leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        JPanel leftPanel = new JPanel();        
+        if (SimConsts.ENABLE_BORDERS)
+            leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         mainHolder.add(leftPanel);        
         JPanel rightPanel = new JPanel();
-        rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         mainHolder.add(rightPanel);        
               
         makeFieldSelector();
         
         typeSpecificMakerPanel = new JPanel();
         typeSpecificMakerPanel.setLayout(new BoxLayout(typeSpecificMakerPanel, BoxLayout.PAGE_AXIS));
-                    typeSpecificMakerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            typeSpecificMakerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         leftPanel.add(typeSpecificMakerPanel);
        
         
         behaviourSelectHolder = new JPanel();
         behaviourSelectHolder.setLayout(new BoxLayout(behaviourSelectHolder, BoxLayout.PAGE_AXIS));
-                    behaviourSelectHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            behaviourSelectHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         behavioursSelect = new BehavioursSelect(this);
-        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true);       
+        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, true, 400);       
         behaviourSelectHolder.add(behavioursSelect);
         makeRemoveComponentButton();
         rightPanel.add(behaviourSelectHolder);
@@ -275,7 +280,7 @@ public class BehaviourMaker extends ComponentMaker {
      */
     @Override
     public void update() {
-        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, false);
+        behavioursSelect.setup("Behaviours", getIDsAndLabels(), true, false, 400);
         this.repaint();
         this.revalidate();    
     }

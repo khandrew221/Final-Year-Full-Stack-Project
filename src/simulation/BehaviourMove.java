@@ -50,32 +50,15 @@ public class BehaviourMove extends Behaviour {
     @Override
     public void execute(Bot bot) {
         
-       // System.out.println(bot.getOutputs().length);
-      //  System.out.println(xMoveSlot);
-      //  System.out.println(yMoveSlot);
-        
-     //   System.out.println("old: " + bot.getPosition());
-        
         double xMove = (bot.getOutput(xMoveSlot)-0.5)*2*maxSpeed; 
         double yMove = (bot.getOutput(yMoveSlot)-0.5)*2*maxSpeed; 
         
         
-       
-       
-       /*if (Double.isNaN(bot.getOutput(xMoveSlot))) {
-           System.out.println("xmoveSlot " + xMoveSlot + ": "  + bot.getOutput(xMoveSlot));
-           System.out.println("ymoveSlot " + yMoveSlot + ": "  + bot.getOutput(yMoveSlot));
-           for (int i = 0; i < bot.getOutputs().length; i++) {
-               System.out.println("output " + i + ": "  + bot.getOutputs()[i]);
-           }
-       }*/
-        
         Point displace = new Point(xMove, yMove);
-      //  System.out.println("displace: " + displace);
         Point newLoc = Point.displace(bot.getPosition(), displace);
         if (newLoc.inBounds(min, max)) {
+            bot.metabolise(-moveCost(bot.getPosition(), newLoc));
             bot.setPosition(newLoc);
-        //    System.out.println("new no coll: " + bot.getPosition());
         } else {
             double newX = newLoc.getX();
             double newY = newLoc.getY();            
@@ -86,20 +69,17 @@ public class BehaviourMove extends Behaviour {
             if (newLoc.getY() > max.getY())
                 newY = max.getY();
             if (newLoc.getY() < min.getY())
-                newY = min.getY();  
-            bot.setPosition(new Point(newX, newY));
+                newY = min.getY();
+            Point adjLoc = new Point(newX, newY);           
+            bot.metabolise(-moveCost(bot.getPosition(), adjLoc));
+            bot.setPosition(newLoc);
             bot.incrementCollisions();
-           // System.out.println("col new x: " + newX);
-           // System.out.println("col new y: " + newY);
-          //  System.out.println("new with coll: " + bot.getPosition());
         }
-        
-        //System.out.println(newLoc);
-        
-        //System.out.println(bot.getPosition());
     }
     
-
+    private double moveCost(Point oldLoc, Point newLoc) {
+        return oldLoc.getDistanceFrom(newLoc)*0.5;
+    }
     
     /**
      * Returns the set of behaviour input slots.
@@ -133,7 +113,8 @@ public class BehaviourMove extends Behaviour {
     
     @Override
     public String toString() {
-        return "Move speed: " +  maxSpeed;
+        String speed = String.format("%.2f",maxSpeed);
+        return "Move speed: " + speed;
     }
     
     

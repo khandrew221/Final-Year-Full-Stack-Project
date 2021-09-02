@@ -33,7 +33,7 @@ public class Graph extends JComponent {
     private String graphTitle;
     
     
-    public Graph(String title, SimStateFacade s, int w, int h) {
+    public Graph(String title, SimStateFacade s, int w, int h, int timeRange) {
         HEIGHT = h;
         WIDTH = w;
         this.setPreferredSize(new Dimension(w,h));
@@ -41,6 +41,7 @@ public class Graph extends JComponent {
         data = new HashMap<>();
         absMax = new HashMap<>();
         graphTitle = title;
+        this.timeRange = timeRange;
     }
     
     public void addSeries(String name) {

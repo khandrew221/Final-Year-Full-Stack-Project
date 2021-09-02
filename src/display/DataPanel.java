@@ -6,17 +6,17 @@
 package display;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import simulation.SimStateFacade;
 
 /**
@@ -42,25 +42,26 @@ public class DataPanel extends JComponent {
         JPanel mainHolder = new JPanel();
         mainHolder.setBorder(BorderFactory.createEtchedBorder());
         mainHolder.setLayout(new BoxLayout(mainHolder, BoxLayout.PAGE_AXIS));
-        mainHolder.setPreferredSize(new Dimension(200,200));
         this.add(mainHolder, BorderLayout.CENTER);
         
-        mainHolder.add(population);
-        Font font = population.getFont().deriveFont(Font.PLAIN);
-        population.setFont(font);
-        mainHolder.add(cycles);
-        cycles.setFont(font);
+        mainHolder.add(population, Component.LEFT_ALIGNMENT);
+        mainHolder.add(cycles, Component.LEFT_ALIGNMENT);
+        
+        mainHolder.add(Box.createRigidArea(new Dimension(5,15)));
         
         sensesSelect = new SensesSelect(null);
-        mainHolder.add(sensesSelect);
-        sensesSelect.setFont(font);
+        mainHolder.add(sensesSelect, Component.LEFT_ALIGNMENT);
         
         behavioursSelect = new BehavioursSelect(null);
-        mainHolder.add(behavioursSelect);
-        behavioursSelect.setFont(font);
+        mainHolder.add(behavioursSelect, Component.LEFT_ALIGNMENT);
         
         fieldsSelect = new FieldsSelect(this.main);
-        mainHolder.add(fieldsSelect);
+        mainHolder.add(fieldsSelect, Component.LEFT_ALIGNMENT);
+        
+        Dimension minSize = new Dimension(0, 0);
+        Dimension prefSize = new Dimension(0, 300);
+        Dimension maxSize = new Dimension(Short.MAX_VALUE, 400);
+        mainHolder.add(new Box.Filler(minSize, prefSize, maxSize));
         
         
     }
@@ -92,17 +93,17 @@ public class DataPanel extends JComponent {
         cycles.setText("<html><b>Simulation Cycles:</b> " + (long) simReport.get("time") + "</html>");
         
         Map<String, String> s = (Map<String, String>) simReport.get("senses");
-        sensesSelect.setup("Senses", s, false, false);       
+        sensesSelect.setup("Current Senses", s, false, false, 400);       
         
         Map<String, String> b = (Map<String, String>) simReport.get("behaviours");
-        behavioursSelect.setup("Behaviours", b, false, false);          
+        behavioursSelect.setup("Current Behaviours", b, false, false, 400);          
         
         Map<String, String> fieldNames = new HashMap<>();
         for (Map m : fieldsReport) {
             String field = (String) m.get("name");
             fieldNames.put(field, field);
         }        
-        fieldsSelect.setup("Fields", fieldNames, true, true);
+        fieldsSelect.setup("Current Fields", fieldNames, true, true, 400);
         
         repaint();
     }                    

@@ -80,14 +80,14 @@ public abstract class SelectableList extends JPanel {
      * @param interactive
      * @param autoSelectFirst 
      */
-    public void setup(String title, Map<String, String> IDsAndLabels, boolean interactive, boolean autoSelectFirst) {
+    public void setup(String title, Map<String, String> IDsAndLabels, boolean interactive, boolean autoSelectFirst, int width) {
         Set<String> oldSelected = getSelected();
         this.removeAll();
         checkBoxes.clear();
         this.setBorder(BorderFactory.createTitledBorder(title));
         boolean first = autoSelectFirst;
         for(String id : IDsAndLabels.keySet()) {
-            String label = IDsAndLabels.get(id);
+            String label = "<html>" + IDsAndLabels.get(id) + "</html>";
             JPanel entry = new JPanel();
             if (interactive) {               
                 JCheckBox checkBox = new JCheckBox(label);
@@ -113,7 +113,7 @@ public abstract class SelectableList extends JPanel {
             this.add(entry);
         }        
         updateContainer();        
-        this.setPreferredSize(new Dimension(300,35*IDsAndLabels.size() + 30));
+        this.setPreferredSize(new Dimension(width,35*IDsAndLabels.size() + 30));
     }    
     
     /**

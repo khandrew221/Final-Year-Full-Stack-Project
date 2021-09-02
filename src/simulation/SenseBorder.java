@@ -19,13 +19,19 @@ import utility.Point;
 public class SenseBorder extends Sense {
     
     Environment environment;    
+    private double maxRange;
     private Map<Integer, Point> points = new HashMap<>();
     
     
     public SenseBorder(Environment e, List<Point> points) {
         this.environment = e;
+        maxRange = 0;
         for (int i = 0; i < points.size(); i++) {
             this.points.put(i, points.get(i));
+            double range = points.get(i).getDistanceFrom(new Point(0,0));
+            if (range > maxRange) {
+                maxRange = range;
+            }
         }
     }  
     
@@ -75,8 +81,8 @@ public class SenseBorder extends Sense {
      */
     @Override
     public String toString() {
-        return "ID: " + super.getID() +  
-                ", Type: Border";
+        String range = String.format("%.2f",maxRange);
+        return "Detects environment border at range " + range;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class RunView extends JPanel {
         setAll();
         controlPanel = new ControlPanel(control);
         
-        fitnessGraph = new Graph("Average Fitness", facade, GRAPH_SIZE, GRAPH_SIZE);
+        fitnessGraph = new Graph("Average Fitness", facade, 500, GRAPH_SIZE, 10000);
         fitnessGraph.addSeries("Fitness");
         fitnessGraph.setYAxisLabel("Fitness");
         fitnessGraph.updateData();

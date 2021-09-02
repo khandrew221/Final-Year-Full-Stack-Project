@@ -21,13 +21,18 @@ public class SenseEnviro extends Sense {
     
     private final Environment env;
     private final String target; 
+    private double maxRange;    
     private Map<Integer, Point> samplePoints = new HashMap<>();
     
     
     public SenseEnviro(String targ, Environment e, List<Point> points) {
         this.env = e;
         for (int i = 0; i < points.size(); i++) {
-            samplePoints.put(i, points.get(i));
+            this.samplePoints.put(i, points.get(i));
+            double range = samplePoints.get(i).getDistanceFrom(new Point(0,0));
+            if (range > maxRange) {
+                maxRange = range;
+            }
         }
         target = targ;
     }    
@@ -73,11 +78,9 @@ public class SenseEnviro extends Sense {
     }
     
     @Override
-    public String toString() {        
-        return "ID: " + super.getID() +  
-                ", Type: Enviro, " + 
-                "Field: " +  target +
-                ", sample points: " + samplePoints.size();
+    public String toString() {    
+        String range = String.format("%.2f",maxRange);
+        return "Field: " + target + ", sample points: " + samplePoints.size() + " , max range: " + range;
     }
 
     @Override

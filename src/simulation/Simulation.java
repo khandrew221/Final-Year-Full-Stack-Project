@@ -69,7 +69,7 @@ public class Simulation {
         addSense(SenseFactory.MakeEnvironmentSense("Test1", environment, true, 3, 12, 7));
         addSense(SenseFactory.MakeBorderSense(environment,5));
         addBehaviour(new BehaviourMove(1, new Point(0,0), new Point(environment.getXSize(), environment.getYSize())));
-        addBehaviour(new BehaviourEat(0.1, 0.1, "Test1", environment));
+        addBehaviour(new BehaviourEat(0.1, 0.5, "Test1", environment));
         
         for (int i = 0; i < maxPop*0.5; i++) {
             addStarterBot(SimConsts.getSTART_ENERGY());
@@ -255,6 +255,7 @@ public class Simulation {
                 b.put("Fitness", bot.getFitness());
                 b.put("Age", bot.getAge());
                 b.put("Generation", bot.getGeneration());
+                b.put("Energy", bot.getEnergy());
                 out.add(b);
             }   
         }        

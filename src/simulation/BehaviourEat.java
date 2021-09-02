@@ -83,12 +83,12 @@ public class BehaviourEat extends Behaviour {
     public String toString() {
         String type;
         if (forageEfficiency > 0) {
-            type = "Eat from ";
+            type = "Eat: ";
         } else {
-            type = "Excrete to ";
+            type = "Excrete: ";
         }
-        return type + target +               
-                ", forage %: " +  (forageEfficiency * 100) +
-                ", energy %: " +  (energyEfficiency * 100);
+        String forage = String.format("%.2f",(forageEfficiency * 100)) + "%";
+        String energy = String.format("%.2f",(energyEfficiency * 100)) + "%";
+        return String.format("%s field %s, (%s foraging, %s energy)", type, target, forage, energy);
     }
 }

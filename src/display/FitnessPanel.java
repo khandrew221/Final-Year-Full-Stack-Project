@@ -64,15 +64,16 @@ public class FitnessPanel extends JPanel {
             fitnessSliders.add(entry);
             entry.setToolTipText(paramNameToTooltip(name));
         }             
-        //fitnessSliderPanel.setPreferredSize(new Dimension(200,35*ParamsAndWeights.size() + 30));
         mainHolder.add(fitnessSliderPanel);   
         mainHolder.add(info, BorderLayout.PAGE_END);
         info.setPreferredSize(new Dimension(100, 100));
         info.setBorder(BorderFactory.createEtchedBorder());  
-        info.setText("<html>Bots are each given a fitness score. The score updates every simulation cycle, "
-                + "and bots with a higher score are more likely to breed. Positive weights encourage the evolution of the "
-                + "associated trait, and negative weights discourage the trait. A weight of zero causes the trait to be "
-                + "ignored in terms of fitness score.</html>");
+        info.setText("<html>Fitness describes how likely a bot is to breed. Bots are each given a fitness score. "
+                + "The score updates every simulation cycle, and bots with a higher score are more likely to breed. "
+                + "Positive settings encourage the evolution of the associated trait, and negative settings discourage "
+                + "the trait. A weight of zero causes the trait to be ignored in terms of fitness score. Note that"
+                + "adjusting these settings does not directly alter what the bots do, only how their behaviour is assessed"
+                + "by the simulation!</html>");
     }   
     
     /**

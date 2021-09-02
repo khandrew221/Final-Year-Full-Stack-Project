@@ -11,6 +11,8 @@ package controls;
  */
 public class SimConsts {
     
+    public static final boolean ENABLE_BORDERS = false;
+    
     private static int MAX_LAYERS = 10;
     private static int MAX_NODES_PER_LAYER = 10;
     
@@ -20,7 +22,7 @@ public class SimConsts {
     private static int ENV_MAX_DENSITY = 10;
     
     private static int START_ENERGY = 600;
-    private static int MAX_ENERGY = 6000;
+    private static int MAX_ENERGY = 1000;
     
     private static int FITNESS_WEIGHT_MIN = -10;
     private static int FITNESS_WEIGHT_MAX = 10;    

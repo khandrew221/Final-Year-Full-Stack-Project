@@ -5,6 +5,7 @@
  */
 package display;
 
+import controls.SimConsts;
 import controls.SimControl;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -77,10 +78,12 @@ public class SenseMaker extends ComponentMaker {
         this.add(mainHolder);
         
         JPanel leftPanel = new JPanel();
-        leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            leftPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         mainHolder.add(leftPanel);        
         JPanel rightPanel = new JPanel();
-        rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            rightPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         mainHolder.add(rightPanel);   
         
         
@@ -88,14 +91,16 @@ public class SenseMaker extends ComponentMaker {
 
         typeSpecificMakerPanel = new JPanel();
         typeSpecificMakerPanel.setLayout(new BoxLayout(typeSpecificMakerPanel, BoxLayout.PAGE_AXIS));
-                    typeSpecificMakerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            typeSpecificMakerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         leftPanel.add(typeSpecificMakerPanel);
         
         senseSelectHolder = new JPanel();
         senseSelectHolder.setLayout(new BoxLayout(senseSelectHolder, BoxLayout.PAGE_AXIS));
-                            senseSelectHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+        if (SimConsts.ENABLE_BORDERS)
+            senseSelectHolder.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
         sensesSelect = new SensesSelect(this);
-        sensesSelect.setup("Senses", getIDsAndLabels(), true, true);    
+        sensesSelect.setup("Senses", getIDsAndLabels(), true, true, 400);    
         senseSelectHolder.add(sensesSelect);
         makeRemoveComponentButton();
         rightPanel.add(senseSelectHolder);
@@ -323,7 +328,7 @@ public class SenseMaker extends ComponentMaker {
      * Updates the senseSelect panel.  Call after change within panel.
      */
     public void update() {
-        sensesSelect.setup("Senses", getIDsAndLabels(), true, false);
+        sensesSelect.setup("Senses", getIDsAndLabels(), true, false, 400);
         updatePreview();
         this.repaint();
         this.revalidate();    

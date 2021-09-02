@@ -64,6 +64,7 @@ public class MainView extends JFrame {
         tabbedPane.addTab("Senses", null, senseMaker, "<html>Add/Remove senses<br>Simulation must be stopped to use.</html>");
         tabbedPane.addTab("Behaviours", null, behaviourMaker, "<html>Add/Remove behaviours<br>Simulation must be stopped to use./html>");  
         tabbedPane.addTab("Help", null, new HelpPanel());  
+        tabbedPane.addTab("About", null, new AboutPanel());  
     
         tabbedPane.addChangeListener( new ChangeListener() {
             @Override
@@ -105,11 +106,14 @@ public class MainView extends JFrame {
             tabbedPane.setEnabledAt(ENVIRONMENT_TAB, false);
             tabbedPane.setEnabledAt(SENSES_TAB, false);
             tabbedPane.setEnabledAt(BEHAVIOURS_TAB, false);
+            if (tabbedPane.getSelectedIndex() == ENVIRONMENT_TAB ||
+                    tabbedPane.getSelectedIndex() == SENSES_TAB ||
+                    tabbedPane.getSelectedIndex() == BEHAVIOURS_TAB)
+                tabbedPane.setSelectedIndex(DATA_TAB);
         } else {
             tabbedPane.setEnabledAt(ENVIRONMENT_TAB, true);
             tabbedPane.setEnabledAt(SENSES_TAB, true);
             tabbedPane.setEnabledAt(BEHAVIOURS_TAB, true);            
         }
     }
-    
 }

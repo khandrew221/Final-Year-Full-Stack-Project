@@ -79,7 +79,7 @@ public class FieldMaker extends ComponentMaker {
         fieldsSelectHolder.setLayout(new BoxLayout(fieldsSelectHolder, BoxLayout.PAGE_AXIS));
         fieldsGraphics = new FieldsGraphics(200, 200, super.getFacade().fieldsReport());
         fieldsSelect = new FieldsSelect(this);
-        fieldsSelect.setup("Fields", getIDsAndLabels(), true, true);        
+        fieldsSelect.setup("Fields", getIDsAndLabels(), true, true, 400);        
         fieldsSelectHolder.add(fieldsSelect);
         makeRemoveComponentButton();
         
@@ -183,7 +183,7 @@ public class FieldMaker extends ComponentMaker {
     @Override
     public void update() {
         List<Map<String, Object>> fieldsReport = super.getFacade().fieldsReport();
-        fieldsSelect.setup("Fields", getIDsAndLabels(), true, false);
+        fieldsSelect.setup("Fields", getIDsAndLabels(), true, false, 400);
         fieldsGraphics.updateData(fieldsReport);
         Set<String> newSelect = fieldsSelect.getSelected();
         newSelect.add(nameField.getText().strip());

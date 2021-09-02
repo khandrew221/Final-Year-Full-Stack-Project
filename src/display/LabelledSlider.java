@@ -5,6 +5,7 @@
  */
 package display;
 
+import controls.SimConsts;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.BorderFactory;
@@ -34,7 +35,10 @@ public class LabelledSlider extends JPanel {
     public LabelledSlider(String name, String text, double min, double max, int steps, int start, Updatable container) {
         this.setLayout(new BorderLayout());
         
-        this.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 1), new EmptyBorder(5, 5, 5, 5)));
+        if (SimConsts.ENABLE_BORDERS)
+            this.setBorder(BorderFactory.createCompoundBorder(new LineBorder(Color.BLACK, 1), new EmptyBorder(5, 5, 5, 5)));
+        else 
+            this.setBorder(new EmptyBorder(5, 5, 5, 5));
         
         this.min = min;
         this.max = max;

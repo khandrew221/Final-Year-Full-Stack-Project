@@ -5,6 +5,7 @@
  */
 package display;
 
+import controls.SimConsts;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -46,7 +47,7 @@ public class SimVis extends JComponent {
     protected void paintBots(Graphics g) {
         int r = 7;    
         for (Map<String, Object> m : sim.botReport()) {
-            g.setColor(genToColour((int) m.get("Generation"))); 
+            g.setColor(energyToColour((double) m.get("Energy"))); 
             double x = simToVisX((double) m.get("PosX"));
             double y = simToVisY((double) m.get("PosY"));
             //fudge edge positions so the bots aren't drawn off environment
@@ -137,6 +138,18 @@ public class SimVis extends JComponent {
            return new Color((int) Math.round(val), 0, 0);
         }
     }
+    
+    public Color energyToColour(double val) {
+           if (val < 120) {
+               return new Color(126, 126, 126);
+           }
+           val = val/SimConsts.getMAX_ENERGY()*255.0;
+           if (val > 255)
+               val = 255;
+           if (val < 0)
+               val = 0;           
+           return new Color((int) Math.round(val), 0, 0);
+    }    
     
     @Override
     protected void paintComponent(Graphics g) {
