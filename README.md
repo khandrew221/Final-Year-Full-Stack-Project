@@ -12,3 +12,10 @@ The simulation would be visualised in real time, and simulation factors could be
 
 The project was completed on time with all key requirements met. In particular, the real time simulation produces noticable advances in bot behaviour within a reasonable timeframe (5 or so minutes). Not only that, but from entirely randomly generated structures the bots evolved to display very organic looking behaviour including turning at environment boundaries, seeking food, slowing thier movement to graze at high food density areas, and even producing a feedback loop between themselves and the environment where heavy grazing at the edges of areas with a high food density would generate an extreme gradient in nearby food density which the bots' senses could exploit to both navigate and allow areas of food to regrow.  
 
+## Screenshots
+
+![Program screenshot](https://github.com/khandrew221/Final-Year-Full-Stack-Project/blob/Post-Prototype/screenshot1.png)
+
+## Architecture
+
+![Architecture](https://github.com/khandrew221/Final-Year-Full-Stack-Project/blob/Post-Prototype/architecture.png)
